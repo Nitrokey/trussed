@@ -90,7 +90,11 @@ unsafe impl<P: Platform> Send for Service<P> {}
 
 impl<P: Platform> ServiceResources<P> {
     #[inline(never)]
-    pub fn reply_to(&mut self, client_id: PathBuf, request: &Request) -> Result<Reply, Error> {
+    pub fn reply_to(
+        &mut self,
+        client_id: &mut ClientId,
+        request: &Request,
+    ) -> Result<Reply, Error> {
         // TODO: what we want to do here is map an enum to a generic type
         // Is there a nicer way to do this?
 
@@ -98,7 +102,7 @@ impl<P: Platform> ServiceResources<P> {
 
         // prepare keystore, bound to client_id, for cryptographic calls
         let mut keystore: ClientKeystore<P> = ClientKeystore::new(
-            client_id.clone(),
+            client_id.path.clone(),
             self.rng().map_err(|_| Error::EntropyMalfunction)?,
             full_store,
         );
@@ -106,7 +110,7 @@ impl<P: Platform> ServiceResources<P> {
 
         // prepare certstore, bound to client_id, for cert calls
         let mut certstore: ClientCertstore<P::S> = ClientCertstore::new(
-            client_id.clone(),
+            client_id.path.clone(),
             self.rng().map_err(|_| Error::EntropyMalfunction)?,
             full_store,
         );
@@ -114,14 +118,15 @@ impl<P: Platform> ServiceResources<P> {
 
         // prepare counterstore, bound to client_id, for counter calls
         let mut counterstore: ClientCounterstore<P::S> = ClientCounterstore::new(
-            client_id.clone(),
+            client_id.path.clone(),
             self.rng().map_err(|_| Error::EntropyMalfunction)?,
             full_store,
         );
         let counterstore = &mut counterstore;
 
         // prepare filestore, bound to client_id, for storage calls
-        let mut filestore: ClientFilestore<P::S> = ClientFilestore::new(client_id, full_store);
+        let mut filestore: ClientFilestore<P::S> =
+            ClientFilestore::new(client_id.path.clone(), full_store);
         let filestore = &mut filestore;
 
         debug_now!("TRUSSED {:?}", request);
@@ -674,7 +679,7 @@ impl<P: Platform> Service<P> {
     ) -> Result<crate::client::ClientImplementation<S>, ()> {
         use interchange::Interchange;
         let (requester, responder) = TrussedInterchange::claim().ok_or(())?;
-        let client_id = ClientId::from(client_id.as_bytes());
+        let client_id = ClientId::from(client_id);
         self.add_endpoint(responder, client_id)
             .map_err(|_service_endpoint| ())?;
 
@@ -691,7 +696,7 @@ impl<P: Platform> Service<P> {
     ) -> Result<crate::client::ClientImplementation<&mut Service<P>>, ()> {
         use interchange::Interchange;
         let (requester, responder) = TrussedInterchange::claim().ok_or(())?;
-        let client_id = ClientId::from(client_id.as_bytes());
+        let client_id = ClientId::from(client_id);
         self.add_endpoint(responder, client_id)
             .map_err(|_service_endpoint| ())?;
 
@@ -719,7 +724,7 @@ impl<P: Platform> Service<P> {
         interchange: Responder<TrussedInterchange>,
         client_id: ClientId,
     ) -> Result<(), ServiceEndpoint> {
-        if client_id == PathBuf::from("trussed") {
+        if client_id.path == PathBuf::from("trussed") {
             panic!("trussed is a reserved client ID");
         }
         self.eps.push(ServiceEndpoint {
@@ -767,7 +772,7 @@ impl<P: Platform> Service<P> {
                 // #[cfg(test)] println!("service got request: {:?}", &request);
 
                 // resources.currently_serving = ep.client_id.clone();
-                let reply_result = resources.reply_to(ep.client_id.clone(), &request);
+                let reply_result = resources.reply_to(&mut ep.client_id, &request);
 
                 resources
                     .platform
