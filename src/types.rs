@@ -499,6 +499,7 @@ pub enum Mechanism {
     HmacBlake2s,
     HmacSha1,
     HmacSha256,
+    HmacSha256P256,
     HmacSha512,
     // P256XSha256,
     P256,
