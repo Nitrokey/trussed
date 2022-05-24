@@ -486,7 +486,6 @@ impl<P: Platform> ServiceResources<P> {
                 let starttime = self.platform.user_interface().uptime();
                 let timeout = core::time::Duration::from_millis(request.timeout_milliseconds as u64);
 
-                let previous_status = self.platform.user_interface().status();
                 self.platform.user_interface().set_status(ui::Status::WaitingForUserPresence);
                 loop {
                     self.platform.user_interface().refresh();
@@ -516,7 +515,7 @@ impl<P: Platform> ServiceResources<P> {
                         }
                     }
                 }
-                self.platform.user_interface().set_status(previous_status);
+                self.platform.user_interface().set_status(ui::Status::Idle);
 
                 let result = Ok(());
                 Ok(Reply::RequestUserConsent(reply::RequestUserConsent { result } ))
@@ -725,13 +724,11 @@ impl<P: Platform> Service<P> {
 
         for ep in eps.iter_mut() {
             if let Some(request) = ep.interchange.take_request() {
-                resources.platform.user_interface().set_status(ui::Status::Processing);
                 // #[cfg(test)] println!("service got request: {:?}", &request);
 
                 // resources.currently_serving = ep.client_id.clone();
                 let reply_result = resources.reply_to(ep.client_id.clone(), &request);
 
-                resources.platform.user_interface().set_status(ui::Status::Idle);
                 ep.interchange.respond(&reply_result).ok();
 
             }
