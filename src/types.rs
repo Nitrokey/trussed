@@ -237,23 +237,23 @@ The "ClientId" struct is the closest equivalent to a PCB that Trussed
 currently has. Trussed currently uses it to choose the client-specific
 subtree in the filesystem (see docs in src/store.rs).
 */
-pub struct ClientId {
+pub struct ClientContext {
     pub path: PathBuf,
 }
 
-impl core::convert::From<PathBuf> for ClientId {
+impl core::convert::From<PathBuf> for ClientContext {
     fn from(path: PathBuf) -> Self {
         Self::new(path)
     }
 }
 
-impl core::convert::From<&str> for ClientId {
+impl core::convert::From<&str> for ClientContext {
     fn from(path_str: &str) -> Self {
         Self::new(PathBuf::from(path_str))
     }
 }
 
-impl ClientId {
+impl ClientContext {
     pub fn new(path: PathBuf) -> Self {
         Self { path }
     }

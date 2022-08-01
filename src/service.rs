@@ -58,7 +58,7 @@ where
 {
     pub(crate) platform: P,
     // // Option?
-    // currently_serving: ClientId,
+    // currently_serving: ClientContext,
     // TODO: how/when to clear
     read_dir_files_state: Option<ReadDirFilesState>,
     read_dir_state: Option<ReadDirState>,
@@ -92,7 +92,7 @@ impl<P: Platform> ServiceResources<P> {
     #[inline(never)]
     pub fn reply_to(
         &mut self,
-        client_id: &mut ClientId,
+        client_id: &mut ClientContext,
         request: &Request,
     ) -> Result<Reply, Error> {
         // TODO: what we want to do here is map an enum to a generic type
@@ -679,8 +679,8 @@ impl<P: Platform> Service<P> {
     ) -> Result<crate::client::ClientImplementation<S>, ()> {
         use interchange::Interchange;
         let (requester, responder) = TrussedInterchange::claim().ok_or(())?;
-        let client_id = ClientId::from(client_id);
-        self.add_endpoint(responder, client_id)
+        let client_ctx = ClientContext::from(client_id);
+        self.add_endpoint(responder, client_ctx)
             .map_err(|_service_endpoint| ())?;
 
         Ok(crate::client::ClientImplementation::new(requester, syscall))
@@ -696,8 +696,8 @@ impl<P: Platform> Service<P> {
     ) -> Result<crate::client::ClientImplementation<&mut Service<P>>, ()> {
         use interchange::Interchange;
         let (requester, responder) = TrussedInterchange::claim().ok_or(())?;
-        let client_id = ClientId::from(client_id);
-        self.add_endpoint(responder, client_id)
+        let client_ctx = ClientContext::from(client_id);
+        self.add_endpoint(responder, client_ctx)
             .map_err(|_service_endpoint| ())?;
 
         Ok(crate::client::ClientImplementation::new(requester, self))
@@ -712,8 +712,8 @@ impl<P: Platform> Service<P> {
     ) -> Result<crate::client::ClientImplementation<Service<P>>, ()> {
         use interchange::Interchange;
         let (requester, responder) = TrussedInterchange::claim().ok_or(())?;
-        let client_id = ClientId::from(client_id.as_bytes());
-        self.add_endpoint(responder, client_id)
+        let client_ctx = ClientContext::from(client_id);
+        self.add_endpoint(responder, client_ctx)
             .map_err(|_service_endpoint| ())?;
 
         Ok(crate::client::ClientImplementation::new(requester, self))
@@ -722,14 +722,14 @@ impl<P: Platform> Service<P> {
     pub fn add_endpoint(
         &mut self,
         interchange: Responder<TrussedInterchange>,
-        client_id: ClientId,
+        client_ctx: ClientContext,
     ) -> Result<(), ServiceEndpoint> {
-        if client_id.path == PathBuf::from("trussed") {
+        if client_ctx.path == PathBuf::from("trussed") {
             panic!("trussed is a reserved client ID");
         }
         self.eps.push(ServiceEndpoint {
             interchange,
-            client_id,
+            client_ctx,
         })
     }
 
@@ -772,7 +772,7 @@ impl<P: Platform> Service<P> {
                 // #[cfg(test)] println!("service got request: {:?}", &request);
 
                 // resources.currently_serving = ep.client_id.clone();
-                let reply_result = resources.reply_to(&mut ep.client_id, &request);
+                let reply_result = resources.reply_to(&mut ep.client_ctx, &request);
 
                 resources
                     .platform
