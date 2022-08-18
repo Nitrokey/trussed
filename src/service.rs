@@ -17,6 +17,7 @@ pub use crate::store::{
     counterstore::{ClientCounterstore, Counterstore as _},
     filestore::{ClientFilestore, Filestore, ReadDirFilesState, ReadDirState},
     keystore::{ClientKeystore, Keystore},
+    rawstore::RawStore,
 };
 use crate::types::*;
 use crate::Bytes;
@@ -100,11 +101,25 @@ impl<P: Platform> ServiceResources<P> {
 
         let full_store = self.platform.store();
 
+        let mode = if let Some(_) = client_id.pin {
+            RawStoreMode::Encrypted
+        } else {
+            RawStoreMode::Unencrypted
+        };
+        let raw_store = RawStore::new(
+            mode,
+            full_store,
+            client_id.pin.clone(),
+            Some(self.rng().unwrap()),
+        );
+        //let raw_store: WrappedStore = &mut raw_store;
+
         // prepare keystore, bound to client_id, for cryptographic calls
         let mut keystore: ClientKeystore<P> = ClientKeystore::new(
             client_id.path.clone(),
             self.rng().map_err(|_| Error::EntropyMalfunction)?,
             full_store,
+            raw_store,
         );
         let keystore = &mut keystore;
 
@@ -113,6 +128,7 @@ impl<P: Platform> ServiceResources<P> {
             client_id.path.clone(),
             self.rng().map_err(|_| Error::EntropyMalfunction)?,
             full_store,
+            raw_store,
         );
         let certstore = &mut certstore;
 
@@ -121,12 +137,13 @@ impl<P: Platform> ServiceResources<P> {
             client_id.path.clone(),
             self.rng().map_err(|_| Error::EntropyMalfunction)?,
             full_store,
+            raw_store,
         );
         let counterstore = &mut counterstore;
 
         // prepare filestore, bound to client_id, for storage calls
         let mut filestore: ClientFilestore<P::S> =
-            ClientFilestore::new(client_id.path.clone(), full_store);
+            ClientFilestore::new(client_id.path.clone(), full_store, raw_store);
         let filestore = &mut filestore;
 
         debug_now!("TRUSSED {:?}", request);
@@ -146,10 +163,12 @@ impl<P: Platform> ServiceResources<P> {
             },
 
             Request::Attest(request) => {
+                let raw_store_mode = RawStoreMode::Unencrypted;
                 let mut attn_keystore: ClientKeystore<P> = ClientKeystore::new(
                     PathBuf::from("attn"),
                     self.rng().map_err(|_| Error::EntropyMalfunction)?,
                     full_store,
+                    raw_store
                 );
                 attest::try_attest(&mut attn_keystore, certstore, keystore, request).map(Reply::Attest)
             }
@@ -589,8 +608,14 @@ impl<P: Platform> ServiceResources<P> {
         let mut rng = match self.rng_state.take() {
             Some(rng) => rng,
             None => {
-                let mut filestore: ClientFilestore<P::S> =
-                    ClientFilestore::new(PathBuf::from("trussed"), self.platform.store());
+                let raw_store =
+                    RawStore::new(RawStoreMode::Unencrypted, self.platform.store(), None, None);
+
+                let mut filestore: ClientFilestore<P::S> = ClientFilestore::new(
+                    PathBuf::from("trussed"),
+                    self.platform.store(),
+                    raw_store,
+                );
 
                 let path = PathBuf::from("rng-state.bin");
 
@@ -734,8 +759,18 @@ impl<P: Platform> Service<P> {
     }
 
     pub fn set_seed_if_uninitialized(&mut self, seed: &[u8; 32]) {
-        let mut filestore: ClientFilestore<P::S> =
-            ClientFilestore::new(PathBuf::from("trussed"), self.resources.platform.store());
+        let raw_store = RawStore::new(
+            RawStoreMode::Unencrypted,
+            self.resources.platform.store(),
+            None,
+            None,
+        );
+
+        let mut filestore: ClientFilestore<P::S> = ClientFilestore::new(
+            PathBuf::from("trussed"),
+            self.resources.platform.store(),
+            raw_store,
+        );
         let filestore = &mut filestore;
 
         let path = PathBuf::from("rng-state.bin");

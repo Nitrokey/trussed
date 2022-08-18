@@ -1,5 +1,6 @@
 use crate::{
     error::{Error, Result},
+    store::rawstore::RawStore,
     // service::ReadDirState,
     store::{self, Store},
     types::{Location, Message, UserAttribute},
@@ -32,11 +33,16 @@ where
 {
     client_id: ClientId,
     store: S,
+    raw_store: RawStore,
 }
 
 impl<S: Store> ClientFilestore<S> {
-    pub fn new(client_id: ClientId, store: S) -> Self {
-        Self { client_id, store }
+    pub fn new(client_id: ClientId, store: S, raw_store: RawStore) -> Self {
+        Self {
+            client_id,
+            store,
+            raw_store,
+        }
     }
 
     /// Client files are store below `/<client_id>/dat/`.
@@ -128,27 +134,27 @@ impl<S: Store> Filestore for ClientFilestore<S> {
     fn read<const N: usize>(&mut self, path: &PathBuf, location: Location) -> Result<Bytes<N>> {
         let path = self.actual_path(path);
 
-        store::read(self.store, location, &path)
+        self.raw_store.read(self.store, location, &path)
     }
 
     fn write(&mut self, path: &PathBuf, location: Location, data: &[u8]) -> Result<()> {
         let path = self.actual_path(path);
-        store::store(self.store, location, &path, data)
+        self.raw_store.store(self.store, location, &path, data)
     }
 
     fn exists(&mut self, path: &PathBuf, location: Location) -> bool {
         let path = self.actual_path(path);
-        store::exists(self.store, location, &path)
+        self.raw_store.exists(self.store, location, &path)
     }
     fn metadata(&mut self, path: &PathBuf, location: Location) -> Result<Option<Metadata>> {
         let path = self.actual_path(path);
-        store::metadata(self.store, location, &path)
+        self.raw_store.metadata(self.store, location, &path)
     }
 
     fn remove_file(&mut self, path: &PathBuf, location: Location) -> Result<()> {
         let path = self.actual_path(path);
 
-        match store::delete(self.store, location, &path) {
+        match self.raw_store.delete(self.store, location, &path) {
             true => Ok(()),
             false => Err(Error::InternalError),
         }
@@ -157,7 +163,7 @@ impl<S: Store> Filestore for ClientFilestore<S> {
     fn remove_dir(&mut self, path: &PathBuf, location: Location) -> Result<()> {
         let path = self.actual_path(path);
 
-        match store::delete(self.store, location, &path) {
+        match self.raw_store.delete(self.store, location, &path) {
             true => Ok(()),
             false => Err(Error::InternalError),
         }
@@ -166,7 +172,8 @@ impl<S: Store> Filestore for ClientFilestore<S> {
     fn remove_dir_all(&mut self, path: &PathBuf, location: Location) -> Result<usize> {
         let path = self.actual_path(path);
 
-        store::remove_dir_all_where(self.store, location, &path, |_| true)
+        self.raw_store
+            .remove_dir_all_where(self.store, location, &path, |_| true)
             .map_err(|_| Error::InternalError)
     }
 
@@ -312,7 +319,7 @@ impl<S: Store> Filestore for ClientFilestore<S> {
                             user_attribute,
                         };
                         // The semantics is that for a non-existent file, we return None (not an error)
-                        let data = store::read(self.store, location, entry.path()).ok();
+                        let data = self.raw_store.read(self.store, location, entry.path()).ok();
                         (data, read_dir_files_state)
 
                         // the `ok_or` dummy error followed by the `ok` in the next line is because
@@ -372,7 +379,7 @@ impl<S: Store> Filestore for ClientFilestore<S> {
                             user_attribute,
                         };
                         // The semantics is that for a non-existent file, we return None (not an error)
-                        let data = store::read(self.store, location, entry.path()).ok();
+                        let data = self.raw_store.read(self.store, location, entry.path()).ok();
                         (data, read_dir_files_state)
                     })
                     // convert Option into Result, again because `read_dir_and_then` expects this
