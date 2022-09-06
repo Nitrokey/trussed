@@ -1,105 +1,110 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/aead-0.3.2/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
-<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../aead/index.html'><div class='logo-container'><img src='https://raw.githubusercontent.com/RustCrypto/meta/master/logo_small.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
-                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
-<span id="2">  2</span>
-<span id="3">  3</span>
-<span id="4">  4</span>
-<span id="5">  5</span>
-<span id="6">  6</span>
-<span id="7">  7</span>
-<span id="8">  8</span>
-<span id="9">  9</span>
-<span id="10"> 10</span>
-<span id="11"> 11</span>
-<span id="12"> 12</span>
-<span id="13"> 13</span>
-<span id="14"> 14</span>
-<span id="15"> 15</span>
-<span id="16"> 16</span>
-<span id="17"> 17</span>
-<span id="18"> 18</span>
-<span id="19"> 19</span>
-<span id="20"> 20</span>
-<span id="21"> 21</span>
-<span id="22"> 22</span>
-<span id="23"> 23</span>
-<span id="24"> 24</span>
-<span id="25"> 25</span>
-<span id="26"> 26</span>
-<span id="27"> 27</span>
-<span id="28"> 28</span>
-<span id="29"> 29</span>
-<span id="30"> 30</span>
-<span id="31"> 31</span>
-<span id="32"> 32</span>
-<span id="33"> 33</span>
-<span id="34"> 34</span>
-<span id="35"> 35</span>
-<span id="36"> 36</span>
-<span id="37"> 37</span>
-<span id="38"> 38</span>
-<span id="39"> 39</span>
-<span id="40"> 40</span>
-<span id="41"> 41</span>
-<span id="42"> 42</span>
-<span id="43"> 43</span>
-<span id="44"> 44</span>
-<span id="45"> 45</span>
-<span id="46"> 46</span>
-<span id="47"> 47</span>
-<span id="48"> 48</span>
-<span id="49"> 49</span>
-<span id="50"> 50</span>
-<span id="51"> 51</span>
-<span id="52"> 52</span>
-<span id="53"> 53</span>
-<span id="54"> 54</span>
-<span id="55"> 55</span>
-<span id="56"> 56</span>
-<span id="57"> 57</span>
-<span id="58"> 58</span>
-<span id="59"> 59</span>
-<span id="60"> 60</span>
-<span id="61"> 61</span>
-<span id="62"> 62</span>
-<span id="63"> 63</span>
-<span id="64"> 64</span>
-<span id="65"> 65</span>
-<span id="66"> 66</span>
-<span id="67"> 67</span>
-<span id="68"> 68</span>
-<span id="69"> 69</span>
-<span id="70"> 70</span>
-<span id="71"> 71</span>
-<span id="72"> 72</span>
-<span id="73"> 73</span>
-<span id="74"> 74</span>
-<span id="75"> 75</span>
-<span id="76"> 76</span>
-<span id="77"> 77</span>
-<span id="78"> 78</span>
-<span id="79"> 79</span>
-<span id="80"> 80</span>
-<span id="81"> 81</span>
-<span id="82"> 82</span>
-<span id="83"> 83</span>
-<span id="84"> 84</span>
-<span id="85"> 85</span>
-<span id="86"> 86</span>
-<span id="87"> 87</span>
-<span id="88"> 88</span>
-<span id="89"> 89</span>
-<span id="90"> 90</span>
-<span id="91"> 91</span>
-<span id="92"> 92</span>
-<span id="93"> 93</span>
-<span id="94"> 94</span>
-<span id="95"> 95</span>
-<span id="96"> 96</span>
-<span id="97"> 97</span>
-<span id="98"> 98</span>
-<span id="99"> 99</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/aead-0.4.3/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/RustCrypto/media/8f1a9894/logo.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aead/index.html"><div class="logo-container"><img src="https://raw.githubusercontent.com/RustCrypto/media/8f1a9894/logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../aead/index.html"><div class="logo-container">
+                    <img src="https://raw.githubusercontent.com/RustCrypto/media/8f1a9894/logo.svg" alt="logo"></div>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aead/index.html">
+                        <img src="https://raw.githubusercontent.com/RustCrypto/media/8f1a9894/logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><div id="settings-menu" tabindex="-1">
+                                <a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div>
+                        </div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<span id="2">2</span>
+<span id="3">3</span>
+<span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
+<span id="9">9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
+<span id="90">90</span>
+<span id="91">91</span>
+<span id="92">92</span>
+<span id="93">93</span>
+<span id="94">94</span>
+<span id="95">95</span>
+<span id="96">96</span>
+<span id="97">97</span>
+<span id="98">98</span>
+<span id="99">99</span>
 <span id="100">100</span>
 <span id="101">101</span>
 <span id="102">102</span>
@@ -534,19 +539,7 @@
 <span id="531">531</span>
 <span id="532">532</span>
 <span id="533">533</span>
-<span id="534">534</span>
-<span id="535">535</span>
-<span id="536">536</span>
-<span id="537">537</span>
-<span id="538">538</span>
-<span id="539">539</span>
-<span id="540">540</span>
-<span id="541">541</span>
-<span id="542">542</span>
-<span id="543">543</span>
-<span id="544">544</span>
-</pre><div class="example-wrap"><pre class="rust ">
-<span class="doccomment">//! [Authenticated Encryption with Associated Data] (AEAD) traits</span>
+</pre><pre class="rust"><code><span class="doccomment">//! [Authenticated Encryption with Associated Data] (AEAD) traits</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! This crate provides an abstract interface for AEAD ciphers, which guarantee</span>
 <span class="doccomment">//! both confidentiality and integrity, even from a powerful attacker who is</span>
@@ -563,8 +556,12 @@
 
 <span class="attribute">#![<span class="ident">no_std</span>]</span>
 <span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">docsrs</span>, <span class="ident">feature</span>(<span class="ident">doc_cfg</span>))]</span>
-<span class="attribute">#![<span class="ident">forbid</span>(<span class="ident">unsafe_code</span>)]</span>
-<span class="attribute">#![<span class="ident">doc</span>(<span class="ident">html_logo_url</span> <span class="op">=</span> <span class="string">&quot;https://raw.githubusercontent.com/RustCrypto/meta/master/logo_small.png&quot;</span>)]</span>
+<span class="attribute">#![<span class="ident">forbid</span>(<span class="ident">unsafe_code</span>, <span class="ident">clippy::unwrap_used</span>)]</span>
+<span class="attribute">#![<span class="ident">doc</span>(
+    <span class="ident">html_logo_url</span> <span class="op">=</span> <span class="string">&quot;https://raw.githubusercontent.com/RustCrypto/media/8f1a9894/logo.svg&quot;</span>,
+    <span class="ident">html_favicon_url</span> <span class="op">=</span> <span class="string">&quot;https://raw.githubusercontent.com/RustCrypto/media/8f1a9894/logo.svg&quot;</span>,
+    <span class="ident">html_root_url</span> <span class="op">=</span> <span class="string">&quot;https://docs.rs/aead/0.4.3&quot;</span>
+)]</span>
 <span class="attribute">#![<span class="ident">warn</span>(<span class="ident">missing_docs</span>, <span class="ident">rust_2018_idioms</span>)]</span>
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;alloc&quot;</span>)]</span>
@@ -577,16 +574,28 @@
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">docsrs</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;dev&quot;</span>)))]</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">dev</span>;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">generic_array</span>::{<span class="self">self</span>, <span class="ident">typenum</span>::<span class="ident">consts</span>};
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;stream&quot;</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">docsrs</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;stream&quot;</span>)))]</span>
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">stream</span>;
+
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">generic_array</span>::{<span class="self">self</span>, <span class="ident">typenum::consts</span>};
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;heapless&quot;</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">docsrs</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;heapless&quot;</span>)))]</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">heapless</span>;
 
-<span class="kw">use</span> <span class="ident">core</span>::<span class="ident">fmt</span>;
-<span class="kw">use</span> <span class="ident">generic_array</span>::{<span class="ident">typenum</span>::<span class="ident">Unsigned</span>, <span class="ident">ArrayLength</span>, <span class="ident">GenericArray</span>};
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rand_core&quot;</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">docsrs</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rand_core&quot;</span>)))]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">rand_core</span>;
+
+<span class="kw">use</span> <span class="ident">core::fmt</span>;
+<span class="kw">use</span> <span class="ident">generic_array</span>::{<span class="ident">typenum::Unsigned</span>, <span class="ident">ArrayLength</span>, <span class="ident">GenericArray</span>};
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;alloc&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">alloc</span>::<span class="ident">vec</span>::<span class="ident">Vec</span>;
+<span class="kw">use</span> <span class="ident">alloc::vec::Vec</span>;
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rand_core&quot;</span>)]</span>
+<span class="kw">use</span> <span class="ident">rand_core</span>::{<span class="ident">CryptoRng</span>, <span class="ident">RngCore</span>};
 
 <span class="doccomment">/// Error type.</span>
 <span class="doccomment">///</span>
@@ -595,24 +604,27 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Error</span>;
 
-<span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+<span class="doccomment">/// Result type alias with [`Error`].</span>
+<span class="kw">pub</span> <span class="kw">type</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">core::result::Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+
+<span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">Error</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
         <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;aead::Error&quot;</span>)
     }
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
-<span class="kw">impl</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span> <span class="kw">for</span> <span class="ident">Error</span> {}
+<span class="kw">impl</span> <span class="ident">std::error::Error</span> <span class="kw">for</span> <span class="ident">Error</span> {}
 
 <span class="doccomment">/// Key for a [`NewAead`] algorithm</span>
 <span class="comment">// TODO(tarcieri): make this a struct and zeroize on drop?</span>
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">GenericArray</span><span class="op">&lt;</span><span class="ident">u8</span>, <span class="op">&lt;</span><span class="ident">A</span> <span class="kw">as</span> <span class="ident">NewAead</span><span class="op">&gt;</span>::<span class="ident">KeySize</span><span class="op">&gt;</span>;
+<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Key</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">GenericArray</span><span class="op">&lt;</span><span class="ident">u8</span>, <span class="op">&lt;</span><span class="ident">A</span> <span class="kw">as</span> <span class="ident">NewAead</span><span class="op">&gt;</span><span class="ident">::KeySize</span><span class="op">&gt;</span>;
 
 <span class="doccomment">/// Nonce: single-use value for ensuring ciphertexts are unique</span>
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Nonce</span><span class="op">&lt;</span><span class="ident">NonceSize</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">GenericArray</span><span class="op">&lt;</span><span class="ident">u8</span>, <span class="ident">NonceSize</span><span class="op">&gt;</span>;
+<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Nonce</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">GenericArray</span><span class="op">&lt;</span><span class="ident">u8</span>, <span class="op">&lt;</span><span class="ident">A</span> <span class="kw">as</span> <span class="ident">AeadCore</span><span class="op">&gt;</span><span class="ident">::NonceSize</span><span class="op">&gt;</span>;
 
 <span class="doccomment">/// Tag: authentication code which ensures ciphertexts are authentic</span>
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Tag</span><span class="op">&lt;</span><span class="ident">TagSize</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">GenericArray</span><span class="op">&lt;</span><span class="ident">u8</span>, <span class="ident">TagSize</span><span class="op">&gt;</span>;
+<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Tag</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">GenericArray</span><span class="op">&lt;</span><span class="ident">u8</span>, <span class="op">&lt;</span><span class="ident">A</span> <span class="kw">as</span> <span class="ident">AeadCore</span><span class="op">&gt;</span><span class="ident">::TagSize</span><span class="op">&gt;</span>;
 
 <span class="doccomment">/// Instantiate either a stateless [`Aead`] or stateful [`AeadMut`] algorithm.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">NewAead</span> {
@@ -620,30 +632,37 @@
     <span class="kw">type</span> <span class="ident">KeySize</span>: <span class="ident">ArrayLength</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Create a new AEAD instance with the given key.</span>
-    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">Key</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>;
+    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">Key</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span>;
 
-    <span class="doccomment">/// Create new AEAD instance from key with variable size.</span>
+    <span class="doccomment">/// Create new AEAD instance from key given as a byte slice..</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Default implementation will accept only keys with length equal to `KeySize`.</span>
-    <span class="kw">fn</span> <span class="ident">new_varkey</span>(<span class="ident">key</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">Error</span><span class="op">&gt;</span>
+    <span class="kw">fn</span> <span class="ident">new_from_slice</span>(<span class="ident">key</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="self">Self</span>: <span class="ident">Sized</span>,
     {
-        <span class="kw">if</span> <span class="ident">key</span>.<span class="ident">len</span>() <span class="op">!</span><span class="op">=</span> <span class="self">Self</span>::<span class="ident">KeySize</span>::<span class="ident">to_usize</span>() {
+        <span class="kw">if</span> <span class="ident">key</span>.<span class="ident">len</span>() <span class="op">!</span><span class="op">=</span> <span class="ident"><span class="self">Self</span>::KeySize::to_usize</span>() {
             <span class="prelude-val">Err</span>(<span class="ident">Error</span>)
         } <span class="kw">else</span> {
-            <span class="prelude-val">Ok</span>(<span class="self">Self</span>::<span class="ident">new</span>(<span class="ident">GenericArray</span>::<span class="ident">from_slice</span>(<span class="ident">key</span>)))
+            <span class="prelude-val">Ok</span>(<span class="ident"><span class="self">Self</span>::new</span>(<span class="ident">GenericArray::from_slice</span>(<span class="ident">key</span>)))
         }
+    }
+
+    <span class="doccomment">/// Generate a random key for this AEAD using the provided [`CryptoRng`].</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rand_core&quot;</span>)]</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">docsrs</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;rand_core&quot;</span>)))]</span>
+    <span class="kw">fn</span> <span class="ident">generate_key</span>(<span class="kw-2">mut</span> <span class="ident">rng</span>: <span class="kw">impl</span> <span class="ident">CryptoRng</span> <span class="op">+</span> <span class="ident">RngCore</span>) -&gt; <span class="ident">Key</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">Key</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="ident">::default</span>();
+        <span class="ident">rng</span>.<span class="ident">fill_bytes</span>(<span class="kw-2">&amp;mut</span> <span class="ident">key</span>);
+        <span class="ident">key</span>
     }
 }
 
-<span class="doccomment">/// Authenticated Encryption with Associated Data (AEAD) algorithm.</span>
+<span class="doccomment">/// Authenticated Encryption with Associated Data (AEAD) algorithm core trait.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// This trait is intended for use with stateless AEAD algorithms. The</span>
-<span class="doccomment">/// [`AeadMut`] trait provides a stateful interface.</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;alloc&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">docsrs</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;alloc&quot;</span>)))]</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Aead</span> {
+<span class="doccomment">/// Defines nonce, tag, and overhead sizes that are consumed by various other</span>
+<span class="doccomment">/// `Aead*` traits.</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">AeadCore</span> {
     <span class="doccomment">/// The length of a nonce.</span>
     <span class="kw">type</span> <span class="ident">NonceSize</span>: <span class="ident">ArrayLength</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>;
 
@@ -653,7 +672,15 @@
     <span class="doccomment">/// The upper bound amount of additional space required to support a</span>
     <span class="doccomment">/// ciphertext vs. a plaintext.</span>
     <span class="kw">type</span> <span class="ident">CiphertextOverhead</span>: <span class="ident">ArrayLength</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Unsigned</span>;
+}
 
+<span class="doccomment">/// Authenticated Encryption with Associated Data (AEAD) algorithm.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// This trait is intended for use with stateless AEAD algorithms. The</span>
+<span class="doccomment">/// [`AeadMut`] trait provides a stateful interface.</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;alloc&quot;</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">docsrs</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;alloc&quot;</span>)))]</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Aead</span>: <span class="ident">AeadCore</span> {
     <span class="doccomment">/// Encrypt the given plaintext payload, and return the resulting</span>
     <span class="doccomment">/// ciphertext as a vector of bytes.</span>
     <span class="doccomment">///</span>
@@ -679,9 +706,9 @@
     <span class="doccomment">/// ciphertext message.</span>
     <span class="kw">fn</span> <span class="ident">encrypt</span><span class="op">&lt;</span><span class="lifetime">&#39;msg</span>, <span class="lifetime">&#39;aad</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">NonceSize</span><span class="op">&gt;</span>,
+        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
         <span class="ident">plaintext</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&lt;</span><span class="lifetime">&#39;msg</span>, <span class="lifetime">&#39;aad</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Decrypt the given ciphertext slice, and return the resulting plaintext</span>
     <span class="doccomment">/// as a vector of bytes.</span>
@@ -702,35 +729,25 @@
     <span class="doccomment">/// ciphertext message.</span>
     <span class="kw">fn</span> <span class="ident">decrypt</span><span class="op">&lt;</span><span class="lifetime">&#39;msg</span>, <span class="lifetime">&#39;aad</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">NonceSize</span><span class="op">&gt;</span>,
+        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
         <span class="ident">ciphertext</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&lt;</span><span class="lifetime">&#39;msg</span>, <span class="lifetime">&#39;aad</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 }
 
 <span class="doccomment">/// Stateful Authenticated Encryption with Associated Data algorithm.</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;alloc&quot;</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">docsrs</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;alloc&quot;</span>)))]</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">AeadMut</span> {
-    <span class="doccomment">/// The length of a nonce.</span>
-    <span class="kw">type</span> <span class="ident">NonceSize</span>: <span class="ident">ArrayLength</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>;
-
-    <span class="doccomment">/// The maximum length of the nonce.</span>
-    <span class="kw">type</span> <span class="ident">TagSize</span>: <span class="ident">ArrayLength</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>;
-
-    <span class="doccomment">/// The upper bound amount of additional space required to support a</span>
-    <span class="doccomment">/// ciphertext vs. a plaintext.</span>
-    <span class="kw">type</span> <span class="ident">CiphertextOverhead</span>: <span class="ident">ArrayLength</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Unsigned</span>;
-
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">AeadMut</span>: <span class="ident">AeadCore</span> {
     <span class="doccomment">/// Encrypt the given plaintext slice, and return the resulting ciphertext</span>
     <span class="doccomment">/// as a vector of bytes.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// See notes on [`Aead::encrypt()`] about allowable message payloads and</span>
     <span class="doccomment">/// Associated Additional Data (AAD).</span>
     <span class="kw">fn</span> <span class="ident">encrypt</span><span class="op">&lt;</span><span class="lifetime">&#39;msg</span>, <span class="lifetime">&#39;aad</span><span class="op">&gt;</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
-        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">NonceSize</span><span class="op">&gt;</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
+        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
         <span class="ident">plaintext</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&lt;</span><span class="lifetime">&#39;msg</span>, <span class="lifetime">&#39;aad</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Decrypt the given ciphertext slice, and return the resulting plaintext</span>
     <span class="doccomment">/// as a vector of bytes.</span>
@@ -738,10 +755,10 @@
     <span class="doccomment">/// See notes on [`Aead::encrypt()`] and [`Aead::decrypt()`] about allowable</span>
     <span class="doccomment">/// message payloads and Associated Additional Data (AAD).</span>
     <span class="kw">fn</span> <span class="ident">decrypt</span><span class="op">&lt;</span><span class="lifetime">&#39;msg</span>, <span class="lifetime">&#39;aad</span><span class="op">&gt;</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
-        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">NonceSize</span><span class="op">&gt;</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
+        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
         <span class="ident">ciphertext</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&lt;</span><span class="lifetime">&#39;msg</span>, <span class="lifetime">&#39;aad</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 }
 
 <span class="doccomment">/// Implement the `decrypt_in_place` method on [`AeadInPlace`] and</span>
@@ -749,15 +766,15 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// Assumes a postfix authentication tag. AEAD ciphers which do not use a</span>
 <span class="doccomment">/// postfix authentication tag will need to define their own implementation.</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">impl_decrypt_in_place</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">aead</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">nonce</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">aad</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">buffer</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {{
-        <span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">buffer</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="self">Self</span>::<span class="ident">TagSize</span>::<span class="ident">to_usize</span>() {
+<span class="macro">macro_rules!</span> <span class="ident">impl_decrypt_in_place</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">aead</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">nonce</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">aad</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">buffer</span>:<span class="ident">expr</span>) =&gt; {{
+        <span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">buffer</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="ident"><span class="self">Self</span>::TagSize::to_usize</span>() {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>);
         }
 
-        <span class="kw">let</span> <span class="ident">tag_pos</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">buffer</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="self">Self</span>::<span class="ident">TagSize</span>::<span class="ident">to_usize</span>();
+        <span class="kw">let</span> <span class="ident">tag_pos</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">buffer</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="ident"><span class="self">Self</span>::TagSize::to_usize</span>();
         <span class="kw">let</span> (<span class="ident">msg</span>, <span class="ident">tag</span>) <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">buffer</span>.<span class="ident">as_mut</span>().<span class="ident">split_at_mut</span>(<span class="ident">tag_pos</span>);
-        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">aead</span>.<span class="ident">decrypt_in_place_detached</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">nonce</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">aad</span>, <span class="ident">msg</span>, <span class="ident">Tag</span>::<span class="ident">from_slice</span>(<span class="ident">tag</span>))<span class="question-mark">?</span>;
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">aead</span>.<span class="ident">decrypt_in_place_detached</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">nonce</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">aad</span>, <span class="ident">msg</span>, <span class="ident">Tag</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="ident">::from_slice</span>(<span class="ident">tag</span>))<span class="question-mark">?</span>;
         <span class="macro-nonterminal">$</span><span class="macro-nonterminal">buffer</span>.<span class="ident">truncate</span>(<span class="ident">tag_pos</span>);
         <span class="prelude-val">Ok</span>(())
     }};
@@ -766,17 +783,7 @@
 <span class="doccomment">/// In-place stateless AEAD trait.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// This trait is both object safe and has no dependencies on `alloc` or `std`.</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">AeadInPlace</span> {
-    <span class="doccomment">/// The length of a nonce.</span>
-    <span class="kw">type</span> <span class="ident">NonceSize</span>: <span class="ident">ArrayLength</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>;
-
-    <span class="doccomment">/// The maximum length of the nonce.</span>
-    <span class="kw">type</span> <span class="ident">TagSize</span>: <span class="ident">ArrayLength</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>;
-
-    <span class="doccomment">/// The upper bound amount of additional space required to support a</span>
-    <span class="doccomment">/// ciphertext vs. a plaintext.</span>
-    <span class="kw">type</span> <span class="ident">CiphertextOverhead</span>: <span class="ident">ArrayLength</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Unsigned</span>;
-
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">AeadInPlace</span>: <span class="ident">AeadCore</span> {
     <span class="doccomment">/// Encrypt the given buffer containing a plaintext message in-place.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The buffer must have sufficient capacity to store the ciphertext</span>
@@ -788,10 +795,10 @@
     <span class="doccomment">/// resulting ciphertext message.</span>
     <span class="kw">fn</span> <span class="ident">encrypt_in_place</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">NonceSize</span><span class="op">&gt;</span>,
+        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
         <span class="ident">associated_data</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-        <span class="ident">buffer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw">dyn</span> <span class="ident">Buffer</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="ident">buffer</span>: <span class="kw-2">&amp;mut</span> <span class="kw">dyn</span> <span class="ident">Buffer</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">tag</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">encrypt_in_place_detached</span>(<span class="ident">nonce</span>, <span class="ident">associated_data</span>, <span class="ident">buffer</span>.<span class="ident">as_mut</span>())<span class="question-mark">?</span>;
         <span class="ident">buffer</span>.<span class="ident">extend_from_slice</span>(<span class="ident">tag</span>.<span class="ident">as_slice</span>())<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
@@ -800,10 +807,10 @@
     <span class="doccomment">/// Encrypt the data in-place, returning the authentication tag</span>
     <span class="kw">fn</span> <span class="ident">encrypt_in_place_detached</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">NonceSize</span><span class="op">&gt;</span>,
+        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
         <span class="ident">associated_data</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-        <span class="ident">buffer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>],
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Tag</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">TagSize</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+        <span class="ident">buffer</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>],
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Tag</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Decrypt the message in-place, returning an error in the event the</span>
     <span class="doccomment">/// provided authentication tag does not match the given ciphertext.</span>
@@ -812,11 +819,11 @@
     <span class="doccomment">/// message upon success.</span>
     <span class="kw">fn</span> <span class="ident">decrypt_in_place</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">NonceSize</span><span class="op">&gt;</span>,
+        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
         <span class="ident">associated_data</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-        <span class="ident">buffer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw">dyn</span> <span class="ident">Buffer</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="macro">impl_decrypt_in_place</span><span class="macro">!</span>(<span class="self">self</span>, <span class="ident">nonce</span>, <span class="ident">associated_data</span>, <span class="ident">buffer</span>)
+        <span class="ident">buffer</span>: <span class="kw-2">&amp;mut</span> <span class="kw">dyn</span> <span class="ident">Buffer</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="macro">impl_decrypt_in_place!</span>(<span class="self">self</span>, <span class="ident">nonce</span>, <span class="ident">associated_data</span>, <span class="ident">buffer</span>)
     }
 
     <span class="doccomment">/// Decrypt the message in-place, returning an error in the event the provided</span>
@@ -824,27 +831,17 @@
     <span class="doccomment">/// is modified/unauthentic)</span>
     <span class="kw">fn</span> <span class="ident">decrypt_in_place_detached</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">NonceSize</span><span class="op">&gt;</span>,
+        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
         <span class="ident">associated_data</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-        <span class="ident">buffer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>],
-        <span class="ident">tag</span>: <span class="kw-2">&amp;</span><span class="ident">Tag</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">TagSize</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span>;
+        <span class="ident">buffer</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>],
+        <span class="ident">tag</span>: <span class="kw-2">&amp;</span><span class="ident">Tag</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
 }
 
 <span class="doccomment">/// In-place stateful AEAD trait.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// This trait is both object safe and has no dependencies on `alloc` or `std`.</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">AeadMutInPlace</span> {
-    <span class="doccomment">/// The length of a nonce.</span>
-    <span class="kw">type</span> <span class="ident">NonceSize</span>: <span class="ident">ArrayLength</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>;
-
-    <span class="doccomment">/// The maximum length of the nonce.</span>
-    <span class="kw">type</span> <span class="ident">TagSize</span>: <span class="ident">ArrayLength</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>;
-
-    <span class="doccomment">/// The upper bound amount of additional space required to support a</span>
-    <span class="doccomment">/// ciphertext vs. a plaintext.</span>
-    <span class="kw">type</span> <span class="ident">CiphertextOverhead</span>: <span class="ident">ArrayLength</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Unsigned</span>;
-
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">AeadMutInPlace</span>: <span class="ident">AeadCore</span> {
     <span class="doccomment">/// Encrypt the given buffer containing a plaintext message in-place.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The buffer must have sufficient capacity to store the ciphertext</span>
@@ -855,11 +852,11 @@
     <span class="doccomment">/// Returns an error if the buffer has insufficient capacity to store the</span>
     <span class="doccomment">/// resulting ciphertext message.</span>
     <span class="kw">fn</span> <span class="ident">encrypt_in_place</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
-        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">NonceSize</span><span class="op">&gt;</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
+        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
         <span class="ident">associated_data</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-        <span class="ident">buffer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw">impl</span> <span class="ident">Buffer</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="ident">buffer</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">Buffer</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">tag</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">encrypt_in_place_detached</span>(<span class="ident">nonce</span>, <span class="ident">associated_data</span>, <span class="ident">buffer</span>.<span class="ident">as_mut</span>())<span class="question-mark">?</span>;
         <span class="ident">buffer</span>.<span class="ident">extend_from_slice</span>(<span class="ident">tag</span>.<span class="ident">as_slice</span>())<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
@@ -867,11 +864,11 @@
 
     <span class="doccomment">/// Encrypt the data in-place, returning the authentication tag</span>
     <span class="kw">fn</span> <span class="ident">encrypt_in_place_detached</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
-        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">NonceSize</span><span class="op">&gt;</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
+        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
         <span class="ident">associated_data</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-        <span class="ident">buffer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>],
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Tag</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">TagSize</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+        <span class="ident">buffer</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>],
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Tag</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Decrypt the message in-place, returning an error in the event the</span>
     <span class="doccomment">/// provided authentication tag does not match the given ciphertext.</span>
@@ -879,126 +876,114 @@
     <span class="doccomment">/// The buffer will be truncated to the length of the original plaintext</span>
     <span class="doccomment">/// message upon success.</span>
     <span class="kw">fn</span> <span class="ident">decrypt_in_place</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
-        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">NonceSize</span><span class="op">&gt;</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
+        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
         <span class="ident">associated_data</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-        <span class="ident">buffer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw">impl</span> <span class="ident">Buffer</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="macro">impl_decrypt_in_place</span><span class="macro">!</span>(<span class="self">self</span>, <span class="ident">nonce</span>, <span class="ident">associated_data</span>, <span class="ident">buffer</span>)
+        <span class="ident">buffer</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">Buffer</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="macro">impl_decrypt_in_place!</span>(<span class="self">self</span>, <span class="ident">nonce</span>, <span class="ident">associated_data</span>, <span class="ident">buffer</span>)
     }
 
     <span class="doccomment">/// Decrypt the data in-place, returning an error in the event the provided</span>
     <span class="doccomment">/// authentication tag does not match the given ciphertext (i.e. ciphertext</span>
     <span class="doccomment">/// is modified/unauthentic)</span>
     <span class="kw">fn</span> <span class="ident">decrypt_in_place_detached</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
-        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">NonceSize</span><span class="op">&gt;</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
+        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
         <span class="ident">associated_data</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-        <span class="ident">buffer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>],
-        <span class="ident">tag</span>: <span class="kw-2">&amp;</span><span class="ident">Tag</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">TagSize</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span>;
+        <span class="ident">buffer</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>],
+        <span class="ident">tag</span>: <span class="kw-2">&amp;</span><span class="ident">Tag</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;alloc&quot;</span>)]</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">Alg</span>: <span class="ident">AeadInPlace</span><span class="op">&gt;</span> <span class="ident">Aead</span> <span class="kw">for</span> <span class="ident">Alg</span> {
-    <span class="kw">type</span> <span class="ident">NonceSize</span> <span class="op">=</span> <span class="ident">Alg</span>::<span class="ident">NonceSize</span>;
-    <span class="kw">type</span> <span class="ident">TagSize</span> <span class="op">=</span> <span class="ident">Alg</span>::<span class="ident">TagSize</span>;
-    <span class="kw">type</span> <span class="ident">CiphertextOverhead</span> <span class="op">=</span> <span class="ident">Alg</span>::<span class="ident">CiphertextOverhead</span>;
-
     <span class="kw">fn</span> <span class="ident">encrypt</span><span class="op">&lt;</span><span class="lifetime">&#39;msg</span>, <span class="lifetime">&#39;aad</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">NonceSize</span><span class="op">&gt;</span>,
+        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
         <span class="ident">plaintext</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&lt;</span><span class="lifetime">&#39;msg</span>, <span class="lifetime">&#39;aad</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">payload</span> <span class="op">=</span> <span class="ident">plaintext</span>.<span class="ident">into</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buffer</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">with_capacity</span>(<span class="ident">payload</span>.<span class="ident">msg</span>.<span class="ident">len</span>() <span class="op">+</span> <span class="self">Self</span>::<span class="ident">TagSize</span>::<span class="ident">to_usize</span>());
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buffer</span> <span class="op">=</span> <span class="ident">Vec::with_capacity</span>(<span class="ident">payload</span>.<span class="ident">msg</span>.<span class="ident">len</span>() <span class="op">+</span> <span class="ident"><span class="self">Self</span>::TagSize::to_usize</span>());
         <span class="ident">buffer</span>.<span class="ident">extend_from_slice</span>(<span class="ident">payload</span>.<span class="ident">msg</span>);
-        <span class="self">self</span>.<span class="ident">encrypt_in_place</span>(<span class="ident">nonce</span>, <span class="ident">payload</span>.<span class="ident">aad</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">buffer</span>)<span class="question-mark">?</span>;
+        <span class="self">self</span>.<span class="ident">encrypt_in_place</span>(<span class="ident">nonce</span>, <span class="ident">payload</span>.<span class="ident">aad</span>, <span class="kw-2">&amp;mut</span> <span class="ident">buffer</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="ident">buffer</span>)
     }
 
     <span class="kw">fn</span> <span class="ident">decrypt</span><span class="op">&lt;</span><span class="lifetime">&#39;msg</span>, <span class="lifetime">&#39;aad</span><span class="op">&gt;</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">NonceSize</span><span class="op">&gt;</span>,
+        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
         <span class="ident">ciphertext</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&lt;</span><span class="lifetime">&#39;msg</span>, <span class="lifetime">&#39;aad</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">payload</span> <span class="op">=</span> <span class="ident">ciphertext</span>.<span class="ident">into</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buffer</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">from</span>(<span class="ident">payload</span>.<span class="ident">msg</span>);
-        <span class="self">self</span>.<span class="ident">decrypt_in_place</span>(<span class="ident">nonce</span>, <span class="ident">payload</span>.<span class="ident">aad</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">buffer</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buffer</span> <span class="op">=</span> <span class="ident">Vec::from</span>(<span class="ident">payload</span>.<span class="ident">msg</span>);
+        <span class="self">self</span>.<span class="ident">decrypt_in_place</span>(<span class="ident">nonce</span>, <span class="ident">payload</span>.<span class="ident">aad</span>, <span class="kw-2">&amp;mut</span> <span class="ident">buffer</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="ident">buffer</span>)
     }
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;alloc&quot;</span>)]</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">Alg</span>: <span class="ident">AeadMutInPlace</span><span class="op">&gt;</span> <span class="ident">AeadMut</span> <span class="kw">for</span> <span class="ident">Alg</span> {
-    <span class="kw">type</span> <span class="ident">NonceSize</span> <span class="op">=</span> <span class="ident">Alg</span>::<span class="ident">NonceSize</span>;
-    <span class="kw">type</span> <span class="ident">TagSize</span> <span class="op">=</span> <span class="ident">Alg</span>::<span class="ident">TagSize</span>;
-    <span class="kw">type</span> <span class="ident">CiphertextOverhead</span> <span class="op">=</span> <span class="ident">Alg</span>::<span class="ident">CiphertextOverhead</span>;
-
     <span class="kw">fn</span> <span class="ident">encrypt</span><span class="op">&lt;</span><span class="lifetime">&#39;msg</span>, <span class="lifetime">&#39;aad</span><span class="op">&gt;</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
-        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">NonceSize</span><span class="op">&gt;</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
+        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
         <span class="ident">plaintext</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&lt;</span><span class="lifetime">&#39;msg</span>, <span class="lifetime">&#39;aad</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">payload</span> <span class="op">=</span> <span class="ident">plaintext</span>.<span class="ident">into</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buffer</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">with_capacity</span>(<span class="ident">payload</span>.<span class="ident">msg</span>.<span class="ident">len</span>() <span class="op">+</span> <span class="self">Self</span>::<span class="ident">TagSize</span>::<span class="ident">to_usize</span>());
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buffer</span> <span class="op">=</span> <span class="ident">Vec::with_capacity</span>(<span class="ident">payload</span>.<span class="ident">msg</span>.<span class="ident">len</span>() <span class="op">+</span> <span class="ident"><span class="self">Self</span>::TagSize::to_usize</span>());
         <span class="ident">buffer</span>.<span class="ident">extend_from_slice</span>(<span class="ident">payload</span>.<span class="ident">msg</span>);
-        <span class="self">self</span>.<span class="ident">encrypt_in_place</span>(<span class="ident">nonce</span>, <span class="ident">payload</span>.<span class="ident">aad</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">buffer</span>)<span class="question-mark">?</span>;
+        <span class="self">self</span>.<span class="ident">encrypt_in_place</span>(<span class="ident">nonce</span>, <span class="ident">payload</span>.<span class="ident">aad</span>, <span class="kw-2">&amp;mut</span> <span class="ident">buffer</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="ident">buffer</span>)
     }
 
     <span class="kw">fn</span> <span class="ident">decrypt</span><span class="op">&lt;</span><span class="lifetime">&#39;msg</span>, <span class="lifetime">&#39;aad</span><span class="op">&gt;</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
-        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">NonceSize</span><span class="op">&gt;</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
+        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
         <span class="ident">ciphertext</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Payload</span><span class="op">&lt;</span><span class="lifetime">&#39;msg</span>, <span class="lifetime">&#39;aad</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">payload</span> <span class="op">=</span> <span class="ident">ciphertext</span>.<span class="ident">into</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buffer</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">from</span>(<span class="ident">payload</span>.<span class="ident">msg</span>);
-        <span class="self">self</span>.<span class="ident">decrypt_in_place</span>(<span class="ident">nonce</span>, <span class="ident">payload</span>.<span class="ident">aad</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">buffer</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buffer</span> <span class="op">=</span> <span class="ident">Vec::from</span>(<span class="ident">payload</span>.<span class="ident">msg</span>);
+        <span class="self">self</span>.<span class="ident">decrypt_in_place</span>(<span class="ident">nonce</span>, <span class="ident">payload</span>.<span class="ident">aad</span>, <span class="kw-2">&amp;mut</span> <span class="ident">buffer</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="ident">buffer</span>)
     }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">Alg</span>: <span class="ident">AeadInPlace</span><span class="op">&gt;</span> <span class="ident">AeadMutInPlace</span> <span class="kw">for</span> <span class="ident">Alg</span> {
-    <span class="kw">type</span> <span class="ident">NonceSize</span> <span class="op">=</span> <span class="ident">Alg</span>::<span class="ident">NonceSize</span>;
-    <span class="kw">type</span> <span class="ident">TagSize</span> <span class="op">=</span> <span class="ident">Alg</span>::<span class="ident">TagSize</span>;
-    <span class="kw">type</span> <span class="ident">CiphertextOverhead</span> <span class="op">=</span> <span class="ident">Alg</span>::<span class="ident">CiphertextOverhead</span>;
-
     <span class="kw">fn</span> <span class="ident">encrypt_in_place</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
-        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">NonceSize</span><span class="op">&gt;</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
+        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
         <span class="ident">associated_data</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-        <span class="ident">buffer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw">impl</span> <span class="ident">Buffer</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">AeadInPlace</span><span class="op">&gt;</span>::<span class="ident">encrypt_in_place</span>(<span class="self">self</span>, <span class="ident">nonce</span>, <span class="ident">associated_data</span>, <span class="ident">buffer</span>)
+        <span class="ident">buffer</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">Buffer</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">AeadInPlace</span><span class="op">&gt;</span><span class="ident">::encrypt_in_place</span>(<span class="self">self</span>, <span class="ident">nonce</span>, <span class="ident">associated_data</span>, <span class="ident">buffer</span>)
     }
 
     <span class="kw">fn</span> <span class="ident">encrypt_in_place_detached</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
-        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">NonceSize</span><span class="op">&gt;</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
+        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
         <span class="ident">associated_data</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-        <span class="ident">buffer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>],
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Tag</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">TagSize</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">AeadInPlace</span><span class="op">&gt;</span>::<span class="ident">encrypt_in_place_detached</span>(<span class="self">self</span>, <span class="ident">nonce</span>, <span class="ident">associated_data</span>, <span class="ident">buffer</span>)
+        <span class="ident">buffer</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>],
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Tag</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">AeadInPlace</span><span class="op">&gt;</span><span class="ident">::encrypt_in_place_detached</span>(<span class="self">self</span>, <span class="ident">nonce</span>, <span class="ident">associated_data</span>, <span class="ident">buffer</span>)
     }
 
     <span class="kw">fn</span> <span class="ident">decrypt_in_place</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
-        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">NonceSize</span><span class="op">&gt;</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
+        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
         <span class="ident">associated_data</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-        <span class="ident">buffer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw">impl</span> <span class="ident">Buffer</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">AeadInPlace</span><span class="op">&gt;</span>::<span class="ident">decrypt_in_place</span>(<span class="self">self</span>, <span class="ident">nonce</span>, <span class="ident">associated_data</span>, <span class="ident">buffer</span>)
+        <span class="ident">buffer</span>: <span class="kw-2">&amp;mut</span> <span class="kw">impl</span> <span class="ident">Buffer</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">AeadInPlace</span><span class="op">&gt;</span><span class="ident">::decrypt_in_place</span>(<span class="self">self</span>, <span class="ident">nonce</span>, <span class="ident">associated_data</span>, <span class="ident">buffer</span>)
     }
 
     <span class="kw">fn</span> <span class="ident">decrypt_in_place_detached</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
-        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">NonceSize</span><span class="op">&gt;</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
+        <span class="ident">nonce</span>: <span class="kw-2">&amp;</span><span class="ident">Nonce</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
         <span class="ident">associated_data</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-        <span class="ident">buffer</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>],
-        <span class="ident">tag</span>: <span class="kw-2">&amp;</span><span class="ident">Tag</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">TagSize</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">AeadInPlace</span><span class="op">&gt;</span>::<span class="ident">decrypt_in_place_detached</span>(<span class="self">self</span>, <span class="ident">nonce</span>, <span class="ident">associated_data</span>, <span class="ident">buffer</span>, <span class="ident">tag</span>)
+        <span class="ident">buffer</span>: <span class="kw-2">&amp;mut</span> [<span class="ident">u8</span>],
+        <span class="ident">tag</span>: <span class="kw-2">&amp;</span><span class="ident">Tag</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
+    ) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">AeadInPlace</span><span class="op">&gt;</span><span class="ident">::decrypt_in_place_detached</span>(<span class="self">self</span>, <span class="ident">nonce</span>, <span class="ident">associated_data</span>, <span class="ident">buffer</span>, <span class="ident">tag</span>)
     }
 }
 
@@ -1023,7 +1008,7 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;alloc&quot;</span>)]</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;msg</span>, <span class="lifetime">&#39;aad</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;msg</span> [<span class="ident">u8</span>]<span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Payload</span><span class="op">&lt;</span><span class="lifetime">&#39;msg</span>, <span class="lifetime">&#39;aad</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">msg</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;msg</span> [<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">msg</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;msg</span> [<span class="ident">u8</span>]) -&gt; <span class="self">Self</span> {
         <span class="self">Self</span> { <span class="ident">msg</span>, <span class="ident">aad</span>: <span class="string">b&quot;&quot;</span> }
     }
 }
@@ -1034,45 +1019,42 @@
 <span class="doccomment">/// on a `Vec`-like data type.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Buffer</span>: <span class="ident">AsRef</span><span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span> <span class="op">+</span> <span class="ident">AsMut</span><span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span> {
     <span class="doccomment">/// Get the length of the buffer</span>
-    <span class="kw">fn</span> <span class="ident">len</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
+    <span class="kw">fn</span> <span class="ident">len</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span> {
         <span class="self">self</span>.<span class="ident">as_ref</span>().<span class="ident">len</span>()
     }
 
     <span class="doccomment">/// Is the buffer empty?</span>
-    <span class="kw">fn</span> <span class="ident">is_empty</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">is_empty</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">as_ref</span>().<span class="ident">is_empty</span>()
     }
 
     <span class="doccomment">/// Extend this buffer from the given slice</span>
-    <span class="kw">fn</span> <span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
 
     <span class="doccomment">/// Truncate this buffer to the given size</span>
-    <span class="kw">fn</span> <span class="ident">truncate</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">len</span>: <span class="ident">usize</span>);
+    <span class="kw">fn</span> <span class="ident">truncate</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">len</span>: <span class="ident">usize</span>);
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;alloc&quot;</span>)]</span>
 <span class="kw">impl</span> <span class="ident">Buffer</span> <span class="kw">for</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="ident">Vec</span>::<span class="ident">extend_from_slice</span>(<span class="self">self</span>, <span class="ident">other</span>);
+    <span class="kw">fn</span> <span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="ident">Vec::extend_from_slice</span>(<span class="self">self</span>, <span class="ident">other</span>);
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn</span> <span class="ident">truncate</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">len</span>: <span class="ident">usize</span>) {
-        <span class="ident">Vec</span>::<span class="ident">truncate</span>(<span class="self">self</span>, <span class="ident">len</span>);
+    <span class="kw">fn</span> <span class="ident">truncate</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">len</span>: <span class="ident">usize</span>) {
+        <span class="ident">Vec::truncate</span>(<span class="self">self</span>, <span class="ident">len</span>);
     }
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;heapless&quot;</span>)]</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">N</span><span class="op">&gt;</span> <span class="ident">Buffer</span> <span class="kw">for</span> <span class="ident">heapless</span>::<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span>, <span class="ident">N</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">N</span>: <span class="ident">heapless</span>::<span class="ident">ArrayLength</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
-{
-    <span class="kw">fn</span> <span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="ident">heapless</span>::<span class="ident">Vec</span>::<span class="ident">extend_from_slice</span>(<span class="self">self</span>, <span class="ident">other</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">Error</span>)
+<span class="kw">impl</span><span class="op">&lt;</span><span class="kw">const</span> <span class="ident">N</span>: <span class="ident">usize</span><span class="op">&gt;</span> <span class="ident">Buffer</span> <span class="kw">for</span> <span class="ident">heapless::Vec</span><span class="op">&lt;</span><span class="ident">u8</span>, <span class="ident">N</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="ident">heapless::Vec::extend_from_slice</span>(<span class="self">self</span>, <span class="ident">other</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">Error</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">truncate</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">len</span>: <span class="ident">usize</span>) {
-        <span class="ident">heapless</span>::<span class="ident">Vec</span>::<span class="ident">truncate</span>(<span class="self">self</span>, <span class="ident">len</span>);
+    <span class="kw">fn</span> <span class="ident">truncate</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">len</span>: <span class="ident">usize</span>) {
+        <span class="ident">heapless::Vec::truncate</span>(<span class="self">self</span>, <span class="ident">len</span>);
     }
 }
 
@@ -1090,5 +1072,6 @@
     <span class="kw">type</span> <span class="ident">DynAeadMutInPlace</span><span class="op">&lt;</span><span class="ident">N</span>, <span class="ident">T</span>, <span class="ident">O</span><span class="op">&gt;</span> <span class="op">=</span>
         <span class="kw">dyn</span> <span class="ident">AeadMutInPlace</span><span class="op">&lt;</span><span class="ident">NonceSize</span> <span class="op">=</span> <span class="ident">N</span>, <span class="ident">TagSize</span> <span class="op">=</span> <span class="ident">T</span>, <span class="ident">CiphertextOverhead</span> <span class="op">=</span> <span class="ident">O</span><span class="op">&gt;</span>;
 }
-</pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "aead";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
+</code></pre></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aead" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
+</body></html>

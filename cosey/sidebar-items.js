@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["PublicKey",""]],"mod":[["consts","Type aliases for many constants."]],"struct":[["ByteBuf",""],["EcdhEsHkdf256PublicKey",""],["Ed25519PublicKey",""],["P256PublicKey",""],["TotpPublicKey",""],["X25519PublicKey",""]]});
+window.SIDEBAR_ITEMS = {"enum":[["PublicKey",""]],"struct":[["Bytes",""],["EcdhEsHkdf256PublicKey",""],["Ed25519PublicKey",""],["P256PublicKey",""],["TotpPublicKey",""],["X25519PublicKey",""]]};
