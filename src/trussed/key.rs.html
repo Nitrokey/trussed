@@ -157,6 +157,16 @@
 <span id="151">151</span>
 <span id="152">152</span>
 <span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">heapless::Vec</span>;
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">Deserialize</span>, <span class="ident">Serialize</span>};
 <span class="kw">use</span> <span class="ident">serde_indexed</span>::{<span class="ident">DeserializeIndexed</span>, <span class="ident">SerializeIndexed</span>};
@@ -164,12 +174,12 @@
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::Bytes</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::{
-    <span class="ident">Error</span>,
     <span class="ident">config</span>::{<span class="ident">MAX_KEY_MATERIAL_LENGTH</span>, <span class="ident">MAX_SERIALIZED_KEY_LENGTH</span>},
+    <span class="ident">Error</span>,
 };
 
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Material</span> <span class="op">=</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span>, {<span class="ident">MAX_KEY_MATERIAL_LENGTH</span>}<span class="op">&gt;</span>;
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">SerializedKeyBytes</span> <span class="op">=</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span>, {<span class="ident">MAX_SERIALIZED_KEY_LENGTH</span>}<span class="op">&gt;</span>;
+<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Material</span> <span class="op">=</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span>, { <span class="ident">MAX_KEY_MATERIAL_LENGTH</span> }<span class="op">&gt;</span>;
+<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">SerializedKeyBytes</span> <span class="op">=</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span>, { <span class="ident">MAX_SERIALIZED_KEY_LENGTH</span> }<span class="op">&gt;</span>;
 
 <span class="comment">// We don&#39;t implement serde to make sure nobody inadvertently still uses it</span>
 <span class="comment">// Should we use references here only?</span>
@@ -182,15 +192,15 @@
 <span class="doccomment">/// [dictum]: https://twitter.com/SchmiegSophie/status/1264567198091079681</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="comment">/*DeserializeIndexed,*/</span> <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="comment">/*SerializeIndexed,*/</span> <span class="ident">Zeroize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Key</span> {
-   <span class="kw">pub</span> <span class="ident">flags</span>: <span class="ident">Flags</span>,
-   <span class="kw">pub</span> <span class="ident">kind</span>: <span class="ident">Kind</span>,
-   <span class="kw">pub</span> <span class="ident">material</span>: <span class="ident">Material</span>,
+    <span class="kw">pub</span> <span class="ident">flags</span>: <span class="ident">Flags</span>,
+    <span class="kw">pub</span> <span class="ident">kind</span>: <span class="ident">Kind</span>,
+    <span class="kw">pub</span> <span class="ident">material</span>: <span class="ident">Material</span>,
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="comment">/*DeserializeIndexed,*/</span> <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="comment">/*SerializeIndexed,*/</span> <span class="ident">Zeroize</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Info</span> {
-   <span class="kw">pub</span> <span class="ident">flags</span>: <span class="ident">Flags</span>,
-   <span class="kw">pub</span> <span class="ident">kind</span>: <span class="ident">Kind</span>,
+    <span class="kw">pub</span> <span class="ident">flags</span>: <span class="ident">Flags</span>,
+    <span class="kw">pub</span> <span class="ident">kind</span>: <span class="ident">Kind</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">Info</span> {
@@ -202,7 +212,10 @@
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Kind</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Info</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">kind</span>: <span class="ident">Kind</span>) -&gt; <span class="self">Self</span> {
-        <span class="self">Self</span> { <span class="ident">flags</span>: <span class="ident">Default::default</span>(), <span class="ident">kind</span> }
+        <span class="self">Self</span> {
+            <span class="ident">flags</span>: <span class="ident">Default::default</span>(),
+            <span class="ident">kind</span>,
+        }
     }
 }
 
@@ -231,7 +244,9 @@
     <span class="doccomment">/// In particular, top bit is intended to be used to accomodate breaking format changes,</span>
     <span class="doccomment">/// i.e., if `flags &gt;&gt; 32 != 0`, then the format is different.</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Flags</span>: <span class="ident">u16</span> {
+        <span class="doccomment">/// Set if the key has been generated on this device.</span>
         <span class="kw">const</span> <span class="ident">LOCAL</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">0</span>;
+        <span class="doccomment">/// Set if the key is a secret key.</span>
         <span class="kw">const</span> <span class="ident">SENSITIVE</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">1</span>;
     }
 }
@@ -251,8 +266,12 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buffer</span> <span class="op">=</span> <span class="ident">SerializedKeyBytes::new</span>();
         <span class="comment">// big-endian here to ensure the first bit is enough to check compatibility</span>
         <span class="comment">// on breaking format change</span>
-        <span class="ident">buffer</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">bits</span>().<span class="ident">to_be_bytes</span>()).<span class="ident">unwrap</span>();
-        <span class="ident">buffer</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span>(<span class="self">self</span>.<span class="ident">kind</span>.<span class="ident">code</span>()).<span class="ident">to_be_bytes</span>()).<span class="ident">unwrap</span>();
+        <span class="ident">buffer</span>
+            .<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">bits</span>().<span class="ident">to_be_bytes</span>())
+            .<span class="ident">unwrap</span>();
+        <span class="ident">buffer</span>
+            .<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span>(<span class="self">self</span>.<span class="ident">kind</span>.<span class="ident">code</span>()).<span class="ident">to_be_bytes</span>())
+            .<span class="ident">unwrap</span>();
         <span class="comment">// can&#39;t fail, since MAX_SERIALIZED_KEY_LENGTH is defined as MAX_KEY_MATERIAL_LENGTH + 4</span>
         <span class="ident">buffer</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">material</span>).<span class="ident">unwrap</span>();
         <span class="ident">buffer</span>
@@ -267,7 +286,8 @@
         <span class="kw">let</span> <span class="ident">flags</span> <span class="op">=</span> <span class="ident">Flags::from_bits</span>(<span class="ident">flags_bits</span>).<span class="ident">ok_or</span>(<span class="ident">Error::InvalidSerializedKey</span>)<span class="question-mark">?</span>;
 
         <span class="kw">let</span> <span class="ident">kind_bits</span> <span class="op">=</span> <span class="ident">u16::from_be_bytes</span>([<span class="ident">info</span>[<span class="number">2</span>], <span class="ident">info</span>[<span class="number">3</span>]]);
-        <span class="kw">let</span> <span class="ident">kind</span> <span class="op">=</span> <span class="ident">Kind::try_from</span>(<span class="ident">kind_bits</span>, <span class="ident">material</span>.<span class="ident">len</span>()).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">Error::InvalidSerializedKey</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">kind</span> <span class="op">=</span>
+            <span class="ident">Kind::try_from</span>(<span class="ident">kind_bits</span>, <span class="ident">material</span>.<span class="ident">len</span>()).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">Error::InvalidSerializedKey</span>)<span class="question-mark">?</span>;
 
         <span class="prelude-val">Ok</span>(<span class="ident">Key</span> {
             <span class="ident">flags</span>,

@@ -82,18 +82,12 @@
 <span id="76">76</span>
 <span id="77">77</span>
 <span id="78">78</span>
-<span id="79">79</span>
-<span id="80">80</span>
-<span id="81">81</span>
-<span id="82">82</span>
-<span id="83">83</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::transmute_ptr_to_ptr</span>)]</span>
 <span class="kw">use</span> <span class="ident">interchange::Responder</span>;
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::api</span>::{<span class="ident">Request</span>, <span class="ident">Reply</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::api</span>::{<span class="ident">Reply</span>, <span class="ident">Request</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::error::Error</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::types::ClientId</span>;
-
 
 <span class="macro">cfg_if::cfg_if!</span> {
 
@@ -148,7 +142,6 @@
     }
 }
 
-
 <span class="comment">// pub use interchange::TrussedInterchange;</span>
 
 <span class="comment">// TODO: The request pipe should block if there is an unhandled</span>
@@ -167,9 +160,6 @@
 }
 
 <span class="comment">// pub type ClientEndpoint = Requester&lt;TrussedInterchange&gt;;</span>
-
-
-
 </code></pre></div>
 </section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="trussed" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
 </body></html>

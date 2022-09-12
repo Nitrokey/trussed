@@ -489,7 +489,6 @@
 <span id="483">483</span>
 <span id="484">484</span>
 <span id="485">485</span>
-<span id="486">486</span>
 </pre><pre class="rust"><code><span class="doccomment">//! This (incomplete!) API loosely follows [PKCS#11 v3][pkcs11-v3].</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! For constants see [their headers][pkcs11-headers].</span>
@@ -497,9 +496,9 @@
 <span class="doccomment">//! [pkcs11-v3]: https://docs.oasis-open.org/pkcs11/pkcs11-base/v3.0/pkcs11-base-v3.0.html</span>
 <span class="doccomment">//! [pkcs11-headers]: https://docs.oasis-open.org/pkcs11/pkcs11-base/v3.0/cs01/include/pkcs11-v3.0/</span>
 
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::types</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">core::hint::unreachable_unchecked</span>;
 <span class="kw">use</span> <span class="ident">core::time::Duration</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::types</span>::<span class="kw-2">*</span>;
 
 <span class="attribute">#[<span class="ident">macro_use</span>]</span>
 <span class="kw">mod</span> <span class="ident">macros</span>;
@@ -536,7 +535,7 @@
     <span class="ident">ReadDirFilesFirst</span>: <span class="number">13</span>
     <span class="ident">ReadDirFilesNext</span>: <span class="number">14</span>
     <span class="ident">ReadFile</span>: <span class="number">15</span>
-    <span class="ident">Metadata</span>: <span class="number">26</span> 
+    <span class="ident">Metadata</span>: <span class="number">26</span>
     <span class="comment">// ReadCounter: 7</span>
     <span class="ident">RandomBytes</span>: <span class="number">16</span>
     <span class="ident">SerializeKey</span>: <span class="number">17</span>
@@ -852,7 +851,7 @@
 
         <span class="ident">DebugDumpStore</span>:
 
-		<span class="ident">Decrypt</span>:
+        <span class="ident">Decrypt</span>:
             <span class="op">-</span> <span class="ident">plaintext</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Message</span><span class="op">&gt;</span>
 
         <span class="ident">Delete</span>:
@@ -871,7 +870,7 @@
         <span class="ident">DeserializeKey</span>:
             <span class="op">-</span> <span class="ident">key</span>: <span class="ident">KeyId</span>
 
-		<span class="ident">Encrypt</span>:
+        <span class="ident">Encrypt</span>:
             <span class="op">-</span> <span class="ident">ciphertext</span>: <span class="ident">Message</span>
             <span class="op">-</span> <span class="ident">nonce</span>: <span class="ident">ShortData</span>
             <span class="op">-</span> <span class="ident">tag</span>: <span class="ident">ShortData</span>
@@ -974,7 +973,6 @@
         <span class="ident">WriteCertificate</span>:
           <span class="op">-</span> <span class="ident">id</span>: <span class="ident">CertId</span>
     }
-
 }
 </code></pre></div>
 </section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="trussed" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>

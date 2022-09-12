@@ -54,7 +54,6 @@
 <span id="48">48</span>
 <span id="49">49</span>
 <span id="50">50</span>
-<span id="51">51</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">allow</span>(<span class="ident">non_camel_case_types</span>)]</span>
 <span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::upper_case_acronyms</span>)]</span>
 
@@ -74,38 +73,37 @@
 <span class="comment">// must be above + 4</span>
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MAX_SERIALIZED_KEY_LENGTH</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">132</span>;
 <span class="macro">cfg_if::cfg_if!</span> {
-	<span class="kw">if</span> <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clients-12&quot;</span>)]</span> {
-		<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">MAX_SERVICE_CLIENTS</span> <span class="op">=</span> <span class="ident">consts::U12</span>;
-	} <span class="kw">else</span> <span class="kw">if</span> <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clients-11&quot;</span>)]</span> {
-		<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">MAX_SERVICE_CLIENTS</span> <span class="op">=</span> <span class="ident">consts::U11</span>;
-	} <span class="kw">else</span> <span class="kw">if</span> <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clients-10&quot;</span>)]</span> {
-		<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">MAX_SERVICE_CLIENTS</span> <span class="op">=</span> <span class="ident">consts::U10</span>;
-	} <span class="kw">else</span> <span class="kw">if</span> <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clients-9&quot;</span>)]</span> {
-		<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">MAX_SERVICE_CLIENTS</span> <span class="op">=</span> <span class="ident">consts::U9</span>;
-	} <span class="kw">else</span> <span class="kw">if</span> <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clients-8&quot;</span>)]</span> {
-		<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">MAX_SERVICE_CLIENTS</span> <span class="op">=</span> <span class="ident">consts::U8</span>;
-	} <span class="kw">else</span> <span class="kw">if</span> <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clients-7&quot;</span>)]</span> {
-		<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">MAX_SERVICE_CLIENTS</span> <span class="op">=</span> <span class="ident">consts::U7</span>;
-	} <span class="kw">else</span> <span class="kw">if</span> <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clients-6&quot;</span>)]</span> {
-		<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">MAX_SERVICE_CLIENTS</span> <span class="op">=</span> <span class="ident">consts::U6</span>;
-	} <span class="kw">else</span> <span class="kw">if</span> <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clients-5&quot;</span>)]</span> {
-		<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">MAX_SERVICE_CLIENTS</span> <span class="op">=</span> <span class="ident">consts::U5</span>;
-	} <span class="kw">else</span> <span class="kw">if</span> <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clients-4&quot;</span>)]</span> {
-		<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">MAX_SERVICE_CLIENTS</span> <span class="op">=</span> <span class="ident">consts::U4</span>;
-	} <span class="kw">else</span> <span class="kw">if</span> <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clients-3&quot;</span>)]</span> {
-		<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">MAX_SERVICE_CLIENTS</span> <span class="op">=</span> <span class="ident">consts::U3</span>;
-	} <span class="kw">else</span> <span class="kw">if</span> <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clients-2&quot;</span>)]</span> {
-		<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">MAX_SERVICE_CLIENTS</span> <span class="op">=</span> <span class="ident">consts::U2</span>;
-	} <span class="kw">else</span> <span class="kw">if</span> <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clients-1&quot;</span>)]</span> {
-		<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">MAX_SERVICE_CLIENTS</span> <span class="op">=</span> <span class="ident">consts::U1</span>;
-	}
+    <span class="kw">if</span> <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clients-12&quot;</span>)]</span> {
+        <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">MAX_SERVICE_CLIENTS</span> <span class="op">=</span> <span class="ident">consts::U12</span>;
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clients-11&quot;</span>)]</span> {
+        <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">MAX_SERVICE_CLIENTS</span> <span class="op">=</span> <span class="ident">consts::U11</span>;
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clients-10&quot;</span>)]</span> {
+        <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">MAX_SERVICE_CLIENTS</span> <span class="op">=</span> <span class="ident">consts::U10</span>;
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clients-9&quot;</span>)]</span> {
+        <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">MAX_SERVICE_CLIENTS</span> <span class="op">=</span> <span class="ident">consts::U9</span>;
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clients-8&quot;</span>)]</span> {
+        <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">MAX_SERVICE_CLIENTS</span> <span class="op">=</span> <span class="ident">consts::U8</span>;
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clients-7&quot;</span>)]</span> {
+        <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">MAX_SERVICE_CLIENTS</span> <span class="op">=</span> <span class="ident">consts::U7</span>;
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clients-6&quot;</span>)]</span> {
+        <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">MAX_SERVICE_CLIENTS</span> <span class="op">=</span> <span class="ident">consts::U6</span>;
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clients-5&quot;</span>)]</span> {
+        <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">MAX_SERVICE_CLIENTS</span> <span class="op">=</span> <span class="ident">consts::U5</span>;
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clients-4&quot;</span>)]</span> {
+        <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">MAX_SERVICE_CLIENTS</span> <span class="op">=</span> <span class="ident">consts::U4</span>;
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clients-3&quot;</span>)]</span> {
+        <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">MAX_SERVICE_CLIENTS</span> <span class="op">=</span> <span class="ident">consts::U3</span>;
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clients-2&quot;</span>)]</span> {
+        <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">MAX_SERVICE_CLIENTS</span> <span class="op">=</span> <span class="ident">consts::U2</span>;
+    } <span class="kw">else</span> <span class="kw">if</span> <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;clients-1&quot;</span>)]</span> {
+        <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">MAX_SERVICE_CLIENTS</span> <span class="op">=</span> <span class="ident">consts::U1</span>;
+    }
 }
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MAX_SHORT_DATA_LENGTH</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">128</span>;
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MAX_SIGNATURE_LENGTH</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">72</span>;
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MAX_USER_ATTRIBUTE_LENGTH</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">256</span>;
 
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">USER_ATTRIBUTE_NUMBER</span>: <span class="ident">u8</span> <span class="op">=</span> <span class="number">37</span>;
-
 </code></pre></div>
 </section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="trussed" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.63.0 (4b91a6ea7 2022-08-08)" ></div>
 </body></html>
