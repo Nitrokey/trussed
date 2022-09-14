@@ -280,7 +280,8 @@ impl<P: Platform> ServiceResources<P> {
                 let key_id = keystore.store_key(
                     request.location,
                     key::Secrecy::Secret,
-                    key::Kind::Shared(request.raw_key.len()),
+                    // key::Kind::Shared(request.raw_key.len()),
+                    request.kind,
                     &request.raw_key,
                 )?;
 
