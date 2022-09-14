@@ -89,6 +89,8 @@ pub use crate::platform::Syscall;
 pub mod mechanisms;
 pub use mechanisms::*;
 
+use crate::key::Kind;
+
 // to be fair, this is a programmer error,
 // and could also just panic
 #[derive(Copy, Clone, Debug)]
@@ -544,10 +546,12 @@ pub trait CryptoClient: PollClient {
         &mut self,
         raw_key: &[u8],
         location: Location,
+        kind: Kind,
     ) -> ClientResult<'_, reply::UnsafeInjectSharedKey, Self> {
         let r = self.request(request::UnsafeInjectSharedKey {
             raw_key: ShortData::from_slice(raw_key).unwrap(),
             location,
+            kind,
         })?;
         r.client.syscall();
         Ok(r)
