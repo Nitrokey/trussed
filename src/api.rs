@@ -5,6 +5,7 @@
 //! [pkcs11-v3]: https://docs.oasis-open.org/pkcs11/pkcs11-base/v3.0/pkcs11-base-v3.0.html
 //! [pkcs11-headers]: https://docs.oasis-open.org/pkcs11/pkcs11-base/v3.0/cs01/include/pkcs11-v3.0/
 
+use crate::key::Kind;
 use crate::types::*;
 use core::time::Duration;
 
@@ -292,6 +293,7 @@ pub mod request {
         UnsafeInjectSharedKey:
           - location: Location
           - raw_key: ShortData
+          - kind: Kind
 
         UnwrapKey:
           - mechanism: Mechanism
