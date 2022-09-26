@@ -19,11 +19,16 @@ where
     client_id: ClientId,
     rng: ChaCha8Rng,
     store: P::S,
-    raw_store: RawStore,
+    raw_store: RawStore<P::S>,
 }
 
 impl<P: Platform> ClientKeystore<P> {
-    pub fn new(client_id: ClientId, rng: ChaCha8Rng, store: P::S, raw_store: RawStore) -> Self {
+    pub fn new(
+        client_id: ClientId,
+        rng: ChaCha8Rng,
+        store: P::S,
+        raw_store: RawStore<P::S>,
+    ) -> Self {
         Self {
             client_id,
             rng,

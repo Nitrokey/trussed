@@ -15,13 +15,13 @@ where
     client_id: PathBuf,
     rng: ChaCha8Rng,
     store: S,
-    raw_store: RawStore,
+    raw_store: RawStore<S>,
 }
 
 pub type Counter = u128;
 
 impl<S: Store> ClientCounterstore<S> {
-    pub fn new(client_id: PathBuf, rng: ChaCha8Rng, store: S, raw_store: RawStore) -> Self {
+    pub fn new(client_id: PathBuf, rng: ChaCha8Rng, store: S, raw_store: RawStore<S>) -> Self {
         Self {
             client_id,
             rng,

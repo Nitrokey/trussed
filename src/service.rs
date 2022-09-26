@@ -593,6 +593,21 @@ impl<P: Platform> ServiceResources<P> {
                     .map(|id| Reply::WriteCertificate(reply::WriteCertificate { id } ))
             }
 
+            Request::ChangePin(request) => {
+                let res = raw_store.change_pin(request.new_pin.clone());
+                match res {
+                    Err(e) => { return Err(e); },
+                    Ok(_) => { client_id.pin = Some(request.new_pin.clone()); },
+                }
+                Ok(Reply::ChangePin(reply::ChangePin {}))
+            }
+
+            Request::SetClientContextPin(request) => {
+                client_id.pin = Some(request.pin.clone());
+
+                Ok(Reply::SetClientContextPin(reply::SetClientContextPin {}))
+            }
+
             // _ => {
             //     // #[cfg(test)]
             //     // println!("todo: {:?} request!", &request);

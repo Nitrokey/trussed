@@ -15,7 +15,7 @@ where
     client_id: PathBuf,
     rng: ChaCha8Rng,
     store: S,
-    raw_store: RawStore,
+    raw_store: RawStore<S>,
 }
 
 pub trait Certstore {
@@ -57,7 +57,7 @@ impl<S: Store> Certstore for ClientCertstore<S> {
 }
 
 impl<S: Store> ClientCertstore<S> {
-    pub fn new(client_id: PathBuf, rng: ChaCha8Rng, store: S, raw_store: RawStore) -> Self {
+    pub fn new(client_id: PathBuf, rng: ChaCha8Rng, store: S, raw_store: RawStore<S>) -> Self {
         Self {
             client_id,
             rng,

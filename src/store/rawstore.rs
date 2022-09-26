@@ -30,15 +30,19 @@ use chacha20::ChaCha8Rng;
 use rand_core::RngCore;
 
 #[derive(Copy, Clone)]
-pub struct RawStore {
+pub struct RawStore<S>
+where
+    S: Store,
+{
     mode: RawStoreMode,
     symmetric_key: Option<[u8; 32]>,
+    store: S,
 }
 
-impl RawStore {
+impl<S: Store> RawStore<S> {
     pub fn new(
         mode: RawStoreMode,
-        store: impl Store,
+        store: S,
         pin: Option<ShortData>,
         rng: Option<ChaCha8Rng>,
     ) -> Self {
@@ -46,7 +50,6 @@ impl RawStore {
 
         if mode == RawStoreMode::Encrypted {
             let key_filename = PathBuf::from("encryption-key");
-
             let res: Result<Bytes<128>, Error> =
                 store::read(store, Location::Internal, &key_filename);
             debug_now!("pin: {:?}", pin);
@@ -82,6 +85,7 @@ impl RawStore {
         Self {
             mode,
             symmetric_key: Some(symmetric_key),
+            store,
         }
     }
 
@@ -90,6 +94,8 @@ impl RawStore {
             RawStoreMode::Unencrypted => Message::from_slice(contents).unwrap(),
             RawStoreMode::Encrypted => {
                 let zero_iv = Self::get_iv(path);
+                debug_now!("iv: {:?}", zero_iv);
+                debug_now!("key: {:?}", key);
                 let cipher = Aes256Cbc::new_from_slices(key, &zero_iv).unwrap();
                 let mut buffer = Message::from_slice(contents).unwrap();
                 let l = contents.len();
@@ -123,6 +129,26 @@ impl RawStore {
         }
     }
 
+    pub fn change_pin(&self, new_pin: ShortData) -> Result<(), Error> {
+        let key_filename = PathBuf::from("encryption-key");
+        let pin_key = Self::get_pin_key(new_pin).into_vec();
+
+        // write key with new pin
+        let content = Self::encrypt_content(
+            RawStoreMode::Encrypted,
+            &key_filename,
+            pin_key.as_slice(),
+            &self.symmetric_key.unwrap(),
+        );
+        store::write(
+            self.store,
+            Location::Internal,
+            &key_filename,
+            content.into_vec().as_slice(),
+        );
+        Ok(())
+    }
+
     pub fn get_pin_key(pin: ShortData) -> Bytes<32> {
         let mut hash = sha2::Sha256::new();
         hash.update(pin);
@@ -143,9 +169,9 @@ impl RawStore {
         Bytes::<16>::from_slice(&hashed.into_vec().as_slice()[..16]).unwrap()
     }
 
-    pub fn create_directories<'s, S: LfsStorage>(
+    pub fn create_directories<'s, X: LfsStorage>(
         &self,
-        fs: &Filesystem<'s, S>,
+        fs: &Filesystem<'s, X>,
         path: &Path,
     ) -> Result<(), Error> {
         store::create_directories(fs, path)

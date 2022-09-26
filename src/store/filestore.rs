@@ -33,11 +33,11 @@ where
 {
     client_id: ClientId,
     store: S,
-    raw_store: RawStore,
+    raw_store: RawStore<S>,
 }
 
 impl<S: Store> ClientFilestore<S> {
-    pub fn new(client_id: ClientId, store: S, raw_store: RawStore) -> Self {
+    pub fn new(client_id: ClientId, store: S, raw_store: RawStore<S>) -> Self {
         Self {
             client_id,
             store,

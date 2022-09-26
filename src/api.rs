@@ -100,10 +100,18 @@ generate_enums! {
     ReadCertificate: 61
     WriteCertificate: 62
 
+    ///////////////////
+    // SW-Encryption //
+    ///////////////////
+    SetClientContextPin: 63
+    ChangePin: 64
+
     ///////////
     // Other //
     ///////////
     DebugDumpStore: 0x79
+
+
 }
 
 pub mod request {
@@ -333,6 +341,12 @@ pub mod request {
           - location: Location
           - der: Message
 
+        SetClientContextPin:
+          - pin: ShortData
+
+        ChangePin:
+          - new_pin: ShortData
+
     }
 }
 
@@ -483,5 +497,10 @@ pub mod reply {
 
         WriteCertificate:
           - id: CertId
+
+        SetClientContextPin:
+
+        ChangePin:
+
     }
 }
