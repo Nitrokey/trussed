@@ -119,7 +119,7 @@ impl<P: Platform> ServiceResources<P> {
             client_id.path.clone(),
             self.rng().map_err(|_| Error::EntropyMalfunction)?,
             full_store,
-            raw_store,
+            raw_store.clone(),
         );
         let keystore = &mut keystore;
 
@@ -128,7 +128,7 @@ impl<P: Platform> ServiceResources<P> {
             client_id.path.clone(),
             self.rng().map_err(|_| Error::EntropyMalfunction)?,
             full_store,
-            raw_store,
+            raw_store.clone(),
         );
         let certstore = &mut certstore;
 
@@ -137,13 +137,13 @@ impl<P: Platform> ServiceResources<P> {
             client_id.path.clone(),
             self.rng().map_err(|_| Error::EntropyMalfunction)?,
             full_store,
-            raw_store,
+            raw_store.clone(),
         );
         let counterstore = &mut counterstore;
 
         // prepare filestore, bound to client_id, for storage calls
         let mut filestore: ClientFilestore<P::S> =
-            ClientFilestore::new(client_id.path.clone(), full_store, raw_store);
+            ClientFilestore::new(client_id.path.clone(), full_store, raw_store.clone());
         let filestore = &mut filestore;
 
         debug_now!("TRUSSED {:?}", request);
@@ -594,11 +594,9 @@ impl<P: Platform> ServiceResources<P> {
             }
 
             Request::ChangePin(request) => {
-                let res = raw_store.change_pin(request.new_pin.clone());
-                match res {
-                    Err(e) => { return Err(e); },
-                    Ok(_) => { client_id.pin = Some(request.new_pin.clone()); },
-                }
+                raw_store.change_pin(request.new_pin.clone())?;
+                client_id.pin = Some(request.new_pin.clone());
+
                 Ok(Reply::ChangePin(reply::ChangePin {}))
             }
 
