@@ -17,6 +17,7 @@ pub use crate::store::{
     counterstore::{ClientCounterstore, Counterstore as _},
     filestore::{ClientFilestore, Filestore, ReadDirFilesState, ReadDirState},
     keystore::{ClientKeystore, Keystore},
+    rawstore::RawStore,
 };
 use crate::types::*;
 use crate::Bytes;
@@ -58,7 +59,7 @@ where
 {
     pub(crate) platform: P,
     // // Option?
-    // currently_serving: ClientId,
+    // currently_serving: ClientContext,
     // TODO: how/when to clear
     read_dir_files_state: Option<ReadDirFilesState>,
     read_dir_state: Option<ReadDirState>,
@@ -90,38 +91,59 @@ unsafe impl<P: Platform> Send for Service<P> {}
 
 impl<P: Platform> ServiceResources<P> {
     #[inline(never)]
-    pub fn reply_to(&mut self, client_id: PathBuf, request: &Request) -> Result<Reply, Error> {
+    pub fn reply_to(
+        &mut self,
+        client_id: &mut ClientContext,
+        request: &Request,
+    ) -> Result<Reply, Error> {
         // TODO: what we want to do here is map an enum to a generic type
         // Is there a nicer way to do this?
 
         let full_store = self.platform.store();
 
+        let mode = if let Some(_) = client_id.pin {
+            RawStoreMode::Encrypted
+        } else {
+            RawStoreMode::Unencrypted
+        };
+        let raw_store = RawStore::new(
+            mode,
+            full_store,
+            client_id.pin.clone(),
+            Some(self.rng().unwrap()),
+        );
+        //let raw_store: WrappedStore = &mut raw_store;
+
         // prepare keystore, bound to client_id, for cryptographic calls
         let mut keystore: ClientKeystore<P> = ClientKeystore::new(
-            client_id.clone(),
+            client_id.path.clone(),
             self.rng().map_err(|_| Error::EntropyMalfunction)?,
             full_store,
+            raw_store.clone(),
         );
         let keystore = &mut keystore;
 
         // prepare certstore, bound to client_id, for cert calls
         let mut certstore: ClientCertstore<P::S> = ClientCertstore::new(
-            client_id.clone(),
+            client_id.path.clone(),
             self.rng().map_err(|_| Error::EntropyMalfunction)?,
             full_store,
+            raw_store.clone(),
         );
         let certstore = &mut certstore;
 
         // prepare counterstore, bound to client_id, for counter calls
         let mut counterstore: ClientCounterstore<P::S> = ClientCounterstore::new(
-            client_id.clone(),
+            client_id.path.clone(),
             self.rng().map_err(|_| Error::EntropyMalfunction)?,
             full_store,
+            raw_store.clone(),
         );
         let counterstore = &mut counterstore;
 
         // prepare filestore, bound to client_id, for storage calls
-        let mut filestore: ClientFilestore<P::S> = ClientFilestore::new(client_id, full_store);
+        let mut filestore: ClientFilestore<P::S> =
+            ClientFilestore::new(client_id.path.clone(), full_store, raw_store.clone());
         let filestore = &mut filestore;
 
         debug_now!("TRUSSED {:?}", request);
@@ -141,10 +163,12 @@ impl<P: Platform> ServiceResources<P> {
             },
 
             Request::Attest(request) => {
+                let raw_store_mode = RawStoreMode::Unencrypted;
                 let mut attn_keystore: ClientKeystore<P> = ClientKeystore::new(
                     PathBuf::from("attn"),
                     self.rng().map_err(|_| Error::EntropyMalfunction)?,
                     full_store,
+                    raw_store
                 );
                 attest::try_attest(&mut attn_keystore, certstore, keystore, request).map(Reply::Attest)
             }
@@ -569,6 +593,19 @@ impl<P: Platform> ServiceResources<P> {
                     .map(|id| Reply::WriteCertificate(reply::WriteCertificate { id } ))
             }
 
+            Request::ChangePin(request) => {
+                raw_store.change_pin(request.new_pin.clone())?;
+                client_id.pin = Some(request.new_pin.clone());
+
+                Ok(Reply::ChangePin(reply::ChangePin {}))
+            }
+
+            Request::SetClientContextPin(request) => {
+                client_id.pin = Some(request.pin.clone());
+
+                Ok(Reply::SetClientContextPin(reply::SetClientContextPin {}))
+            }
+
             // _ => {
             //     // #[cfg(test)]
             //     // println!("todo: {:?} request!", &request);
@@ -584,8 +621,14 @@ impl<P: Platform> ServiceResources<P> {
         let mut rng = match self.rng_state.take() {
             Some(rng) => rng,
             None => {
-                let mut filestore: ClientFilestore<P::S> =
-                    ClientFilestore::new(PathBuf::from("trussed"), self.platform.store());
+                let raw_store =
+                    RawStore::new(RawStoreMode::Unencrypted, self.platform.store(), None, None);
+
+                let mut filestore: ClientFilestore<P::S> = ClientFilestore::new(
+                    PathBuf::from("trussed"),
+                    self.platform.store(),
+                    raw_store,
+                );
 
                 let path = PathBuf::from("rng-state.bin");
 
@@ -674,8 +717,8 @@ impl<P: Platform> Service<P> {
     ) -> Result<crate::client::ClientImplementation<S>, ()> {
         use interchange::Interchange;
         let (requester, responder) = TrussedInterchange::claim().ok_or(())?;
-        let client_id = ClientId::from(client_id.as_bytes());
-        self.add_endpoint(responder, client_id)
+        let client_ctx = ClientContext::from(client_id);
+        self.add_endpoint(responder, client_ctx)
             .map_err(|_service_endpoint| ())?;
 
         Ok(crate::client::ClientImplementation::new(requester, syscall))
@@ -691,8 +734,8 @@ impl<P: Platform> Service<P> {
     ) -> Result<crate::client::ClientImplementation<&mut Service<P>>, ()> {
         use interchange::Interchange;
         let (requester, responder) = TrussedInterchange::claim().ok_or(())?;
-        let client_id = ClientId::from(client_id.as_bytes());
-        self.add_endpoint(responder, client_id)
+        let client_ctx = ClientContext::from(client_id);
+        self.add_endpoint(responder, client_ctx)
             .map_err(|_service_endpoint| ())?;
 
         Ok(crate::client::ClientImplementation::new(requester, self))
@@ -707,8 +750,8 @@ impl<P: Platform> Service<P> {
     ) -> Result<crate::client::ClientImplementation<Service<P>>, ()> {
         use interchange::Interchange;
         let (requester, responder) = TrussedInterchange::claim().ok_or(())?;
-        let client_id = ClientId::from(client_id.as_bytes());
-        self.add_endpoint(responder, client_id)
+        let client_ctx = ClientContext::from(client_id);
+        self.add_endpoint(responder, client_ctx)
             .map_err(|_service_endpoint| ())?;
 
         Ok(crate::client::ClientImplementation::new(requester, self))
@@ -717,20 +760,30 @@ impl<P: Platform> Service<P> {
     pub fn add_endpoint(
         &mut self,
         interchange: Responder<TrussedInterchange>,
-        client_id: ClientId,
+        client_ctx: ClientContext,
     ) -> Result<(), ServiceEndpoint> {
-        if client_id == PathBuf::from("trussed") {
+        if client_ctx.path == PathBuf::from("trussed") {
             panic!("trussed is a reserved client ID");
         }
         self.eps.push(ServiceEndpoint {
             interchange,
-            client_id,
+            client_ctx,
         })
     }
 
     pub fn set_seed_if_uninitialized(&mut self, seed: &[u8; 32]) {
-        let mut filestore: ClientFilestore<P::S> =
-            ClientFilestore::new(PathBuf::from("trussed"), self.resources.platform.store());
+        let raw_store = RawStore::new(
+            RawStoreMode::Unencrypted,
+            self.resources.platform.store(),
+            None,
+            None,
+        );
+
+        let mut filestore: ClientFilestore<P::S> = ClientFilestore::new(
+            PathBuf::from("trussed"),
+            self.resources.platform.store(),
+            raw_store,
+        );
         let filestore = &mut filestore;
 
         let path = PathBuf::from("rng-state.bin");
@@ -767,7 +820,7 @@ impl<P: Platform> Service<P> {
                 // #[cfg(test)] println!("service got request: {:?}", &request);
 
                 // resources.currently_serving = ep.client_id.clone();
-                let reply_result = resources.reply_to(ep.client_id.clone(), &request);
+                let reply_result = resources.reply_to(&mut ep.client_ctx, &request);
 
                 resources
                     .platform
