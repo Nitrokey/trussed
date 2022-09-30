@@ -43,6 +43,8 @@ pub use cbor_smol::{cbor_deserialize, cbor_serialize, cbor_serialize_bytes};
 pub use heapless_bytes::Bytes;
 pub use postcard::{from_bytes as postcard_deserialize, to_slice as postcard_serialize};
 
+pub use types::ClientContext;
+
 pub fn postcard_serialize_bytes<T: serde::Serialize, const N: usize>(
     object: &T,
 ) -> postcard::Result<Bytes<N>> {
