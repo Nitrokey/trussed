@@ -4,8 +4,9 @@ use littlefs2::path::PathBuf;
 use crate::{
     error::{Error, Result},
     key,
+    store::rawstore::RawStore,
     store::{self, Store as _},
-    types::{KeyId, Location},
+    types::{KeyId, Location, RawStoreMode},
     Bytes, Platform,
 };
 
@@ -18,14 +19,21 @@ where
     client_id: ClientId,
     rng: ChaCha8Rng,
     store: P::S,
+    raw_store: RawStore<P::S>,
 }
 
 impl<P: Platform> ClientKeystore<P> {
-    pub fn new(client_id: ClientId, rng: ChaCha8Rng, store: P::S) -> Self {
+    pub fn new(
+        client_id: ClientId,
+        rng: ChaCha8Rng,
+        store: P::S,
+        raw_store: RawStore<P::S>,
+    ) -> Self {
         Self {
             client_id,
             rng,
             store,
+            raw_store,
         }
     }
 }
@@ -116,7 +124,8 @@ impl<P: Platform> Keystore for ClientKeystore<P> {
 
         let id = self.generate_key_id();
         let path = self.key_path(secrecy, &id);
-        store::store(self.store, location, &path, &key.serialize())?;
+        self.raw_store
+            .store(self.store, location, &path, &key.serialize())?;
 
         Ok(id)
     }
@@ -144,7 +153,7 @@ impl<P: Platform> Keystore for ClientKeystore<P> {
             let path = self.key_path(*secrecy, id);
             locations
                 .iter()
-                .any(|location| store::delete(self.store, *location, &path))
+                .any(|location| self.raw_store.delete(self.store, *location, &path))
         })
     }
 
@@ -152,13 +161,15 @@ impl<P: Platform> Keystore for ClientKeystore<P> {
     /// Be more principled :)
     fn delete_all(&self, location: Location) -> Result<usize> {
         let path = self.key_directory(key::Secrecy::Secret);
-        store::remove_dir_all_where(self.store, location, &path, |dir_entry| {
-            dir_entry.file_name().as_ref().len() >= 4
-        })?;
+        self.raw_store
+            .remove_dir_all_where(self.store, location, &path, |dir_entry| {
+                dir_entry.file_name().as_ref().len() >= 4
+            })?;
         let path = self.key_directory(key::Secrecy::Public);
-        store::remove_dir_all_where(self.store, location, &path, |dir_entry| {
-            dir_entry.file_name().as_ref().len() >= 4
-        })
+        self.raw_store
+            .remove_dir_all_where(self.store, location, &path, |dir_entry| {
+                dir_entry.file_name().as_ref().len() >= 4
+            })
     }
 
     fn load_key(
@@ -172,9 +183,11 @@ impl<P: Platform> Keystore for ClientKeystore<P> {
 
         let location = self.location(secrecy, id).ok_or(Error::NoSuchKey)?;
 
-        let bytes: Bytes<128> = store::read(self.store, location, &path)?;
+        let bytes: Bytes<128> = self.raw_store.read(self.store, location, &path)?;
 
         let key = key::Key::try_deserialize(&bytes)?;
+
+        debug_now!("kind {:?} id: {:?} key.kind: {:?}", kind, id, key.kind);
 
         if let Some(kind) = kind {
             if key.kind != kind {
@@ -203,7 +216,8 @@ impl<P: Platform> Keystore for ClientKeystore<P> {
         };
 
         let path = self.key_path(secrecy, id);
-        store::store(self.store, location, &path, &key.serialize())?;
+        self.raw_store
+            .store(self.store, location, &path, &key.serialize())?;
 
         Ok(())
     }

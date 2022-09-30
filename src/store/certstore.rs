@@ -3,17 +3,19 @@ use littlefs2::path::PathBuf;
 
 use crate::{
     error::{Error, Result},
-    store::{self, Store},
-    types::{CertId, ClientId, Location, Message},
+    store::rawstore::RawStore,
+    store::Store,
+    types::{CertId, Location, Message, RawStoreMode},
 };
 
 pub struct ClientCertstore<S>
 where
     S: Store,
 {
-    client_id: ClientId,
+    client_id: PathBuf,
     rng: ChaCha8Rng,
     store: S,
+    raw_store: RawStore<S>,
 }
 
 pub trait Certstore {
@@ -31,7 +33,7 @@ impl<S: Store> Certstore for ClientCertstore<S> {
         let locations = [Location::Internal, Location::External, Location::Volatile];
         locations
             .iter()
-            .any(|&location| store::delete(self.store, location, &path))
+            .any(|&location| self.raw_store.delete(self.store, location, &path))
             .then(|| ())
             .ok_or(Error::NoSuchKey)
     }
@@ -41,24 +43,26 @@ impl<S: Store> Certstore for ClientCertstore<S> {
         let locations = [Location::Internal, Location::External, Location::Volatile];
         locations
             .iter()
-            .find_map(|&location| store::read(self.store, location, &path).ok())
+            .find_map(|&location| self.raw_store.read(self.store, location, &path).ok())
             .ok_or(Error::NoSuchCertificate)
     }
 
     fn write_certificate(&mut self, location: Location, der: &Message) -> Result<CertId> {
         let id = CertId::new(&mut self.rng);
         let path = self.cert_path(id);
-        store::store(self.store, location, &path, der.as_slice())?;
+        self.raw_store
+            .store(self.store, location, &path, der.as_slice())?;
         Ok(id)
     }
 }
 
 impl<S: Store> ClientCertstore<S> {
-    pub fn new(client_id: ClientId, rng: ChaCha8Rng, store: S) -> Self {
+    pub fn new(client_id: PathBuf, rng: ChaCha8Rng, store: S, raw_store: RawStore<S>) -> Self {
         Self {
             client_id,
             rng,
             store,
+            raw_store,
         }
     }
 

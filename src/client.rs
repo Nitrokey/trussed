@@ -753,6 +753,27 @@ pub trait FilesystemClient: PollClient {
         r.client.syscall();
         Ok(r)
     }
+
+    fn change_pin(&mut self, new_pin: ShortData) -> ClientResult<'_, reply::ChangePin, Self> {
+        let r = self.request(request::ChangePin { new_pin })?;
+        r.client.syscall();
+        Ok(r)
+    }
+
+    fn reset_pin(&mut self, new_pin: ShortData) -> ClientResult<'_, reply::ResetPin, Self> {
+        let r = self.request(request::ResetPin { new_pin })?;
+        r.client.syscall();
+        Ok(r)
+    }
+
+    fn set_client_context_pin(
+        &mut self,
+        pin: ShortData,
+    ) -> ClientResult<'_, reply::SetClientContextPin, Self> {
+        let r = self.request(request::SetClientContextPin { pin })?;
+        r.client.syscall();
+        Ok(r)
+    }
 }
 
 /// All the other methods that are fit to expose.
