@@ -133,10 +133,17 @@ impl SerializeKey for super::Rsa2kPkcs {
         let key_id = request.key;
 
         // We rely on the fact that we store the keys in the PKCS#8 DER format already
-        let priv_key_der = keystore
-            .load_key(key::Secrecy::Secret, Some(key::Kind::Rsa2k), &key_id)
-            .expect("Failed to load an RSA 2K private key with the given ID")
-            .material;
+        let priv_key_der = {
+            let res = keystore
+                .load_key(key::Secrecy::Secret, Some(key::Kind::Rsa2k), &key_id);
+            if res.is_ok(){
+                res.expect("Failed to load an RSA 2K private key with the given ID")
+            } else {
+                keystore
+                    .load_key(key::Secrecy::Public, Some(key::Kind::Rsa2k), &key_id)
+                    .expect("Failed to load an RSA 2K private key with the given ID")
+            }
+        }.material;
 
         let serialized_key = match request.format {
             KeySerialization::Raw => {
