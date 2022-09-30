@@ -732,6 +732,22 @@ impl<P: Platform> Service<P> {
         Ok(crate::client::ClientImplementation::new(requester, syscall))
     }
 
+    /// Add a new client, claiming one of the statically configured
+    /// interchange pairs.
+    #[allow(clippy::result_unit_err)]
+    pub fn try_new_client_ctx<S: crate::platform::Syscall>(
+        &mut self,
+        syscall: S,
+        client_ctx: ClientContext,
+    ) -> Result<crate::client::ClientImplementation<S>, ()> {
+        use interchange::Interchange;
+        let (requester, responder) = TrussedInterchange::claim().ok_or(())?;
+        self.add_endpoint(responder, client_ctx)
+            .map_err(|_service_endpoint| ())?;
+
+        Ok(crate::client::ClientImplementation::new(requester, syscall))
+    }
+
     /// Specialization of `try_new_client`, using `self`'s implementation of `Syscall`
     /// (directly call self for processing). This method is only useful for single-threaded
     /// single-app runners.
