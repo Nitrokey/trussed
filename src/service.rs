@@ -600,6 +600,14 @@ impl<P: Platform> ServiceResources<P> {
                 Ok(Reply::ChangePin(reply::ChangePin {}))
             }
 
+            Request::ResetPin(request) => {
+                raw_store.delete_pin_key();
+                client_id.pin = Some(request.new_pin.clone());
+
+                Ok(Reply::ResetPin(reply::ResetPin {}))
+            }
+
+
             Request::SetClientContextPin(request) => {
                 client_id.pin = Some(request.pin.clone());
 

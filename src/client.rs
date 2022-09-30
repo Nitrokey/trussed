@@ -760,6 +760,12 @@ pub trait FilesystemClient: PollClient {
         Ok(r)
     }
 
+    fn reset_pin(&mut self, new_pin: ShortData) -> ClientResult<'_, reply::ResetPin, Self> {
+        let r = self.request(request::ResetPin { new_pin })?;
+        r.client.syscall();
+        Ok(r)
+    }
+
     fn set_client_context_pin(
         &mut self,
         pin: ShortData,

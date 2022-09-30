@@ -42,7 +42,7 @@ pub enum Error {
     WrongSignatureLength,
 
     // sw encryption errors
-    FilesystemEncryptionError
+    FilesystemEncryptionError,
 }
 
 // pub struct FutureResult<'a, 'c> {
