@@ -2,6 +2,7 @@ use chacha20::ChaCha8Rng;
 use littlefs2::path::PathBuf;
 
 use crate::{
+    config::MAX_SERIALIZED_KEY_LENGTH,
     error::{Error, Result},
     key,
     store::{self, Store as _},
@@ -172,7 +173,10 @@ impl<P: Platform> Keystore for ClientKeystore<P> {
 
         let location = self.location(secrecy, id).ok_or(Error::NoSuchKey)?;
 
+        #[cfg(not(feature = "rsa2k"))]
         let bytes: Bytes<128> = store::read(self.store, location, &path)?;
+        #[cfg(feature = "rsa2k")]
+        let bytes: Bytes<MAX_SERIALIZED_KEY_LENGTH> = store::read(self.store, location, &path)?;
 
         let key = key::Key::try_deserialize(&bytes)?;
 

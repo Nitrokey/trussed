@@ -512,6 +512,12 @@ pub enum Mechanism {
     X255,
     /// Used to serialize the output of a diffie-hellman
     SharedSecret,
+    Rsa2kPkcs,
+    Rsa2kPss,
+    Rsa3kPkcs,
+    Rsa3kPss,
+    Rsa4kPkcs,
+    Rsa4kPss,
 }
 
 pub type LongData = Bytes<MAX_LONG_DATA_LENGTH>;

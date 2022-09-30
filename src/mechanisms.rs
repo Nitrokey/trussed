@@ -52,6 +52,10 @@ pub struct P256 {}
 pub struct P256Prehashed {}
 mod p256;
 
+pub struct Rsa2kPkcs {}
+// Later on we'll add: "pub struct Rsa2kPss {}" and so on
+mod rsa2k;
+
 pub struct Sha256 {}
 mod sha256;
 
