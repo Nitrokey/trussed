@@ -741,6 +741,19 @@ impl<P: Platform> Service<P> {
         Ok(crate::client::ClientImplementation::new(requester, self))
     }
 
+    #[allow(clippy::result_unit_err)]
+    pub fn try_as_new_client_ctx(
+        &mut self,
+        client_ctx: ClientContext,
+    ) -> Result<crate::client::ClientImplementation<&mut Service<P>>, ()> {
+        use interchange::Interchange;
+        let (requester, responder) = TrussedInterchange::claim().ok_or(())?;
+        self.add_endpoint(responder, client_ctx)
+            .map_err(|_service_endpoint| ())?;
+
+        Ok(crate::client::ClientImplementation::new(requester, self))
+    }
+
     /// Similar to [try_as_new_client][Service::try_as_new_client] except that the returning client owns the
     /// Service and is therefore `'static`
     #[allow(clippy::result_unit_err)]
