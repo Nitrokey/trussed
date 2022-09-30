@@ -549,7 +549,7 @@ pub trait CryptoClient: PollClient {
         kind: Kind,
     ) -> ClientResult<'_, reply::UnsafeInjectSharedKey, Self> {
         let r = self.request(request::UnsafeInjectSharedKey {
-            raw_key: ShortData::from_slice(raw_key).unwrap(),
+            raw_key: Bytes::from_slice(raw_key).unwrap(),
             location,
             kind,
         })?;

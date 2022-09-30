@@ -51,7 +51,7 @@ pub const MAX_SIGNATURE_LENGTH: usize = 512;
 pub const MAX_KEY_MATERIAL_LENGTH: usize = 1217;
 #[cfg(any(feature = "rsa2k", feature = "rsa3k", feature = "rsa4k"))]
 // This is due to the fact that KEY_MATERIAL_LENGTH is bigger than MESSAGE_LENGTH for RSA.
-pub const MAX_MESSAGE_LENGTH: usize = MAX_KEY_MATERIAL_LENGTH;
+pub const MAX_MESSAGE_LENGTH: usize = 1500;
 
 #[cfg(not(any(feature = "rsa2k", feature = "rsa3k", feature = "rsa4k")))]
 pub const MAX_SIGNATURE_LENGTH: usize = 72;
