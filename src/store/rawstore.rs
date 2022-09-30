@@ -116,6 +116,12 @@ impl<S: Store> RawStore<S> {
         }
     }
 
+    pub fn delete_pin_key(&self) {
+        if store::exists(self.store, Location::Internal, &self.key_filename) {
+            store::delete(self.store, Location::Internal, &self.key_filename);
+        }
+    }
+
     pub fn get_pin_key(pin: ShortData) -> Bytes<32> {
         let mut hash = sha2::Sha256::new();
         hash.update(pin);
@@ -160,7 +166,7 @@ impl<S: Store> RawStore<S> {
         let mut buffer = data.clone();
         match cipher.decrypt(&mut buffer) {
             Err(e) => return Err(Error::FilesystemEncryptionError),
-            Ok(plaintext) => symmetric_key.copy_from_slice(plaintext)
+            Ok(plaintext) => symmetric_key.copy_from_slice(plaintext),
         };
 
         //let out = Bytes::<N>::from_slice(plaintext).unwrap();

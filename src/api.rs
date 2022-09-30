@@ -105,6 +105,7 @@ generate_enums! {
     ///////////////////
     SetClientContextPin: 63
     ChangePin: 64
+    ResetPin: 65
 
     ///////////
     // Other //
@@ -347,6 +348,9 @@ pub mod request {
         ChangePin:
           - new_pin: ShortData
 
+        ResetPin:
+          - new_pin: ShortData
+
     }
 }
 
@@ -501,6 +505,8 @@ pub mod reply {
         SetClientContextPin:
 
         ChangePin:
+
+        ResetPin:
 
     }
 }
