@@ -48,6 +48,7 @@ pub fn try_attest(
     enum KeyAlgorithm {
         Ed255,
         P256,
+        RSA,
     }
 
     let key_algorithm = match keystore.key_info(key::Secrecy::Secret, &request.private_key) {
@@ -60,6 +61,7 @@ pub fn try_attest(
             match info.kind {
                 key::Kind::P256 => KeyAlgorithm::P256,
                 key::Kind::Ed255 => KeyAlgorithm::Ed255,
+                key::Kind::Rsa2k => KeyAlgorithm::RSA,
                 _ => return Err(Error::NoSuchKey),
             }
         }
@@ -126,6 +128,9 @@ pub fn try_attest(
                     .try_into()
                     .map_err(|_| Error::ImplementationError)?,
             )
+        }
+        KeyAlgorithm::RSA => {
+            todo!()
         }
     };
 

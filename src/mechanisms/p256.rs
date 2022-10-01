@@ -240,6 +240,9 @@ impl SerializeKey for super::P256 {
                     .map_err(|_| Error::InternalError)?;
                 serialized_key
             }
+            _ => {
+                todo!()
+            }
         };
 
         Ok(reply::SerializeKey { serialized_key })

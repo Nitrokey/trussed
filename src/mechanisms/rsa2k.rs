@@ -123,6 +123,9 @@ impl GenerateKey for super::Rsa2kPkcs {
     }
 }
 
+use rsa::pkcs1::EncodeRsaPublicKey;
+use rsa::pkcs8::DecodePublicKey;
+
 #[cfg(feature = "rsa2k")]
 impl SerializeKey for super::Rsa2kPkcs {
     #[inline(never)]
@@ -134,16 +137,16 @@ impl SerializeKey for super::Rsa2kPkcs {
 
         // We rely on the fact that we store the keys in the PKCS#8 DER format already
         let priv_key_der = {
-            let res = keystore
-                .load_key(key::Secrecy::Secret, Some(key::Kind::Rsa2k), &key_id);
-            if res.is_ok(){
+            let res = keystore.load_key(key::Secrecy::Secret, Some(key::Kind::Rsa2k), &key_id);
+            if res.is_ok() {
                 res.expect("Failed to load an RSA 2K private key with the given ID")
             } else {
                 keystore
                     .load_key(key::Secrecy::Public, Some(key::Kind::Rsa2k), &key_id)
                     .expect("Failed to load an RSA 2K private key with the given ID")
             }
-        }.material;
+        }
+        .material;
 
         let serialized_key = match request.format {
             KeySerialization::Raw => {
@@ -153,12 +156,18 @@ impl SerializeKey for super::Rsa2kPkcs {
                     .map_err(|_| Error::InternalError)?;
                 serialized_key
             }
-
+            KeySerialization::RsaPkcs1 => {
+                // TODO make sure this is only for the public key
+                // pkcs1::EncodeRsaPublicKey
+                let public_key =
+                    RsaPublicKey::from_public_key_der(priv_key_der.as_slice()).unwrap();
+                heapless_bytes::Bytes::from_slice(public_key.to_pkcs1_der().unwrap().as_ref())
+                    .unwrap()
+            }
             _ => {
                 return Err(Error::InternalError);
             }
         };
-
         Ok(reply::SerializeKey { serialized_key })
     }
 }

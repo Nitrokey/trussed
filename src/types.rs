@@ -534,6 +534,7 @@ pub enum KeySerialization {
     EcdhEsHkdf256,
     Raw,
     Sec1,
+    RsaPkcs1,
 }
 
 pub type Signature = Bytes<MAX_SIGNATURE_LENGTH>;
