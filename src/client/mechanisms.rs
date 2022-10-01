@@ -461,6 +461,21 @@ pub trait Rsa2kPkcs: CryptoClient {
         )
     }
 
+    fn decrypt_rsa2kpkcs<'c>(
+        &'c mut self,
+        key: KeyId,
+        message: &[u8],
+    ) -> ClientResult<'c, reply::Decrypt, Self> {
+        self.decrypt(
+            Mechanism::Rsa2kPkcs,
+            key,
+            message,
+            &[],
+            &[],
+            &[],
+        )
+    }
+
     fn verify_rsa2kpkcs<'c>(
         &'c mut self,
         key: KeyId,

@@ -241,7 +241,7 @@ impl SerializeKey for super::P256 {
                 serialized_key
             }
             _ => {
-                todo!()
+                return Err(Error::InternalError);
             }
         };
 

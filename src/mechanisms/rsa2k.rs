@@ -1,6 +1,6 @@
 use rsa::{
     pkcs8::{DecodePrivateKey, EncodePrivateKey, EncodePublicKey},
-    PublicKey, RsaPrivateKey, RsaPublicKey,
+    PaddingScheme, PublicKey, RsaPrivateKey, RsaPublicKey,
 };
 
 use crate::api::*;
@@ -274,6 +274,34 @@ impl Verify for super::Rsa2kPkcs {
     }
 }
 
+#[cfg(feature = "rsa2k")]
+impl Decrypt for super::Rsa2kPkcs {
+    #[inline(never)]
+    fn decrypt(
+        keystore: &mut impl Keystore,
+        request: &request::Decrypt,
+    ) -> Result<reply::Decrypt, Error> {
+        let key_id = request.key;
+
+        let priv_key_der = keystore
+            .load_key(key::Secrecy::Secret, Some(key::Kind::Rsa2k), &key_id)
+            .expect("Failed to load an RSA 2K private key with the given ID")
+            .material;
+        let priv_key: RsaPrivateKey = DecodePrivateKey::from_pkcs8_der(&priv_key_der)
+            .expect("Failed to deserialize an RSA 2K private key from PKCS#8 DER");
+
+        // Decrypt
+        // let padding = PaddingScheme::new_oaep::<sha2::Sha256>();
+        let padding = PaddingScheme::new_pkcs1v15_encrypt(); // TODO DESIGN discuss, if this should be supported
+        let dec_data = priv_key
+            .decrypt(padding, &request.message.as_slice())
+            .expect("Failed to decrypt RSA 2K message, PKCS#1v15 padding");
+        Ok(reply::Decrypt {
+            plaintext: Some(Bytes::from_slice(dec_data.as_slice()).unwrap()),
+        })
+    }
+}
+
 #[cfg(not(feature = "rsa2k"))]
 impl DeriveKey for super::Rsa2kPkcs {}
 #[cfg(not(feature = "rsa2k"))]
@@ -282,3 +310,5 @@ impl GenerateKey for super::Rsa2kPkcs {}
 impl Sign for super::Rsa2kPkcs {}
 #[cfg(not(feature = "rsa2k"))]
 impl Verify for super::Rsa2kPkcs {}
+#[cfg(not(feature = "rsa2k"))]
+impl Decrypt for super::Rsa2kPkcs {}
