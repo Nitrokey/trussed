@@ -290,7 +290,7 @@ pub mod request {
 
         UnsafeInjectSharedKey:
           - location: Location
-          - raw_key: ShortData
+          - raw_key: Message
           - kind: Kind
 
         UnwrapKey:

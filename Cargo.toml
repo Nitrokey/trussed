@@ -35,6 +35,7 @@ des = { version = "0.7", optional = true }
 hmac = "0.11"
 sha-1 = { version = "0.9", default-features = false, optional = true }
 sha2 = { version = "0.9", default-features = false }
+rsa = { version = "0.6.0", optional = true }
 
 # ours
 cosey = "0.3"
@@ -91,6 +92,7 @@ default-mechanisms = [
     "tdes",
     "totp",
     "trng",
+    "rsa2k"
 ]
 aes256-cbc = []
 chacha8-poly1305 = []
@@ -106,6 +108,9 @@ sha256 = []
 tdes = ["des"]
 totp = ["sha-1"]
 trng = ["sha-1"]
+rsa2k = ["rsa"]
+rsa3k = ["rsa"]
+rsa4k = ["rsa"]
 
 clients-1 = []
 clients-2 = []

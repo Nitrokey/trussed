@@ -200,13 +200,18 @@ pub trait HmacSha256: CryptoClient {
 impl<S: Syscall> HmacSha256P256 for ClientImplementation<S> {}
 
 pub trait HmacSha256P256: CryptoClient {
-    fn hmacsha256p256_derive_key(&mut self, base_key: KeyId, message: &[u8], persistence: Location)
-        -> ClientResult<'_, reply::DeriveKey, Self>
-    {
+    fn hmacsha256p256_derive_key(
+        &mut self,
+        base_key: KeyId,
+        message: &[u8],
+        persistence: Location,
+    ) -> ClientResult<'_, reply::DeriveKey, Self> {
         self.derive_key(
-            Mechanism::HmacSha256P256, base_key,
+            Mechanism::HmacSha256P256,
+            base_key,
             Some(MediumData::from_slice(message).map_err(|_| ClientError::DataTooLarge)?),
-            StorageAttributes::new().set_persistence(persistence))
+            StorageAttributes::new().set_persistence(persistence),
+        )
     }
 }
 
@@ -395,6 +400,94 @@ pub trait P256: CryptoClient {
             private_key,
             public_key,
             StorageAttributes::new().set_persistence(persistence),
+        )
+    }
+}
+
+#[cfg(feature = "rsa2k")]
+impl<S: Syscall> Rsa2kPkcs for ClientImplementation<S> {}
+
+pub trait Rsa2kPkcs: CryptoClient {
+    fn generate_rsa2kpkcs_private_key(
+        &mut self,
+        persistence: Location,
+    ) -> ClientResult<'_, reply::GenerateKey, Self> {
+        self.generate_key(
+            Mechanism::Rsa2kPkcs,
+            StorageAttributes::new().set_persistence(persistence),
+        )
+    }
+
+    fn derive_rsa2kpkcs_public_key(
+        &mut self,
+        shared_key: KeyId,
+        persistence: Location,
+    ) -> ClientResult<'_, reply::DeriveKey, Self> {
+        self.derive_key(
+            Mechanism::Rsa2kPkcs,
+            shared_key,
+            None,
+            StorageAttributes::new().set_persistence(persistence),
+        )
+    }
+
+    fn serialize_rsa2kpkcs_key(
+        &mut self,
+        key: KeyId,
+        format: KeySerialization,
+    ) -> ClientResult<'_, reply::SerializeKey, Self> {
+        self.serialize_key(Mechanism::Rsa2kPkcs, key, format)
+    }
+
+    fn deserialize_rsa2kpkcs_key<'c>(
+        &'c mut self,
+        serialized_key: &[u8],
+        format: KeySerialization,
+        attributes: StorageAttributes,
+    ) -> ClientResult<'c, reply::DeserializeKey, Self> {
+        self.deserialize_key(Mechanism::Rsa2kPkcs, serialized_key, format, attributes)
+    }
+
+    fn sign_rsa2kpkcs<'c>(
+        &'c mut self,
+        key: KeyId,
+        message: &[u8],
+    ) -> ClientResult<'c, reply::Sign, Self> {
+        self.sign(
+            Mechanism::Rsa2kPkcs,
+            key,
+            message,
+            SignatureSerialization::Raw,
+        )
+    }
+
+    fn decrypt_rsa2kpkcs<'c>(
+        &'c mut self,
+        key: KeyId,
+        message: &[u8],
+    ) -> ClientResult<'c, reply::Decrypt, Self> {
+        self.decrypt(
+            Mechanism::Rsa2kPkcs,
+            key,
+            message,
+            &[],
+            &[],
+            &[],
+        )
+    }
+
+    fn verify_rsa2kpkcs<'c>(
+        &'c mut self,
+        key: KeyId,
+        message: &[u8],
+        signature: &[u8],
+    ) -> ClientResult<'c, reply::Verify, Self> {
+        self.verify(
+            Mechanism::Rsa2kPkcs,
+            key,
+            message,
+            signature,
+            SignatureSerialization::Raw,
         )
     }
 }
