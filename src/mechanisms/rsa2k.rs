@@ -61,7 +61,7 @@ impl DeserializeKey for super::Rsa2kPkcs {
         // - serialized_key: Message
         // - attributes: StorageAttributes
 
-        if request.format != KeySerialization::Raw {
+        if request.format != KeySerialization::Pkcs8Der {
             return Err(Error::InternalError);
         }
 
@@ -137,7 +137,7 @@ impl SerializeKey for super::Rsa2kPkcs {
             .material;
 
         let serialized_key = match request.format {
-            KeySerialization::Raw => {
+            KeySerialization::Pkcs8Der => {
                 let mut serialized_key = Message::new();
                 serialized_key
                     .extend_from_slice(&pub_key_der)

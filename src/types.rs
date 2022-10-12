@@ -539,6 +539,7 @@ pub enum KeySerialization {
     RsaN,
     /// RSA Public key exponent
     RsaE,
+    Pkcs8Der,
 }
 
 pub type Signature = Bytes<MAX_SIGNATURE_LENGTH>;
