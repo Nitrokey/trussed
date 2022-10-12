@@ -75,7 +75,7 @@ impl DeserializeKey for super::Rsa2kPkcs {
 
         let pub_key_id = keystore.store_key(
             request.attributes.persistence,
-            key::Secrecy::Secret,
+            key::Secrecy::Public,
             key::Kind::Rsa2k,
             pub_key_der.as_ref(),
         )?;
