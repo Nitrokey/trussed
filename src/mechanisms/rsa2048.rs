@@ -2,6 +2,7 @@ use rsa::{
     pkcs8::{DecodePrivateKey, DecodePublicKey, EncodePrivateKey, EncodePublicKey},
     PublicKey, PublicKeyParts, RsaPrivateKey, RsaPublicKey,
 };
+use serde::{Deserialize, Serialize};
 
 use crate::api::*;
 // use crate::config::*;
@@ -314,6 +315,109 @@ impl Decrypt for super::Rsa2048Pkcs {
     }
 }
 
+fn unsafe_inject_pkcs_key(
+    keystore: &mut impl Keystore,
+    request: &request::UnsafeInjectKey,
+) -> Result<reply::UnsafeInjectKey, Error> {
+    let private_key: RsaPrivateKey = DecodePrivateKey::from_pkcs8_der(&request.raw_key)
+        .map_err(|_| Error::InvalidSerializedKey)?;
+
+    // We store our keys in PKCS#8 DER format
+    let private_key_der = private_key
+        .to_pkcs8_der()
+        .expect("Failed to serialize an RSA 2K private key to PKCS#8 DER");
+
+    let private_key_id = keystore.store_key(
+        request.attributes.persistence,
+        key::Secrecy::Secret,
+        key::Kind::Rsa2048,
+        private_key_der.as_ref(),
+    )?;
+
+    Ok(reply::UnsafeInjectKey {
+        key: private_key_id,
+    })
+}
+
+/// Data format for RSA Private key serialization in [KeySerialization::Raw](crate::types::KeySerialization::Raw)
+/// format in [unsafe_inject_key](crate::client::CryptoClient::unsafe_inject_key)
+///
+/// Serialized using [postcard_serialize_bytes](crate::postcard_serialize_bytes). All data are big endian large integers
+#[derive(Debug, Deserialize, Serialize)]
+pub struct RsaPrivateKeyFormat<'d> {
+    pub e: &'d [u8],
+    pub p: &'d [u8],
+    pub q: &'d [u8],
+    pub qinv: &'d [u8],
+    pub dp: &'d [u8],
+    pub dq: &'d [u8],
+    pub n: &'d [u8],
+}
+
+#[cfg(feature = "rsa2048")]
+fn unsafe_inject_openpgp_key(
+    keystore: &mut impl Keystore,
+    request: &request::UnsafeInjectKey,
+) -> Result<reply::UnsafeInjectKey, Error> {
+    use rsa::BigUint;
+    let data: RsaPrivateKeyFormat<'_> =
+        crate::postcard_deserialize(&request.raw_key).map_err(|_err| {
+            error!("Failed to deserialize rsa key: {_err:?}");
+            Error::InvalidSerializedKey
+        })?;
+    let e = BigUint::from_bytes_be(data.e);
+    let p = BigUint::from_bytes_be(data.p);
+    let q = BigUint::from_bytes_be(data.q);
+    // let dp = BigUint::from_bytes_be(data.dp);
+    // let dq = BigUint::from_bytes_be(data.dq);
+    let phi = (&p - 1u64) * (&q - 1u64);
+
+    let d = e.modpow(&(&phi - 1u64), &phi);
+
+    // todo check bit size
+    let private_key =
+        RsaPrivateKey::from_components(BigUint::from_bytes_be(data.n), e, d, vec![p, q]);
+    private_key.validate().map_err(|_err| {
+        warn!("Bad private key: {_err:?}");
+        Error::InvalidSerializedKey
+    })?;
+    if private_key.size() != 2048 {
+        warn!("Bad key size: {}", private_key.size());
+        return Err(Error::InvalidSerializedKey);
+    }
+
+    // We store our keys in PKCS#8 DER format
+    let private_key_der = private_key
+        .to_pkcs8_der()
+        .expect("Failed to serialize an RSA 2K private key to PKCS#8 DER");
+
+    let private_key_id = keystore.store_key(
+        request.attributes.persistence,
+        key::Secrecy::Secret,
+        key::Kind::Rsa2048,
+        private_key_der.as_ref(),
+    )?;
+
+    Ok(reply::UnsafeInjectKey {
+        key: private_key_id,
+    })
+}
+
+#[cfg(feature = "rsa2048")]
+impl UnsafeInjectKey for super::Rsa2048Pkcs {
+    #[inline(never)]
+    fn unsafe_inject_key(
+        keystore: &mut impl Keystore,
+        request: &request::UnsafeInjectKey,
+    ) -> Result<reply::UnsafeInjectKey, Error> {
+        match request.format {
+            KeySerialization::Pkcs8Der => unsafe_inject_pkcs_key(keystore, request),
+            KeySerialization::OpenPgpRsa => unsafe_inject_openpgp_key(keystore, request),
+            _ => Err(Error::InvalidSerializationFormat),
+        }
+    }
+}
+
 #[cfg(not(feature = "rsa2048"))]
 impl DeriveKey for super::Rsa2048Pkcs {}
 #[cfg(not(feature = "rsa2048"))]
@@ -324,3 +428,5 @@ impl Sign for super::Rsa2048Pkcs {}
 impl Verify for super::Rsa2048Pkcs {}
 #[cfg(not(feature = "rsa2048"))]
 impl Decrypt for super::Rsa2048Pkcs {}
+#[cfg(not(feature = "rsa2048"))]
+impl UnsafeInjectKey for super::Rsa2048Pkcs {}
