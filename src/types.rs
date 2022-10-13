@@ -536,6 +536,8 @@ pub enum KeySerialization {
     EcdhEsHkdf256,
     Raw,
     Sec1,
+    /// RSA OpenPGP private key import format
+    OpenPgpRsa,
     /// RSA Public key modulus
     RsaN,
     /// RSA Public key exponent

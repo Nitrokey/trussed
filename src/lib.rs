@@ -17,6 +17,10 @@
 extern crate delog;
 generate_macros!();
 
+#[cfg(feature = "alloc")]
+#[macro_use]
+extern crate alloc;
+
 pub use interchange::Interchange;
 
 pub mod api;
