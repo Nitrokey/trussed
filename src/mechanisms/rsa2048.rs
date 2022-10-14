@@ -347,7 +347,7 @@ fn unsafe_inject_openpgp_key(
     use rsa::BigUint;
     let data: RsaCrtImportFormat<'_> =
         crate::postcard_deserialize(&request.raw_key).map_err(|_err| {
-            error!("Failed to deserialize rsa key: {_err:?}");
+            error!("Failed to deserialize RSA key: {_err:?}");
             Error::InvalidSerializedKey
         })?;
     let e = BigUint::from_bytes_be(data.e);
