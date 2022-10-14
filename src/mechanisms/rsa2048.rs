@@ -352,7 +352,6 @@ pub struct RsaPrivateKeyFormat<'d> {
     pub qinv: &'d [u8],
     pub dp: &'d [u8],
     pub dq: &'d [u8],
-    pub n: &'d [u8],
 }
 
 #[cfg(feature = "rsa2048")]
@@ -383,8 +382,7 @@ fn unsafe_inject_openpgp_key(
         })?;
 
     // todo check bit size
-    let private_key =
-        RsaPrivateKey::from_components(BigUint::from_bytes_be(data.n), e, d, vec![p, q]);
+    let private_key = RsaPrivateKey::from_components(&p * &q, e, d, vec![p, q]);
     private_key.validate().map_err(|_err| {
         warn!("Bad private key: {_err:?}");
         Error::InvalidSerializedKey
