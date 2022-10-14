@@ -537,7 +537,9 @@ pub enum KeySerialization {
     Raw,
     Sec1,
     /// RSA OpenPGP private key import format
-    OpenPgpRsa,
+    ///
+    /// Corresponds to [RsaCrtImportFormat](RsaCrtImportFormat)
+    RsaCrt,
     /// RSA Public key modulus
     RsaN,
     /// RSA Public key exponent
@@ -556,3 +558,17 @@ pub enum SignatureSerialization {
 }
 
 pub type UserAttribute = Bytes<MAX_USER_ATTRIBUTE_LENGTH>;
+
+/// Data format for RSA Private key serialization in [KeySerialization::Raw](crate::types::KeySerialization::Raw)
+/// format in [unsafe_inject_key](crate::client::CryptoClient::unsafe_inject_key)
+///
+/// Serialized using [postcard_serialize_bytes](crate::postcard_serialize_bytes). All data are big endian large integers
+#[derive(Debug, Deserialize, Serialize)]
+pub struct RsaCrtImportFormat<'d> {
+    pub e: &'d [u8],
+    pub p: &'d [u8],
+    pub q: &'d [u8],
+    pub qinv: &'d [u8],
+    pub dp: &'d [u8],
+    pub dq: &'d [u8],
+}
