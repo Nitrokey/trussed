@@ -52,7 +52,6 @@ mod p256;
 pub struct Rsa2048Pkcs {}
 // Later on we'll add: "pub struct Rsa2048Pss {}" and so on
 mod rsa2048;
-pub use rsa2048::RsaPrivateKeyFormat;
 
 pub struct Sha256 {}
 mod sha256;

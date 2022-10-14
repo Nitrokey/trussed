@@ -3,7 +3,6 @@ use rsa::{
     pkcs8::{DecodePrivateKey, DecodePublicKey, EncodePrivateKey, EncodePublicKey},
     PublicKey, PublicKeyParts, RsaPrivateKey, RsaPublicKey,
 };
-use serde::{Deserialize, Serialize};
 
 use crate::api::*;
 // use crate::config::*;
@@ -340,27 +339,13 @@ fn unsafe_inject_pkcs_key(
     })
 }
 
-/// Data format for RSA Private key serialization in [KeySerialization::Raw](crate::types::KeySerialization::Raw)
-/// format in [unsafe_inject_key](crate::client::CryptoClient::unsafe_inject_key)
-///
-/// Serialized using [postcard_serialize_bytes](crate::postcard_serialize_bytes). All data are big endian large integers
-#[derive(Debug, Deserialize, Serialize)]
-pub struct RsaPrivateKeyFormat<'d> {
-    pub e: &'d [u8],
-    pub p: &'d [u8],
-    pub q: &'d [u8],
-    pub qinv: &'d [u8],
-    pub dp: &'d [u8],
-    pub dq: &'d [u8],
-}
-
 #[cfg(feature = "rsa2048")]
 fn unsafe_inject_openpgp_key(
     keystore: &mut impl Keystore,
     request: &request::UnsafeInjectKey,
 ) -> Result<reply::UnsafeInjectKey, Error> {
     use rsa::BigUint;
-    let data: RsaPrivateKeyFormat<'_> =
+    let data: RsaCrtImportFormat<'_> =
         crate::postcard_deserialize(&request.raw_key).map_err(|_err| {
             error!("Failed to deserialize rsa key: {_err:?}");
             Error::InvalidSerializedKey
@@ -418,7 +403,7 @@ impl UnsafeInjectKey for super::Rsa2048Pkcs {
     ) -> Result<reply::UnsafeInjectKey, Error> {
         match request.format {
             KeySerialization::Pkcs8Der => unsafe_inject_pkcs_key(keystore, request),
-            KeySerialization::OpenPgpRsa => unsafe_inject_openpgp_key(keystore, request),
+            KeySerialization::RsaCrt => unsafe_inject_openpgp_key(keystore, request),
             _ => Err(Error::InvalidSerializationFormat),
         }
     }
