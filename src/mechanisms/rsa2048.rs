@@ -10,8 +10,8 @@ use crate::error::Error;
 use crate::service::*;
 use crate::types::*;
 
-#[cfg(feature = "rsa2k")]
-impl DeriveKey for super::Rsa2kPkcs {
+#[cfg(feature = "rsa2048")]
+impl DeriveKey for super::Rsa2048Pkcs {
     #[inline(never)]
     fn derive_key(
         keystore: &mut impl Keystore,
@@ -23,7 +23,7 @@ impl DeriveKey for super::Rsa2kPkcs {
         // std::println!("Loading key: {:?}", base_key_id);
 
         let priv_key_der = keystore
-            .load_key(key::Secrecy::Secret, Some(key::Kind::Rsa2k), base_key_id)
+            .load_key(key::Secrecy::Secret, Some(key::Kind::Rsa2048), base_key_id)
             .expect("Failed to load an RSA 2K private key with the given ID")
             .material;
 
@@ -41,7 +41,7 @@ impl DeriveKey for super::Rsa2kPkcs {
         let pub_key_id = keystore.store_key(
             request.attributes.persistence,
             key::Secrecy::Public,
-            key::Kind::Rsa2k,
+            key::Kind::Rsa2048,
             pub_key_der.as_ref(),
         )?;
 
@@ -50,8 +50,8 @@ impl DeriveKey for super::Rsa2kPkcs {
     }
 }
 
-#[cfg(feature = "rsa2k")]
-impl DeserializeKey for super::Rsa2kPkcs {
+#[cfg(feature = "rsa2048")]
+impl DeserializeKey for super::Rsa2048Pkcs {
     #[inline(never)]
     fn deserialize_key(
         keystore: &mut impl Keystore,
@@ -76,7 +76,7 @@ impl DeserializeKey for super::Rsa2kPkcs {
         let pub_key_id = keystore.store_key(
             request.attributes.persistence,
             key::Secrecy::Public,
-            key::Kind::Rsa2k,
+            key::Kind::Rsa2048,
             pub_key_der.as_ref(),
         )?;
 
@@ -84,8 +84,8 @@ impl DeserializeKey for super::Rsa2kPkcs {
     }
 }
 
-#[cfg(feature = "rsa2k")]
-impl GenerateKey for super::Rsa2kPkcs {
+#[cfg(feature = "rsa2048")]
+impl GenerateKey for super::Rsa2048Pkcs {
     #[inline(never)]
     fn generate_key(
         keystore: &mut impl Keystore,
@@ -106,13 +106,13 @@ impl GenerateKey for super::Rsa2kPkcs {
         // std::println!("Stored key material after DER: {}", delog::hex_str!(&priv_key_der));
         // std::println!("Key material length is {}", priv_key_der.as_ref().len());
         // #[cfg(all(test, feature = "verbose-tests"))]
-        // std::println!("rsa2k-pkcs private key = {:?}", &private_key);
+        // std::println!("rsa2048-pkcs private key = {:?}", &private_key);
 
         // store the key
         let priv_key_id = keystore.store_key(
             request.attributes.persistence,
             key::Secrecy::Secret,
-            key::Info::from(key::Kind::Rsa2k).with_local_flag(),
+            key::Info::from(key::Kind::Rsa2048).with_local_flag(),
             priv_key_der.as_ref(),
         )?;
 
@@ -121,8 +121,8 @@ impl GenerateKey for super::Rsa2kPkcs {
     }
 }
 
-#[cfg(feature = "rsa2k")]
-impl SerializeKey for super::Rsa2kPkcs {
+#[cfg(feature = "rsa2048")]
+impl SerializeKey for super::Rsa2048Pkcs {
     #[inline(never)]
     fn serialize_key(
         keystore: &mut impl Keystore,
@@ -132,7 +132,7 @@ impl SerializeKey for super::Rsa2kPkcs {
 
         // We rely on the fact that we store the keys in the PKCS#8 DER format already
         let pub_key_der = keystore
-            .load_key(key::Secrecy::Public, Some(key::Kind::Rsa2k), &key_id)
+            .load_key(key::Secrecy::Public, Some(key::Kind::Rsa2048), &key_id)
             .expect("Failed to load an RSA 2K public key with the given ID")
             .material;
 
@@ -180,8 +180,8 @@ impl SerializeKey for super::Rsa2kPkcs {
     }
 }
 
-#[cfg(feature = "rsa2k")]
-impl Exists for super::Rsa2kPkcs {
+#[cfg(feature = "rsa2048")]
+impl Exists for super::Rsa2048Pkcs {
     #[inline(never)]
     fn exists(
         keystore: &mut impl Keystore,
@@ -189,13 +189,13 @@ impl Exists for super::Rsa2kPkcs {
     ) -> Result<reply::Exists, Error> {
         let key_id = request.key;
 
-        let exists = keystore.exists_key(key::Secrecy::Secret, Some(key::Kind::Rsa2k), &key_id);
+        let exists = keystore.exists_key(key::Secrecy::Secret, Some(key::Kind::Rsa2048), &key_id);
         Ok(reply::Exists { exists })
     }
 }
 
-#[cfg(feature = "rsa2k")]
-impl Sign for super::Rsa2kPkcs {
+#[cfg(feature = "rsa2048")]
+impl Sign for super::Rsa2048Pkcs {
     #[inline(never)]
     fn sign(keystore: &mut impl Keystore, request: &request::Sign) -> Result<reply::Sign, Error> {
         // First, get the key
@@ -203,7 +203,7 @@ impl Sign for super::Rsa2kPkcs {
 
         // We rely on the fact that we store the keys in the PKCS#8 DER format already
         let priv_key_der = keystore
-            .load_key(key::Secrecy::Secret, Some(key::Kind::Rsa2k), &key_id)
+            .load_key(key::Secrecy::Secret, Some(key::Kind::Rsa2048), &key_id)
             .expect("Failed to load an RSA 2K private key with the given ID")
             .material;
 
@@ -220,7 +220,7 @@ impl Sign for super::Rsa2kPkcs {
             .unwrap();
         let our_signature = Signature::from_slice(&native_signature).unwrap();
 
-        // std::println!("RSA2K-PKCS_v1.5 signature:");
+        // std::println!("Rsa2048-PKCS_v1.5 signature:");
         // std::println!("msg: {:?}", &request.message);
         // std::println!("pk:  {:?}", &priv_key);
         // std::println!("sig: {:?}", &our_signature);
@@ -232,8 +232,8 @@ impl Sign for super::Rsa2kPkcs {
     }
 }
 
-#[cfg(feature = "rsa2k")]
-impl Verify for super::Rsa2kPkcs {
+#[cfg(feature = "rsa2048")]
+impl Verify for super::Rsa2048Pkcs {
     #[inline(never)]
     fn verify(
         keystore: &mut impl Keystore,
@@ -252,7 +252,7 @@ impl Verify for super::Rsa2kPkcs {
         let key_id = request.key;
 
         let priv_key_der = keystore
-            .load_key(key::Secrecy::Secret, Some(key::Kind::Rsa2k), &key_id)
+            .load_key(key::Secrecy::Secret, Some(key::Kind::Rsa2048), &key_id)
             .expect("Failed to load an RSA 2K private key with the given ID")
             .material;
 
@@ -277,8 +277,8 @@ impl Verify for super::Rsa2kPkcs {
     }
 }
 
-#[cfg(feature = "rsa2k")]
-impl Decrypt for super::Rsa2kPkcs {
+#[cfg(feature = "rsa2048")]
+impl Decrypt for super::Rsa2048Pkcs {
     #[inline(never)]
     fn decrypt(
         keystore: &mut impl Keystore,
@@ -291,7 +291,7 @@ impl Decrypt for super::Rsa2kPkcs {
 
         // We rely on the fact that we store the keys in the PKCS#8 DER format already
         let priv_key_der = keystore
-            .load_key(key::Secrecy::Secret, Some(key::Kind::Rsa2k), &key_id)
+            .load_key(key::Secrecy::Secret, Some(key::Kind::Rsa2048), &key_id)
             .expect("Failed to load an RSA 2K private key with the given ID")
             .material;
 
@@ -314,13 +314,13 @@ impl Decrypt for super::Rsa2kPkcs {
     }
 }
 
-#[cfg(not(feature = "rsa2k"))]
-impl DeriveKey for super::Rsa2kPkcs {}
-#[cfg(not(feature = "rsa2k"))]
-impl GenerateKey for super::Rsa2kPkcs {}
-#[cfg(not(feature = "rsa2k"))]
-impl Sign for super::Rsa2kPkcs {}
-#[cfg(not(feature = "rsa2k"))]
-impl Verify for super::Rsa2kPkcs {}
-#[cfg(not(feature = "rsa2k"))]
-impl Decrypt for super::Rsa2kPkcs {}
+#[cfg(not(feature = "rsa2048"))]
+impl DeriveKey for super::Rsa2048Pkcs {}
+#[cfg(not(feature = "rsa2048"))]
+impl GenerateKey for super::Rsa2048Pkcs {}
+#[cfg(not(feature = "rsa2048"))]
+impl Sign for super::Rsa2048Pkcs {}
+#[cfg(not(feature = "rsa2048"))]
+impl Verify for super::Rsa2048Pkcs {}
+#[cfg(not(feature = "rsa2048"))]
+impl Decrypt for super::Rsa2048Pkcs {}

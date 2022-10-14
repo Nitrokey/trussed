@@ -44,20 +44,20 @@ cfg_if::cfg_if! {
 }
 pub const MAX_SHORT_DATA_LENGTH: usize = 128;
 
-#[cfg(any(feature = "rsa2k", feature = "rsa3k", feature = "rsa4k"))]
+#[cfg(any(feature = "rsa2048", feature = "rsa3072", feature = "rsa4096"))]
 pub const MAX_SIGNATURE_LENGTH: usize = 512;
-#[cfg(any(feature = "rsa2k", feature = "rsa3k", feature = "rsa4k"))]
-// FIXME: Value from https://stackoverflow.com/questions/5403808/private-key-length-bytes for RSA2K Private key
+#[cfg(any(feature = "rsa2048", feature = "rsa3072", feature = "rsa4096"))]
+// FIXME: Value from https://stackoverflow.com/questions/5403808/private-key-length-bytes for Rsa2048 Private key
 pub const MAX_KEY_MATERIAL_LENGTH: usize = 1232;
-#[cfg(any(feature = "rsa2k", feature = "rsa3k", feature = "rsa4k"))]
+#[cfg(any(feature = "rsa2048", feature = "rsa3072", feature = "rsa4096"))]
 // This is due to the fact that KEY_MATERIAL_LENGTH is bigger than MESSAGE_LENGTH for RSA.
 pub const MAX_MESSAGE_LENGTH: usize = MAX_KEY_MATERIAL_LENGTH;
 
-#[cfg(not(any(feature = "rsa2k", feature = "rsa3k", feature = "rsa4k")))]
+#[cfg(not(any(feature = "rsa2048", feature = "rsa3072", feature = "rsa4096")))]
 pub const MAX_SIGNATURE_LENGTH: usize = 72;
-#[cfg(not(any(feature = "rsa2k", feature = "rsa3k", feature = "rsa4k")))]
+#[cfg(not(any(feature = "rsa2048", feature = "rsa3072", feature = "rsa4096")))]
 pub const MAX_KEY_MATERIAL_LENGTH: usize = 128;
-#[cfg(not(any(feature = "rsa2k", feature = "rsa3k", feature = "rsa4k")))]
+#[cfg(not(any(feature = "rsa2048", feature = "rsa3072", feature = "rsa4096")))]
 pub const MAX_MESSAGE_LENGTH: usize = 1024;
 
 // must be MAX_KEY_MATERIAL_LENGTH + 4

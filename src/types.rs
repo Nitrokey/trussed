@@ -512,13 +512,13 @@ pub enum Mechanism {
     /// Used to serialize the output of a diffie-hellman
     SharedSecret,
     //TODO: Do we want to distinguish PKCS_v1.5 vs PSS/OAEP right here?
-    Rsa2k,
-    Rsa2kPkcs,
-    Rsa2kPss,
-    Rsa3kPkcs,
-    Rsa3kPss,
-    Rsa4kPkcs,
-    Rsa4kPss,
+    Rsa2048,
+    Rsa2048Pkcs,
+    Rsa2048Pss,
+    Rsa3072Pkcs,
+    Rsa3072Pss,
+    Rsa4096Pkcs,
+    Rsa4096Pss,
 }
 
 pub type LongData = Bytes<MAX_LONG_DATA_LENGTH>;

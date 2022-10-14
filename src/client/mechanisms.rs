@@ -385,71 +385,71 @@ pub trait P256: CryptoClient {
     }
 }
 
-#[cfg(feature = "rsa2k")]
-impl<S: Syscall> Rsa2kPkcs for ClientImplementation<S> {}
+#[cfg(feature = "rsa2048")]
+impl<S: Syscall> Rsa2048Pkcs for ClientImplementation<S> {}
 
-pub trait Rsa2kPkcs: CryptoClient {
-    fn generate_rsa2kpkcs_private_key(
+pub trait Rsa2048Pkcs: CryptoClient {
+    fn generate_rsa2048pkcs_private_key(
         &mut self,
         persistence: Location,
     ) -> ClientResult<'_, reply::GenerateKey, Self> {
         self.generate_key(
-            Mechanism::Rsa2kPkcs,
+            Mechanism::Rsa2048Pkcs,
             StorageAttributes::new().set_persistence(persistence),
         )
     }
 
-    fn derive_rsa2kpkcs_public_key(
+    fn derive_rsa2048pkcs_public_key(
         &mut self,
         shared_key: KeyId,
         persistence: Location,
     ) -> ClientResult<'_, reply::DeriveKey, Self> {
         self.derive_key(
-            Mechanism::Rsa2kPkcs,
+            Mechanism::Rsa2048Pkcs,
             shared_key,
             None,
             StorageAttributes::new().set_persistence(persistence),
         )
     }
 
-    fn serialize_rsa2kpkcs_key(
+    fn serialize_rsa2048pkcs_key(
         &mut self,
         key: KeyId,
         format: KeySerialization,
     ) -> ClientResult<'_, reply::SerializeKey, Self> {
-        self.serialize_key(Mechanism::Rsa2kPkcs, key, format)
+        self.serialize_key(Mechanism::Rsa2048Pkcs, key, format)
     }
 
-    fn deserialize_rsa2kpkcs_key<'c>(
+    fn deserialize_rsa2048pkcs_key<'c>(
         &'c mut self,
         serialized_key: &[u8],
         format: KeySerialization,
         attributes: StorageAttributes,
     ) -> ClientResult<'c, reply::DeserializeKey, Self> {
-        self.deserialize_key(Mechanism::Rsa2kPkcs, serialized_key, format, attributes)
+        self.deserialize_key(Mechanism::Rsa2048Pkcs, serialized_key, format, attributes)
     }
 
-    fn sign_rsa2kpkcs<'c>(
+    fn sign_rsa2048pkcs<'c>(
         &'c mut self,
         key: KeyId,
         message: &[u8],
     ) -> ClientResult<'c, reply::Sign, Self> {
         self.sign(
-            Mechanism::Rsa2kPkcs,
+            Mechanism::Rsa2048Pkcs,
             key,
             message,
             SignatureSerialization::Raw,
         )
     }
 
-    fn verify_rsa2kpkcs<'c>(
+    fn verify_rsa2048pkcs<'c>(
         &'c mut self,
         key: KeyId,
         message: &[u8],
         signature: &[u8],
     ) -> ClientResult<'c, reply::Verify, Self> {
         self.verify(
-            Mechanism::Rsa2kPkcs,
+            Mechanism::Rsa2048Pkcs,
             key,
             message,
             signature,
