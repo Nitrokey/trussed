@@ -1,3 +1,4 @@
+use num_bigint_dig::traits::ModInverse;
 use rsa::{
     pkcs8::{DecodePrivateKey, DecodePublicKey, EncodePrivateKey, EncodePublicKey},
     PublicKey, PublicKeyParts, RsaPrivateKey, RsaPublicKey,
@@ -372,7 +373,14 @@ fn unsafe_inject_openpgp_key(
     // let dq = BigUint::from_bytes_be(data.dq);
     let phi = (&p - 1u64) * (&q - 1u64);
 
-    let d = e.modpow(&(&phi - 1u64), &phi);
+    let d = e
+        .clone()
+        .mod_inverse(&phi)
+        .and_then(|int| int.to_biguint())
+        .ok_or_else(|| {
+            warn!("Failed inverse");
+            Error::InvalidSerializedKey
+        })?;
 
     // todo check bit size
     let private_key =
@@ -381,7 +389,7 @@ fn unsafe_inject_openpgp_key(
         warn!("Bad private key: {_err:?}");
         Error::InvalidSerializedKey
     })?;
-    if private_key.size() != 2048 {
+    if private_key.size() * 8 != 2048 {
         warn!("Bad key size: {}", private_key.size());
         return Err(Error::InvalidSerializedKey);
     }
