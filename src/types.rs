@@ -24,6 +24,7 @@ use crate::error::Error;
 use crate::key::Secrecy;
 use crate::store::filestore::{ReadDirFilesState, ReadDirState};
 
+use crate::store::Store;
 pub use crate::client::FutureResult;
 pub use crate::platform::Platform;
 
@@ -333,12 +334,9 @@ pub enum ServiceBackends {
 /**
 Each service backend implements a subset of API calls through this trait.
 */
-pub trait ServiceBackend {
-    fn reply_to(
-        &mut self,
-        client_id: &mut ClientContext,
-        request: &Request,
-    ) -> Result<Reply, Error>;
+pub trait ServiceBackend<S: Store, R: CryptoRng + RngCore> {
+    fn reply_to(&mut self, store: S, rng: &mut R, client_ctx: &mut ClientContext, request: &Request)
+        -> Result<Reply, Error>;
 }
 
 #[bitfield]
