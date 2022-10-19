@@ -232,8 +232,40 @@ pub mod consent {
 // pub type AeadNonce = [u8; 12];
 // pub type AeadTag = [u8; 16];
 
-// pub type ClientId = heapless::Vec<u8, heapless::consts::U32>;
-pub type ClientId = PathBuf;
+/**
+The "ClientId" struct is the closest equivalent to a PCB that Trussed
+currently has. Trussed currently uses it to choose the client-specific
+subtree in the filesystem (see docs in src/store.rs).
+*/
+pub struct ClientContext {
+    pub path: PathBuf,
+    pub pin: Option<ShortData>,
+}
+
+impl core::convert::From<PathBuf> for ClientContext {
+    fn from(path: PathBuf) -> Self {
+        Self::new(path, None)
+    }
+}
+
+impl core::convert::From<&str> for ClientContext {
+    fn from(path_str: &str) -> Self {
+        Self::new(PathBuf::from(path_str), None)
+    }
+}
+
+impl ClientContext {
+    pub fn new(path: PathBuf, pin: Option<&str>) -> Self {
+        if let Some(pindata) = pin {
+            Self {
+                path,
+                pin: Some(ShortData::from_slice(pindata.as_bytes()).unwrap()),
+            }
+        } else {
+            Self { path, pin: None }
+        }
+    }
+}
 
 // Object Hierarchy according to Cryptoki
 // - Storage
@@ -491,6 +523,12 @@ impl Default for StorageAttributes {
     }
 }
 
+#[derive(Copy, Clone, PartialEq)]
+pub enum RawStoreMode {
+    Unencrypted,
+    Encrypted,
+}
+
 #[derive(Copy, Clone, Eq, PartialEq, Debug, Serialize, Deserialize)]
 pub enum Mechanism {
     Aes256Cbc,
@@ -499,6 +537,7 @@ pub enum Mechanism {
     HmacBlake2s,
     HmacSha1,
     HmacSha256,
+    HmacSha256P256,
     HmacSha512,
     // P256XSha256,
     P256,

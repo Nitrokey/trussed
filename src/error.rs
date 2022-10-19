@@ -40,6 +40,9 @@ pub enum Error {
     WrongKeyKind,
     WrongMessageLength,
     WrongSignatureLength,
+
+    // sw encryption errors
+    FilesystemEncryptionError,
 }
 
 // pub struct FutureResult<'a, 'c> {

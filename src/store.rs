@@ -78,6 +78,7 @@ pub mod certstore;
 pub mod counterstore;
 pub mod filestore;
 pub mod keystore;
+pub mod rawstore;
 
 // pub type FileContents = Bytes<MAX_FILE_SIZE>;
 

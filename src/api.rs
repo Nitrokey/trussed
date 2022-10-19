@@ -5,6 +5,7 @@
 //! [pkcs11-v3]: https://docs.oasis-open.org/pkcs11/pkcs11-base/v3.0/pkcs11-base-v3.0.html
 //! [pkcs11-headers]: https://docs.oasis-open.org/pkcs11/pkcs11-base/v3.0/cs01/include/pkcs11-v3.0/
 
+use crate::key::Kind;
 use crate::types::*;
 use core::hint::unreachable_unchecked;
 use core::time::Duration;
@@ -99,10 +100,19 @@ generate_enums! {
     ReadCertificate: 61
     WriteCertificate: 62
 
+    ///////////////////
+    // SW-Encryption //
+    ///////////////////
+    SetClientContextPin: 63
+    ChangePin: 64
+    ResetPin: 65
+
     ///////////
     // Other //
     ///////////
     DebugDumpStore: 0x79
+
+
 }
 
 pub mod request {
@@ -282,6 +292,7 @@ pub mod request {
         UnsafeInjectSharedKey:
           - location: Location
           - raw_key: ShortData
+          - kind: Kind
 
         UnwrapKey:
           - mechanism: Mechanism
@@ -331,6 +342,15 @@ pub mod request {
         WriteCertificate:
           - location: Location
           - der: Message
+
+        SetClientContextPin:
+          - pin: ShortData
+
+        ChangePin:
+          - new_pin: ShortData
+
+        ResetPin:
+          - new_pin: ShortData
 
     }
 }
@@ -482,5 +502,12 @@ pub mod reply {
 
         WriteCertificate:
           - id: CertId
+
+        SetClientContextPin:
+
+        ChangePin:
+
+        ResetPin:
+
     }
 }

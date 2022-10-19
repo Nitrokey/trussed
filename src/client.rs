@@ -89,6 +89,8 @@ pub use crate::platform::Syscall;
 pub mod mechanisms;
 pub use mechanisms::*;
 
+use crate::key::Kind;
+
 // to be fair, this is a programmer error,
 // and could also just panic
 #[derive(Copy, Clone, Debug)]
@@ -539,10 +541,12 @@ pub trait CryptoClient: PollClient {
         &mut self,
         raw_key: &[u8],
         location: Location,
+        kind: Kind,
     ) -> ClientResult<'_, reply::UnsafeInjectSharedKey, Self> {
         let r = self.request(request::UnsafeInjectSharedKey {
             raw_key: ShortData::from_slice(raw_key).unwrap(),
             location,
+            kind,
         })?;
         r.client.syscall();
         Ok(r)
@@ -741,6 +745,27 @@ pub trait FilesystemClient: PollClient {
             data,
             user_attribute,
         })?;
+        r.client.syscall();
+        Ok(r)
+    }
+
+    fn change_pin(&mut self, new_pin: ShortData) -> ClientResult<'_, reply::ChangePin, Self> {
+        let r = self.request(request::ChangePin { new_pin })?;
+        r.client.syscall();
+        Ok(r)
+    }
+
+    fn reset_pin(&mut self, new_pin: ShortData) -> ClientResult<'_, reply::ResetPin, Self> {
+        let r = self.request(request::ResetPin { new_pin })?;
+        r.client.syscall();
+        Ok(r)
+    }
+
+    fn set_client_context_pin(
+        &mut self,
+        pin: ShortData,
+    ) -> ClientResult<'_, reply::SetClientContextPin, Self> {
+        let r = self.request(request::SetClientContextPin { pin })?;
         r.client.syscall();
         Ok(r)
     }

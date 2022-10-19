@@ -3,27 +3,30 @@ use littlefs2::path::PathBuf;
 
 use crate::{
     error::{Error, Result},
+    store::rawstore::RawStore,
     store::{self, Store},
-    types::{ClientId, CounterId, Location},
+    types::{CounterId, Location, RawStoreMode},
 };
 
 pub struct ClientCounterstore<S>
 where
     S: Store,
 {
-    client_id: ClientId,
+    client_id: PathBuf,
     rng: ChaCha8Rng,
     store: S,
+    raw_store: RawStore<S>,
 }
 
 pub type Counter = u128;
 
 impl<S: Store> ClientCounterstore<S> {
-    pub fn new(client_id: ClientId, rng: ChaCha8Rng, store: S) -> Self {
+    pub fn new(client_id: PathBuf, rng: ChaCha8Rng, store: S, raw_store: RawStore<S>) -> Self {
         Self {
             client_id,
             rng,
             store,
+            raw_store,
         }
     }
 
@@ -37,14 +40,15 @@ impl<S: Store> ClientCounterstore<S> {
 
     fn read_counter(&mut self, location: Location, id: CounterId) -> Result<Counter> {
         let path = self.counter_path(id);
-        let mut bytes: crate::Bytes<16> = store::read(self.store, location, &path)?;
+        let mut bytes: crate::Bytes<16> = self.raw_store.read(self.store, location, &path)?;
         bytes.resize_default(16).ok();
         Ok(u128::from_le_bytes(bytes.as_slice().try_into().unwrap()))
     }
 
     fn write_counter(&mut self, location: Location, id: CounterId, value: u128) -> Result<()> {
         let path = self.counter_path(id);
-        store::store(self.store, location, &path, &value.to_le_bytes())
+        self.raw_store
+            .store(self.store, location, &path, &value.to_le_bytes())
     }
 
     fn increment_location(&mut self, location: Location, id: CounterId) -> Result<Counter> {
