@@ -138,7 +138,7 @@ impl SerializeKey for super::Rsa2048Pkcs {
 
         let serialized_key = match request.format {
             KeySerialization::Pkcs8Der => {
-                let mut serialized_key = Message::new();
+                let mut serialized_key = SerializedKey::new();
                 serialized_key
                     .extend_from_slice(&pub_key_der)
                     .map_err(|_err| {
@@ -150,7 +150,7 @@ impl SerializeKey for super::Rsa2048Pkcs {
             KeySerialization::RsaN => {
                 let key: RsaPublicKey = DecodePublicKey::from_public_key_der(&pub_key_der)
                     .expect("Failed to parse key");
-                let mut serialized_n = Message::new();
+                let mut serialized_n = SerializedKey::new();
                 serialized_n
                     .extend_from_slice(&key.n().to_bytes_be())
                     .map_err(|_err| {
@@ -162,7 +162,7 @@ impl SerializeKey for super::Rsa2048Pkcs {
             KeySerialization::RsaE => {
                 let key: RsaPublicKey = DecodePublicKey::from_public_key_der(&pub_key_der)
                     .expect("Failed to parse key");
-                let mut serialized_e = Message::new();
+                let mut serialized_e = SerializedKey::new();
                 serialized_e
                     .extend_from_slice(&key.e().to_bytes_be())
                     .map_err(|_err| {
