@@ -167,7 +167,7 @@ pub mod request {
 
         DeserializeKey:
           - mechanism: Mechanism
-          - serialized_key: Message
+          - serialized_key: SerializedKey
           - format: KeySerialization
           - attributes: StorageAttributes
 
@@ -436,7 +436,7 @@ pub mod reply {
             - bytes: Message
 
         SerializeKey:
-            - serialized_key: Message
+            - serialized_key: SerializedKey
 
         Sign:
             - signature: Signature
