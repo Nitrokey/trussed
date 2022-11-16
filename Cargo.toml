@@ -90,7 +90,6 @@ default-mechanisms = [
     "tdes",
     "totp",
     "trng",
-    "rsa2048"
 ]
 aes256-cbc = []
 chacha8-poly1305 = []
