@@ -1,3 +1,5 @@
+#![cfg(feature = "rsa2048")]
+
 use trussed::client::mechanisms::Rsa2048Pkcs;
 use trussed::client::CryptoClient;
 use trussed::syscall;
