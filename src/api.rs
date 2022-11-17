@@ -275,7 +275,7 @@ pub mod request {
 
         UnsafeInjectKey:
           - mechanism: Mechanism        // -> implies key type
-          - raw_key: Message
+          - raw_key: SerializedKey
           - attributes: StorageAttributes
           - format: KeySerialization
 
