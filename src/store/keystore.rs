@@ -173,9 +173,9 @@ impl<S: Store> Keystore for ClientKeystore<S> {
 
         let location = self.location(secrecy, id).ok_or(Error::NoSuchKey)?;
 
-        #[cfg(not(feature = "rsa2048"))]
+        #[cfg(not(any(feature = "rsa2048", feature = "rsa3072", feature = "rsa4096")))]
         let bytes: Bytes<128> = store::read(self.store, location, &path)?;
-        #[cfg(feature = "rsa2048")]
+        #[cfg(any(feature = "rsa2048", feature = "rsa3072", feature = "rsa4096"))]
         let bytes: Bytes<MAX_SERIALIZED_KEY_LENGTH> = store::read(self.store, location, &path)?;
 
         let key = key::Key::try_deserialize(&bytes)?;

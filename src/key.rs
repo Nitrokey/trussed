@@ -67,6 +67,7 @@ pub enum Kind {
     P256,
     X255,
     Rsa2048,
+    Rsa4096,
 }
 
 bitflags::bitflags! {
@@ -153,7 +154,7 @@ impl Kind {
             Kind::X255 => 6,
             Kind::Rsa2048 => 0x7,
             //Kind::Rsa3072 => 0xE0,
-            //Kind::Rsa4096 => 0xE1,
+            Kind::Rsa4096 => 0x8,
         }
     }
 
@@ -168,7 +169,7 @@ impl Kind {
 
             0x7 => Self::Rsa2048,
             //0xE0 => Kind::Rsa3072,
-            //0xE1 => Kind::Rsa4096,
+            0x8 => Kind::Rsa4096,
             _ => return Err(Error::InvalidSerializedKey),
         })
     }

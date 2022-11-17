@@ -53,6 +53,10 @@ pub struct Rsa2048Pkcs {}
 // Later on we'll add: "pub struct Rsa2048Pss {}" and so on
 mod rsa2048;
 
+pub struct Rsa4096Pkcs {}
+// Later on we'll add: "pub struct Rsa4096Pss {}" and so on
+mod rsa4096;
+
 pub struct Sha256 {}
 mod sha256;
 
