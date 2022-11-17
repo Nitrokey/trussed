@@ -129,3 +129,9 @@ test-attestation-cert-ids = []
 [package.metadata.docs.rs]
 features = ["virt"]
 rustdoc-args = ["--cfg", "docsrs"]
+
+[profile.dev.package.rsa]
+opt-level = 2
+
+[profile.dev.package.num-bigint-dig]
+opt-level = 2
