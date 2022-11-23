@@ -14,8 +14,7 @@ pub struct MockRng(ChaCha20);
 
 impl MockRng {
     pub fn new() -> Self {
-        use chacha20::cipher::KeyIvInit;
-
+        use chacha20::cipher::NewCipher;
         let key = GenericArray::from_slice(b"an example very very secret key.");
         let nonce = GenericArray::from_slice(b"secret nonce");
         Self(ChaCha20::new(&key, &nonce))

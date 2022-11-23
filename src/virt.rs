@@ -8,7 +8,7 @@ mod ui;
 
 use std::{path::PathBuf, sync::Mutex};
 
-use rand_chacha::ChaCha8Rng;
+use chacha20::ChaCha8Rng;
 use rand_core::SeedableRng as _;
 
 use crate::{
