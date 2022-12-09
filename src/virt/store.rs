@@ -47,7 +47,7 @@ impl Storage for FilesystemStorage {
     // TODO: This can't actually be changed currently
     // type ATTRBYTES_MAX = U1022;
 
-    fn read(&self, offset: usize, buffer: &mut [u8]) -> LfsResult<usize> {
+    fn read(&mut self, offset: usize, buffer: &mut [u8]) -> LfsResult<usize> {
         debug!("read: offset: {}, len: {}", offset, buffer.len());
         let mut file = File::open(&self.0).unwrap();
         file.seek(SeekFrom::Start(offset as _)).unwrap();

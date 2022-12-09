@@ -126,6 +126,9 @@ test-attestation-cert-ids = []
 # [patch.crates-io]
 # interchange = { git = "https://github.com/trussed-dev/interchange", branch = "main" }
 
+[patch.crates-io]
+littlefs2 = { git = "https://github.com/Nitrokey/littlefs2", tag = "v0.3.2-nitrokey-1" }
+
 [package.metadata.docs.rs]
 features = ["virt"]
 rustdoc-args = ["--cfg", "docsrs"]
