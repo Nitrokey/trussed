@@ -468,7 +468,7 @@
         keystore: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>Keystore,
         request: <span class="kw-2">&amp;</span>request::Decrypt,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;reply::Decrypt, Error&gt; {
-        <span class="kw">use </span>chacha20poly1305::aead::{AeadInPlace, NewAead};
+        <span class="kw">use </span>chacha20poly1305::aead::{AeadMutInPlace, KeyInit};
         <span class="kw">use </span>chacha20poly1305::ChaCha8Poly1305;
 
         <span class="kw">let </span>serialized_material = keystore
@@ -487,7 +487,7 @@
 
         <span class="kw">let </span>symmetric_key = <span class="kw-2">&amp;</span>serialized[..<span class="number">32</span>];
 
-        <span class="kw">let </span>aead = ChaCha8Poly1305::new(<span class="kw-2">&amp;</span>GenericArray::clone_from_slice(symmetric_key));
+        <span class="kw">let </span><span class="kw-2">mut </span>aead = ChaCha8Poly1305::new(<span class="kw-2">&amp;</span>GenericArray::clone_from_slice(symmetric_key));
 
         <span class="kw">let </span><span class="kw-2">mut </span>plaintext = request.message.clone();
         <span class="kw">let </span>nonce = GenericArray::from_slice(<span class="kw-2">&amp;</span>request.nonce);
@@ -517,7 +517,7 @@
         keystore: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>Keystore,
         request: <span class="kw-2">&amp;</span>request::Encrypt,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;reply::Encrypt, Error&gt; {
-        <span class="kw">use </span>chacha20poly1305::aead::{AeadInPlace, NewAead};
+        <span class="kw">use </span>chacha20poly1305::aead::{AeadMutInPlace, KeyInit};
         <span class="kw">use </span>chacha20poly1305::ChaCha8Poly1305;
 
         <span class="comment">// load key and nonce
@@ -554,7 +554,7 @@
         };
 
         <span class="comment">// keep in state?
-        </span><span class="kw">let </span>aead = ChaCha8Poly1305::new(<span class="kw-2">&amp;</span>GenericArray::clone_from_slice(symmetric_key));
+        </span><span class="kw">let </span><span class="kw-2">mut </span>aead = ChaCha8Poly1305::new(<span class="kw-2">&amp;</span>GenericArray::clone_from_slice(symmetric_key));
 
         <span class="kw">let </span><span class="kw-2">mut </span>ciphertext = request.message.clone();
         <span class="kw">let </span>tag: [u8; <span class="number">16</span>] = aead

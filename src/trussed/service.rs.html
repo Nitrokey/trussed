@@ -822,10 +822,29 @@
 <span id="822">822</span>
 <span id="823">823</span>
 <span id="824">824</span>
-</pre><pre class="rust"><code><span class="kw">use </span>chacha20::ChaCha8Rng;
-<span class="kw">use </span>heapless_bytes::Unsigned;
+<span id="825">825</span>
+<span id="826">826</span>
+<span id="827">827</span>
+<span id="828">828</span>
+<span id="829">829</span>
+<span id="830">830</span>
+<span id="831">831</span>
+<span id="832">832</span>
+<span id="833">833</span>
+<span id="834">834</span>
+<span id="835">835</span>
+<span id="836">836</span>
+<span id="837">837</span>
+<span id="838">838</span>
+<span id="839">839</span>
+<span id="840">840</span>
+<span id="841">841</span>
+<span id="842">842</span>
+<span id="843">843</span>
+</pre><pre class="rust"><code><span class="kw">use </span>heapless_bytes::Unsigned;
 <span class="kw">use </span>interchange::Responder;
 <span class="kw">use </span>littlefs2::path::PathBuf;
+<span class="kw">use </span>rand_chacha::ChaCha8Rng;
 <span class="kw">pub use </span>rand_core::{RngCore, SeedableRng};
 
 <span class="kw">use </span><span class="kw">crate</span>::api::<span class="kw-2">*</span>;
@@ -979,6 +998,8 @@
                     Mechanism::Aes256Cbc =&gt; mechanisms::Aes256Cbc::decrypt(keystore, request),
                     Mechanism::Chacha8Poly1305 =&gt; mechanisms::Chacha8Poly1305::decrypt(keystore, request),
                     Mechanism::Tdes =&gt; mechanisms::Tdes::decrypt(keystore, request),
+                    Mechanism::Rsa2048Pkcs =&gt; mechanisms::Rsa2048Pkcs::decrypt(keystore, request),
+                    Mechanism::Rsa4096Pkcs =&gt; mechanisms::Rsa4096Pkcs::decrypt(keystore, request),
                     <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(Error::MechanismNotAvailable),
 
                 }.map(Reply::Decrypt)
@@ -995,6 +1016,8 @@
                     Mechanism::P256 =&gt; mechanisms::P256::derive_key(keystore, request),
                     Mechanism::Sha256 =&gt; mechanisms::Sha256::derive_key(keystore, request),
                     Mechanism::X255 =&gt; mechanisms::X255::derive_key(keystore, request),
+                    Mechanism::Rsa2048Pkcs =&gt; mechanisms::Rsa2048Pkcs::derive_key(keystore, request),
+                    Mechanism::Rsa4096Pkcs =&gt; mechanisms::Rsa4096Pkcs::derive_key(keystore, request),
                     <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(Error::MechanismNotAvailable),
 
                 }.map(Reply::DeriveKey)
@@ -1006,6 +1029,8 @@
                     Mechanism::Ed255 =&gt; mechanisms::Ed255::deserialize_key(keystore, request),
                     Mechanism::P256 =&gt; mechanisms::P256::deserialize_key(keystore, request),
                     Mechanism::X255 =&gt; mechanisms::X255::deserialize_key(keystore, request),
+                    Mechanism::Rsa2048Pkcs =&gt; mechanisms::Rsa2048Pkcs::deserialize_key(keystore, request),
+                    Mechanism::Rsa4096Pkcs =&gt; mechanisms::Rsa4096Pkcs::deserialize_key(keystore, request),
                     <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(Error::MechanismNotAvailable),
 
                 }.map(Reply::DeserializeKey)
@@ -1039,6 +1064,8 @@
                     Mechanism::P256 =&gt; mechanisms::P256::exists(keystore, request),
                     Mechanism::Totp =&gt; mechanisms::Totp::exists(keystore, request),
                     Mechanism::X255 =&gt; mechanisms::X255::exists(keystore, request),
+                    Mechanism::Rsa2048Pkcs =&gt; mechanisms::Rsa2048Pkcs::exists(keystore, request),
+                    Mechanism::Rsa4096Pkcs =&gt; mechanisms::Rsa4096Pkcs::exists(keystore, request),
                     <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(Error::MechanismNotAvailable),
 
                 }.map(Reply::Exists)
@@ -1050,6 +1077,8 @@
                     Mechanism::Ed255 =&gt; mechanisms::Ed255::generate_key(keystore, request),
                     Mechanism::P256 =&gt; mechanisms::P256::generate_key(keystore, request),
                     Mechanism::X255 =&gt; mechanisms::X255::generate_key(keystore, request),
+                    Mechanism::Rsa2048Pkcs =&gt; mechanisms::Rsa2048Pkcs::generate_key(keystore, request),
+                    Mechanism::Rsa4096Pkcs =&gt; mechanisms::Rsa4096Pkcs::generate_key(keystore, request),
                     <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(Error::MechanismNotAvailable),
                 }.map(Reply::GenerateKey)
             },
@@ -1076,6 +1105,9 @@
                     Mechanism::Ed255 =&gt; mechanisms::Ed255::unsafe_inject_key(keystore,request),
                     Mechanism::SharedSecret =&gt; mechanisms::SharedSecret::unsafe_inject_key(keystore, request),
                     Mechanism::Aes256Cbc =&gt; mechanisms::Aes256Cbc::unsafe_inject_key(keystore, request),
+                    Mechanism::Tdes =&gt; mechanisms::Tdes::unsafe_inject_key(keystore, request),
+                    Mechanism::Rsa2048Pkcs =&gt; mechanisms::Rsa2048Pkcs::unsafe_inject_key(keystore, request),
+                    Mechanism::Rsa4096Pkcs =&gt; mechanisms::Rsa4096Pkcs::unsafe_inject_key(keystore, request),
                     <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(Error::MechanismNotAvailable)
                 }.map(Reply::UnsafeInjectKey)
             },
@@ -1261,6 +1293,8 @@
                     Mechanism::P256 =&gt; mechanisms::P256::serialize_key(keystore, request),
                     Mechanism::X255 =&gt; mechanisms::X255::serialize_key(keystore, request),
                     Mechanism::SharedSecret =&gt; mechanisms::SharedSecret::serialize_key(keystore, request),
+                    Mechanism::Rsa2048Pkcs =&gt; mechanisms::Rsa2048Pkcs::serialize_key(keystore, request),
+                    Mechanism::Rsa4096Pkcs =&gt; mechanisms::Rsa4096Pkcs::serialize_key(keystore, request),
                     <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(Error::MechanismNotAvailable),
 
                 }.map(Reply::SerializeKey)
@@ -1277,6 +1311,8 @@
                     Mechanism::P256 =&gt; mechanisms::P256::sign(keystore, request),
                     Mechanism::P256Prehashed =&gt; mechanisms::P256Prehashed::sign(keystore, request),
                     Mechanism::Totp =&gt; mechanisms::Totp::sign(keystore, request),
+                    Mechanism::Rsa2048Pkcs =&gt; mechanisms::Rsa2048Pkcs::sign(keystore, request),
+                    Mechanism::Rsa4096Pkcs =&gt; mechanisms::Rsa4096Pkcs::sign(keystore, request),
                     <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(Error::MechanismNotAvailable),
 
                 }.map(Reply::Sign)
@@ -1301,6 +1337,8 @@
 
                     Mechanism::Ed255 =&gt; mechanisms::Ed255::verify(keystore, request),
                     Mechanism::P256 =&gt; mechanisms::P256::verify(keystore, request),
+                    Mechanism::Rsa2048Pkcs =&gt; mechanisms::Rsa2048Pkcs::verify(keystore, request),
+                    Mechanism::Rsa4096Pkcs =&gt; mechanisms::Rsa4096Pkcs::verify(keystore, request),
                     <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(Error::MechanismNotAvailable),
 
                 }.map(Reply::Verify)
@@ -1458,7 +1496,7 @@
                 }
 
                 <span class="comment">// 3. Initialize ChaCha8 construction with our seed.
-                </span><span class="kw">let </span><span class="kw-2">mut </span>rng = chacha20::ChaCha8Rng::from_seed(our_seed);
+                </span><span class="kw">let </span><span class="kw-2">mut </span>rng = ChaCha8Rng::from_seed(our_seed);
 
                 <span class="comment">// 4. Store freshly drawn seed for next boot.
                 </span><span class="kw">let </span><span class="kw-2">mut </span>seed_to_store = [<span class="number">0u8</span>; <span class="number">32</span>];

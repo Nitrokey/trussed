@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/block-padding-0.2.1/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../block_padding/index.html"><div class="logo-container"><img src="https://raw.githubusercontent.com/RustCrypto/meta/master/logo_small.png" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../block_padding/index.html"><div class="logo-container">
-                    <img src="https://raw.githubusercontent.com/RustCrypto/meta/master/logo_small.png" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../block_padding/index.html">
-                        <img src="https://raw.githubusercontent.com/RustCrypto/meta/master/logo_small.png" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/block-padding-0.3.2/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/RustCrypto/media/6ee8e381/logo.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../block_padding/index.html"><div class="logo-container"><img src="https://raw.githubusercontent.com/RustCrypto/media/6ee8e381/logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../block_padding/index.html"><div class="logo-container">
+                    <img src="https://raw.githubusercontent.com/RustCrypto/media/6ee8e381/logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../block_padding/index.html">
+                        <img src="https://raw.githubusercontent.com/RustCrypto/media/6ee8e381/logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -363,114 +363,137 @@
 <span id="361">361</span>
 <span id="362">362</span>
 <span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
+<span id="374">374</span>
+<span id="375">375</span>
+<span id="376">376</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Padding and unpadding of messages divided into blocks.
 //!
 //! This crate provides `Padding` trait which provides padding and unpadding
 //! operations. Additionally several common padding schemes are available out
 //! of the box.
 </span><span class="attribute">#![no_std]
-#![doc(html_logo_url = <span class="string">&quot;https://raw.githubusercontent.com/RustCrypto/meta/master/logo_small.png&quot;</span>)]
+#![doc(
+    html_logo_url = <span class="string">&quot;https://raw.githubusercontent.com/RustCrypto/media/6ee8e381/logo.svg&quot;</span>,
+    html_favicon_url = <span class="string">&quot;https://raw.githubusercontent.com/RustCrypto/media/6ee8e381/logo.svg&quot;</span>,
+    html_root_url = <span class="string">&quot;https://docs.rs/block-padding/0.3.2&quot;
+</span>)]
+#![cfg_attr(docsrs, feature(doc_cfg))]
+#![warn(missing_docs, rust_2018_idioms)]
 
-</span><span class="doccomment">/// Error for indicating failed padding operation
-</span><span class="attribute">#[derive(Clone, Copy, Debug)]
-</span><span class="kw">pub struct </span>PadError;
+#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
+</span><span class="kw">extern crate </span>std;
 
-<span class="doccomment">/// Error for indicating failed unpadding operation
-</span><span class="attribute">#[derive(Clone, Copy, Debug)]
-</span><span class="kw">pub struct </span>UnpadError;
+<span class="kw">use </span>core::fmt;
+<span class="kw">pub use </span>generic_array;
+<span class="kw">use </span>generic_array::{ArrayLength, GenericArray};
+
+<span class="doccomment">/// Padding types
+</span><span class="attribute">#[derive(Copy, Clone, Debug, Eq, PartialEq)]
+</span><span class="kw">pub enum </span>PadType {
+    <span class="doccomment">/// Reversible padding
+    </span>Reversible,
+    <span class="doccomment">/// Ambiguous padding
+    </span>Ambiguous,
+    <span class="doccomment">/// No padding, message must be mutliple of block size
+    </span>NoPadding,
+}
+
+<span class="doccomment">/// Block size.
+</span><span class="kw">pub type </span>Block&lt;B&gt; = GenericArray&lt;u8, B&gt;;
 
 <span class="doccomment">/// Trait for padding messages divided into blocks
-</span><span class="kw">pub trait </span>Padding {
-    <span class="doccomment">/// Pads `block` filled with data up to `pos`.
-    ///
-    /// `pos` should be inside of the block and block must not be full, i.e.
-    /// `pos &lt; block.len()` must be true. Otherwise method will return
-    /// `PadError`. Some potentially irreversible padding schemes can allow
-    /// padding of the full block, in this case aforementioned condition is
-    /// relaxed to `pos &lt;= block.len()`.
-    </span><span class="kw">fn </span>pad_block(block: <span class="kw-2">&amp;mut </span>[u8], pos: usize) -&gt; <span class="prelude-ty">Result</span>&lt;(), PadError&gt;;
+</span><span class="kw">pub trait </span>Padding&lt;BlockSize: ArrayLength&lt;u8&gt;&gt; {
+    <span class="doccomment">/// Padding type
+    </span><span class="kw">const </span>TYPE: PadType;
 
-    <span class="doccomment">/// Pads message with length `pos` in the provided buffer.
+    <span class="doccomment">/// Pads `block` filled with data up to `pos` (i.e length of a message
+    /// stored in the block is equal to `pos`).
     ///
-    /// `&amp;buf[..pos]` is perceived as the message, the buffer must contain
-    /// enough leftover space for padding: `block_size - (pos % block_size)`
-    /// extra bytes must be available. Otherwise method will return
-    /// `PadError`.
-    </span><span class="kw">fn </span>pad(buf: <span class="kw-2">&amp;mut </span>[u8], pos: usize, block_size: usize) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;mut </span>[u8], PadError&gt; {
-        <span class="kw">let </span>bs = block_size * (pos / block_size);
-        <span class="kw">if </span>buf.len() &lt; bs || buf.len() - bs &lt; block_size {
-            <span class="prelude-val">Err</span>(PadError)<span class="question-mark">?
-        </span>}
-        <span class="self">Self</span>::pad_block(<span class="kw-2">&amp;mut </span>buf[bs..bs + block_size], pos - bs)<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="kw-2">&amp;mut </span>buf[..bs + block_size])
+    /// # Panics
+    /// If `pos` is bigger than `BlockSize`. Most paddin algorithms also
+    /// panic if they are equal.
+    </span><span class="kw">fn </span>pad(block: <span class="kw-2">&amp;mut </span>Block&lt;BlockSize&gt;, pos: usize);
+
+    <span class="doccomment">/// Unpad data in the `block`.
+    ///
+    /// Returns `Err(UnpadError)` if the block containts malformed padding.
+    </span><span class="kw">fn </span>unpad(block: <span class="kw-2">&amp;</span>Block&lt;BlockSize&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;</span>[u8], UnpadError&gt;;
+
+    <span class="doccomment">/// Unpad data in the `blocks`.
+    ///
+    /// Returns `Err(UnpadError)` if the block containts malformed padding.
+    </span><span class="kw">fn </span>unpad_blocks(blocks: <span class="kw-2">&amp;</span>[Block&lt;BlockSize&gt;]) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;</span>[u8], UnpadError&gt; {
+        <span class="kw">let </span>bs = BlockSize::USIZE;
+        <span class="kw">let </span>res_len = <span class="kw">match </span>(blocks.last(), <span class="self">Self</span>::TYPE) {
+            (<span class="kw">_</span>, PadType::NoPadding) =&gt; bs * blocks.len(),
+            (<span class="prelude-val">Some</span>(last_block), <span class="kw">_</span>) =&gt; {
+                <span class="kw">let </span>n = <span class="self">Self</span>::unpad(last_block)<span class="question-mark">?</span>.len();
+                <span class="macro">assert!</span>(n &lt;= bs);
+                n + bs * (blocks.len() - <span class="number">1</span>)
+            }
+            (<span class="prelude-val">None</span>, PadType::Ambiguous) =&gt; <span class="number">0</span>,
+            (<span class="prelude-val">None</span>, PadType::Reversible) =&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(UnpadError),
+        };
+        <span class="comment">// SAFETY: `res_len` is always smaller or equal to `bs * blocks.len()`
+        </span><span class="prelude-val">Ok</span>(<span class="kw">unsafe </span>{
+            <span class="kw">let </span>p = blocks.as_ptr() <span class="kw">as </span><span class="kw-2">*const </span>u8;
+            core::slice::from_raw_parts(p, res_len)
+        })
     }
-
-    <span class="doccomment">/// Unpad given `data` by truncating it according to the used padding.
-    /// In case of the malformed padding will return `UnpadError`
-    </span><span class="kw">fn </span>unpad(data: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;</span>[u8], UnpadError&gt;;
 }
 
 <span class="doccomment">/// Pad block with zeros.
 ///
 /// ```
 /// use block_padding::{ZeroPadding, Padding};
+/// use generic_array::{GenericArray, typenum::U8};
 ///
 /// let msg = b&quot;test&quot;;
-/// let n = msg.len();
-/// let mut buffer = [0xff; 16];
-/// buffer[..n].copy_from_slice(msg);
-/// let padded_msg = ZeroPadding::pad(&amp;mut buffer, n, 8).unwrap();
-/// assert_eq!(padded_msg, b&quot;test\x00\x00\x00\x00&quot;);
-/// assert_eq!(ZeroPadding::unpad(&amp;padded_msg).unwrap(), msg);
-/// ```
-/// ```
-/// # use block_padding::{ZeroPadding, Padding};
-/// # let msg = b&quot;test&quot;;
-/// # let n = msg.len();
-/// # let mut buffer = [0xff; 16];
-/// # buffer[..n].copy_from_slice(msg);
-/// let padded_msg = ZeroPadding::pad(&amp;mut buffer, n, 2).unwrap();
-/// assert_eq!(padded_msg, b&quot;test&quot;);
-/// assert_eq!(ZeroPadding::unpad(&amp;padded_msg).unwrap(), msg);
+/// let pos = msg.len();
+/// let mut block: GenericArray::&lt;u8, U8&gt; = [0xff; 8].into();
+/// block[..pos].copy_from_slice(msg);
+/// ZeroPadding::pad(&amp;mut block, pos);
+/// assert_eq!(&amp;block[..], b&quot;test\x00\x00\x00\x00&quot;);
+/// let res = ZeroPadding::unpad(&amp;mut block).unwrap();
+/// assert_eq!(res, msg);
 /// ```
 ///
-/// Note that zero padding may not be reversible if the original message ends
+/// Note that zero padding is not reversible for messages which end
 /// with one or more zero bytes.
 </span><span class="attribute">#[derive(Clone, Copy, Debug)]
-</span><span class="kw">pub enum </span>ZeroPadding {}
+</span><span class="kw">pub struct </span>ZeroPadding;
 
-<span class="kw">impl </span>Padding <span class="kw">for </span>ZeroPadding {
-    <span class="kw">fn </span>pad_block(block: <span class="kw-2">&amp;mut </span>[u8], pos: usize) -&gt; <span class="prelude-ty">Result</span>&lt;(), PadError&gt; {
-        <span class="kw">if </span>pos &gt; block.len() {
-            <span class="prelude-val">Err</span>(PadError)<span class="question-mark">?
-        </span>}
-        set(<span class="kw-2">&amp;mut </span>block[pos..], <span class="number">0</span>);
-        <span class="prelude-val">Ok</span>(())
-    }
+<span class="kw">impl</span>&lt;B: ArrayLength&lt;u8&gt;&gt; Padding&lt;B&gt; <span class="kw">for </span>ZeroPadding {
+    <span class="kw">const </span>TYPE: PadType = PadType::Ambiguous;
 
-    <span class="kw">fn </span>pad(buf: <span class="kw-2">&amp;mut </span>[u8], pos: usize, block_size: usize) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;mut </span>[u8], PadError&gt; {
-        <span class="kw">if </span>pos % block_size == <span class="number">0 </span>{
-            <span class="prelude-val">Ok</span>(<span class="kw-2">&amp;mut </span>buf[..pos])
-        } <span class="kw">else </span>{
-            <span class="kw">let </span>bs = block_size * (pos / block_size);
-            <span class="kw">let </span>be = bs + block_size;
-            <span class="kw">if </span>buf.len() &lt; be {
-                <span class="prelude-val">Err</span>(PadError)<span class="question-mark">?
-            </span>}
-            <span class="self">Self</span>::pad_block(<span class="kw-2">&amp;mut </span>buf[bs..be], pos - bs)<span class="question-mark">?</span>;
-            <span class="prelude-val">Ok</span>(<span class="kw-2">&amp;mut </span>buf[..be])
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>pad(block: <span class="kw-2">&amp;mut </span>Block&lt;B&gt;, pos: usize) {
+        <span class="kw">if </span>pos &gt; B::USIZE {
+            <span class="macro">panic!</span>(<span class="string">&quot;`pos` is bigger than block size&quot;</span>);
+        }
+        <span class="kw">for </span>b <span class="kw">in </span><span class="kw-2">&amp;mut </span>block[pos..] {
+            <span class="kw-2">*</span>b = <span class="number">0</span>;
         }
     }
 
-    <span class="kw">fn </span>unpad(data: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;</span>[u8], UnpadError&gt; {
-        <span class="kw">let </span><span class="kw-2">mut </span>n = data.len() - <span class="number">1</span>;
-        <span class="kw">while </span>n != <span class="number">0 </span>{
-            <span class="kw">if </span>data[n] != <span class="number">0 </span>{
-                <span class="kw">break</span>;
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>unpad(block: <span class="kw-2">&amp;</span>Block&lt;B&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;</span>[u8], UnpadError&gt; {
+        <span class="kw">for </span>i <span class="kw">in </span>(<span class="number">0</span>..B::USIZE).rev() {
+            <span class="kw">if </span>block[i] != <span class="number">0 </span>{
+                <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="kw-2">&amp;</span>block[..i + <span class="number">1</span>]);
             }
-            n -= <span class="number">1</span>;
         }
-        <span class="prelude-val">Ok</span>(<span class="kw-2">&amp;</span>data[..n + <span class="number">1</span>])
+        <span class="prelude-val">Ok</span>(<span class="kw-2">&amp;</span>block[..<span class="number">0</span>])
     }
 }
 
@@ -480,70 +503,97 @@
 ///
 /// ```
 /// use block_padding::{Pkcs7, Padding};
+/// use generic_array::{GenericArray, typenum::U8};
 ///
 /// let msg = b&quot;test&quot;;
-/// let n = msg.len();
-/// let mut buffer = [0xff; 8];
-/// buffer[..n].copy_from_slice(msg);
-/// let padded_msg = Pkcs7::pad(&amp;mut buffer, n, 8).unwrap();
-/// assert_eq!(padded_msg, b&quot;test\x04\x04\x04\x04&quot;);
-/// assert_eq!(Pkcs7::unpad(&amp;padded_msg).unwrap(), msg);
+/// let pos = msg.len();
+/// let mut block: GenericArray::&lt;u8, U8&gt; = [0xff; 8].into();
+/// block[..pos].copy_from_slice(msg);
+/// Pkcs7::pad(&amp;mut block, pos);
+/// assert_eq!(&amp;block[..], b&quot;test\x04\x04\x04\x04&quot;);
+/// let res = Pkcs7::unpad(&amp;block).unwrap();
+/// assert_eq!(res, msg);
 /// ```
-/// ```
-/// # use block_padding::{Pkcs7, Padding};
-/// # let msg = b&quot;test&quot;;
-/// # let n = msg.len();
-/// # let mut buffer = [0xff; 8];
-/// # buffer[..n].copy_from_slice(msg);
-/// let padded_msg = Pkcs7::pad(&amp;mut buffer, n, 2).unwrap();
-/// assert_eq!(padded_msg, b&quot;test\x02\x02&quot;);
-/// assert_eq!(Pkcs7::unpad(&amp;padded_msg).unwrap(), msg);
-/// ```
-/// ```
-/// # use block_padding::{Pkcs7, Padding};
-/// let mut buffer = [0xff; 5];
-/// assert!(Pkcs7::pad(&amp;mut buffer, 4, 2).is_err());
-/// ```
-/// ```
-/// # use block_padding::{Pkcs7, Padding};
-/// # let buffer = [0xff; 16];
-/// assert!(Pkcs7::unpad(&amp;buffer).is_err());
-/// ```
-///
-/// In addition to conditions stated in the `Padding` trait documentation,
-/// `pad_block` will return `PadError` if `block.len() &gt; 255`, and in case of
-/// `pad` if `block_size &gt; 255`.
 </span><span class="attribute">#[derive(Clone, Copy, Debug)]
-</span><span class="kw">pub enum </span>Pkcs7 {}
+</span><span class="kw">pub struct </span>Pkcs7;
 
-<span class="kw">impl </span>Padding <span class="kw">for </span>Pkcs7 {
-    <span class="kw">fn </span>pad_block(block: <span class="kw-2">&amp;mut </span>[u8], pos: usize) -&gt; <span class="prelude-ty">Result</span>&lt;(), PadError&gt; {
-        <span class="kw">if </span>block.len() &gt; <span class="number">255 </span>{
-            <span class="prelude-val">Err</span>(PadError)<span class="question-mark">?
-        </span>}
-        <span class="kw">if </span>pos &gt;= block.len() {
-            <span class="prelude-val">Err</span>(PadError)<span class="question-mark">?
-        </span>}
-        <span class="kw">let </span>n = block.len() - pos;
-        set(<span class="kw-2">&amp;mut </span>block[pos..], n <span class="kw">as </span>u8);
-        <span class="prelude-val">Ok</span>(())
+<span class="kw">impl </span>Pkcs7 {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>unpad&lt;B: ArrayLength&lt;u8&gt;&gt;(block: <span class="kw-2">&amp;</span>Block&lt;B&gt;, strict: bool) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;</span>[u8], UnpadError&gt; {
+        <span class="comment">// TODO: use bounds to check it at compile time
+        </span><span class="kw">if </span>B::USIZE &gt; <span class="number">255 </span>{
+            <span class="macro">panic!</span>(<span class="string">&quot;block size is too big for PKCS#7&quot;</span>);
+        }
+        <span class="kw">let </span>bs = B::USIZE;
+        <span class="kw">let </span>n = block[bs - <span class="number">1</span>];
+        <span class="kw">if </span>n == <span class="number">0 </span>|| n <span class="kw">as </span>usize &gt; bs {
+            <span class="kw">return </span><span class="prelude-val">Err</span>(UnpadError);
+        }
+        <span class="kw">let </span>s = bs - n <span class="kw">as </span>usize;
+        <span class="kw">if </span>strict &amp;&amp; block[s..bs - <span class="number">1</span>].iter().any(|<span class="kw-2">&amp;</span>v| v != n) {
+            <span class="kw">return </span><span class="prelude-val">Err</span>(UnpadError);
+        }
+        <span class="prelude-val">Ok</span>(<span class="kw-2">&amp;</span>block[..s])
+    }
+}
+
+<span class="kw">impl</span>&lt;B: ArrayLength&lt;u8&gt;&gt; Padding&lt;B&gt; <span class="kw">for </span>Pkcs7 {
+    <span class="kw">const </span>TYPE: PadType = PadType::Reversible;
+
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>pad(block: <span class="kw-2">&amp;mut </span>Block&lt;B&gt;, pos: usize) {
+        <span class="comment">// TODO: use bounds to check it at compile time
+        </span><span class="kw">if </span>B::USIZE &gt; <span class="number">255 </span>{
+            <span class="macro">panic!</span>(<span class="string">&quot;block size is too big for PKCS#7&quot;</span>);
+        }
+        <span class="kw">if </span>pos &gt;= B::USIZE {
+            <span class="macro">panic!</span>(<span class="string">&quot;`pos` is bigger or equal to block size&quot;</span>);
+        }
+        <span class="kw">let </span>n = (B::USIZE - pos) <span class="kw">as </span>u8;
+        <span class="kw">for </span>b <span class="kw">in </span><span class="kw-2">&amp;mut </span>block[pos..] {
+            <span class="kw-2">*</span>b = n;
+        }
     }
 
-    <span class="kw">fn </span>unpad(data: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;</span>[u8], UnpadError&gt; {
-        <span class="kw">if </span>data.is_empty() {
-            <span class="prelude-val">Err</span>(UnpadError)<span class="question-mark">?
-        </span>}
-        <span class="kw">let </span>l = data.len();
-        <span class="kw">let </span>n = data[l - <span class="number">1</span>];
-        <span class="kw">if </span>n == <span class="number">0 </span>|| n <span class="kw">as </span>usize &gt; l {
-            <span class="prelude-val">Err</span>(UnpadError)<span class="question-mark">?
-        </span>}
-        <span class="kw">for </span>v <span class="kw">in </span><span class="kw-2">&amp;</span>data[l - n <span class="kw">as </span>usize..l - <span class="number">1</span>] {
-            <span class="kw">if </span><span class="kw-2">*</span>v != n {
-                <span class="prelude-val">Err</span>(UnpadError)<span class="question-mark">?
-            </span>}
-        }
-        <span class="prelude-val">Ok</span>(<span class="kw-2">&amp;</span>data[..l - n <span class="kw">as </span>usize])
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>unpad(block: <span class="kw-2">&amp;</span>Block&lt;B&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;</span>[u8], UnpadError&gt; {
+        Pkcs7::unpad(block, <span class="bool-val">true</span>)
+    }
+}
+
+<span class="doccomment">/// Pad block with arbitrary bytes ending with value equal to the number of bytes added.
+///
+/// A variation of PKCS#7 that is less strict when decoding.
+///
+/// ```
+/// use block_padding::{Iso10126, Padding};
+/// use generic_array::{GenericArray, typenum::U8};
+///
+/// let msg = b&quot;test&quot;;
+/// let pos = msg.len();
+/// let mut block: GenericArray::&lt;u8, U8&gt; = [0xff; 8].into();
+/// block[..pos].copy_from_slice(msg);
+/// Iso10126::pad(&amp;mut block, pos);
+/// assert_eq!(&amp;block[..], b&quot;test\x04\x04\x04\x04&quot;);
+/// let res = Iso10126::unpad(&amp;block).unwrap();
+/// assert_eq!(res, msg);
+/// ```
+</span><span class="attribute">#[derive(Clone, Copy, Debug)]
+</span><span class="kw">pub struct </span>Iso10126;
+
+<span class="kw">impl</span>&lt;B: ArrayLength&lt;u8&gt;&gt; Padding&lt;B&gt; <span class="kw">for </span>Iso10126 {
+    <span class="kw">const </span>TYPE: PadType = PadType::Reversible;
+
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>pad(block: <span class="kw-2">&amp;mut </span>Block&lt;B&gt;, pos: usize) {
+        <span class="comment">// Instead of generating random bytes as specified by Iso10126 we
+        // simply use Pkcs7 padding.
+        </span>Pkcs7::pad(block, pos)
+    }
+
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>unpad(block: <span class="kw-2">&amp;</span>Block&lt;B&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;</span>[u8], UnpadError&gt; {
+        Pkcs7::unpad(block, <span class="bool-val">false</span>)
     }
 }
 
@@ -552,66 +602,55 @@
 ///
 /// ```
 /// use block_padding::{AnsiX923, Padding};
+/// use generic_array::{GenericArray, typenum::U8};
 ///
 /// let msg = b&quot;test&quot;;
-/// let n = msg.len();
-/// let mut buffer = [0xff; 16];
-/// buffer[..n].copy_from_slice(msg);
-/// let padded_msg = AnsiX923::pad(&amp;mut buffer, n, 8).unwrap();
-/// assert_eq!(padded_msg, b&quot;test\x00\x00\x00\x04&quot;);
-/// assert_eq!(AnsiX923::unpad(&amp;padded_msg).unwrap(), msg);
+/// let pos = msg.len();
+/// let mut block: GenericArray::&lt;u8, U8&gt; = [0xff; 8].into();
+/// block[..pos].copy_from_slice(msg);
+/// AnsiX923::pad(&amp;mut block, pos);
+/// assert_eq!(&amp;block[..], b&quot;test\x00\x00\x00\x04&quot;);
+/// let res = AnsiX923::unpad(&amp;block).unwrap();
+/// assert_eq!(res, msg);
 /// ```
-/// ```
-/// # use block_padding::{AnsiX923, Padding};
-/// # let msg = b&quot;test&quot;;
-/// # let n = msg.len();
-/// # let mut buffer = [0xff; 16];
-/// # buffer[..n].copy_from_slice(msg);
-/// let padded_msg = AnsiX923::pad(&amp;mut buffer, n, 2).unwrap();
-/// assert_eq!(padded_msg, b&quot;test\x00\x02&quot;);
-/// assert_eq!(AnsiX923::unpad(&amp;padded_msg).unwrap(), msg);
-/// ```
-/// ```
-/// # use block_padding::{AnsiX923, Padding};
-/// # let buffer = [0xff; 16];
-/// assert!(AnsiX923::unpad(&amp;buffer).is_err());
-/// ```
-///
-/// In addition to conditions stated in the `Padding` trait documentation,
-/// `pad_block` will return `PadError` if `block.len() &gt; 255`, and in case of
-/// `pad` if `block_size &gt; 255`.
 </span><span class="attribute">#[derive(Clone, Copy, Debug)]
-</span><span class="kw">pub enum </span>AnsiX923 {}
+</span><span class="kw">pub struct </span>AnsiX923;
 
-<span class="kw">impl </span>Padding <span class="kw">for </span>AnsiX923 {
-    <span class="kw">fn </span>pad_block(block: <span class="kw-2">&amp;mut </span>[u8], pos: usize) -&gt; <span class="prelude-ty">Result</span>&lt;(), PadError&gt; {
-        <span class="kw">if </span>block.len() &gt; <span class="number">255 </span>{
-            <span class="prelude-val">Err</span>(PadError)<span class="question-mark">?
-        </span>}
-        <span class="kw">if </span>pos &gt;= block.len() {
-            <span class="prelude-val">Err</span>(PadError)<span class="question-mark">?
-        </span>}
-        <span class="kw">let </span>bs = block.len();
-        set(<span class="kw-2">&amp;mut </span>block[pos..bs - <span class="number">1</span>], <span class="number">0</span>);
+<span class="kw">impl</span>&lt;B: ArrayLength&lt;u8&gt;&gt; Padding&lt;B&gt; <span class="kw">for </span>AnsiX923 {
+    <span class="kw">const </span>TYPE: PadType = PadType::Reversible;
+
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>pad(block: <span class="kw-2">&amp;mut </span>Block&lt;B&gt;, pos: usize) {
+        <span class="comment">// TODO: use bounds to check it at compile time
+        </span><span class="kw">if </span>B::USIZE &gt; <span class="number">255 </span>{
+            <span class="macro">panic!</span>(<span class="string">&quot;block size is too big for PKCS#7&quot;</span>);
+        }
+        <span class="kw">if </span>pos &gt;= B::USIZE {
+            <span class="macro">panic!</span>(<span class="string">&quot;`pos` is bigger or equal to block size&quot;</span>);
+        }
+        <span class="kw">let </span>bs = B::USIZE;
+        <span class="kw">for </span>b <span class="kw">in </span><span class="kw-2">&amp;mut </span>block[pos..bs - <span class="number">1</span>] {
+            <span class="kw-2">*</span>b = <span class="number">0</span>;
+        }
         block[bs - <span class="number">1</span>] = (bs - pos) <span class="kw">as </span>u8;
-        <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn </span>unpad(data: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;</span>[u8], UnpadError&gt; {
-        <span class="kw">if </span>data.is_empty() {
-            <span class="prelude-val">Err</span>(UnpadError)<span class="question-mark">?
-        </span>}
-        <span class="kw">let </span>l = data.len();
-        <span class="kw">let </span>n = data[l - <span class="number">1</span>] <span class="kw">as </span>usize;
-        <span class="kw">if </span>n == <span class="number">0 </span>|| n &gt; l {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>unpad(block: <span class="kw-2">&amp;</span>Block&lt;B&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;</span>[u8], UnpadError&gt; {
+        <span class="comment">// TODO: use bounds to check it at compile time
+        </span><span class="kw">if </span>B::USIZE &gt; <span class="number">255 </span>{
+            <span class="macro">panic!</span>(<span class="string">&quot;block size is too big for PKCS#7&quot;</span>);
+        }
+        <span class="kw">let </span>bs = B::USIZE;
+        <span class="kw">let </span>n = block[bs - <span class="number">1</span>] <span class="kw">as </span>usize;
+        <span class="kw">if </span>n == <span class="number">0 </span>|| n &gt; bs {
             <span class="kw">return </span><span class="prelude-val">Err</span>(UnpadError);
         }
-        <span class="kw">for </span>v <span class="kw">in </span><span class="kw-2">&amp;</span>data[l - n..l - <span class="number">1</span>] {
-            <span class="kw">if </span><span class="kw-2">*</span>v != <span class="number">0 </span>{
-                <span class="prelude-val">Err</span>(UnpadError)<span class="question-mark">?
-            </span>}
+        <span class="kw">let </span>s = bs - n;
+        <span class="kw">if </span>block[s..bs - <span class="number">1</span>].iter().any(|<span class="kw-2">&amp;</span>v| v != <span class="number">0</span>) {
+            <span class="kw">return </span><span class="prelude-val">Err</span>(UnpadError);
         }
-        <span class="prelude-val">Ok</span>(<span class="kw-2">&amp;</span>data[..l - n])
+        <span class="prelude-val">Ok</span>(<span class="kw-2">&amp;</span>block[..s])
     }
 }
 
@@ -619,112 +658,99 @@
 ///
 /// ```
 /// use block_padding::{Iso7816, Padding};
+/// use generic_array::{GenericArray, typenum::U8};
 ///
 /// let msg = b&quot;test&quot;;
-/// let n = msg.len();
-/// let mut buffer = [0xff; 16];
-/// buffer[..n].copy_from_slice(msg);
-/// let padded_msg = Iso7816::pad(&amp;mut buffer, n, 8).unwrap();
-/// assert_eq!(padded_msg, b&quot;test\x80\x00\x00\x00&quot;);
-/// assert_eq!(Iso7816::unpad(&amp;padded_msg).unwrap(), msg);
-/// ```
-/// ```
-/// # use block_padding::{Iso7816, Padding};
-/// # let msg = b&quot;test&quot;;
-/// # let n = msg.len();
-/// # let mut buffer = [0xff; 16];
-/// # buffer[..n].copy_from_slice(msg);
-/// let padded_msg = Iso7816::pad(&amp;mut buffer, n, 2).unwrap();
-/// assert_eq!(padded_msg, b&quot;test\x80\x00&quot;);
-/// assert_eq!(Iso7816::unpad(&amp;padded_msg).unwrap(), msg);
+/// let pos = msg.len();
+/// let mut block: GenericArray::&lt;u8, U8&gt; = [0xff; 8].into();
+/// block[..pos].copy_from_slice(msg);
+/// Iso7816::pad(&amp;mut block, pos);
+/// assert_eq!(&amp;block[..], b&quot;test\x80\x00\x00\x00&quot;);
+/// let res = Iso7816::unpad(&amp;block).unwrap();
+/// assert_eq!(res, msg);
 /// ```
 </span><span class="attribute">#[derive(Clone, Copy, Debug)]
-</span><span class="kw">pub enum </span>Iso7816 {}
+</span><span class="kw">pub struct </span>Iso7816;
 
-<span class="kw">impl </span>Padding <span class="kw">for </span>Iso7816 {
-    <span class="kw">fn </span>pad_block(block: <span class="kw-2">&amp;mut </span>[u8], pos: usize) -&gt; <span class="prelude-ty">Result</span>&lt;(), PadError&gt; {
-        <span class="kw">if </span>pos &gt;= block.len() {
-            <span class="prelude-val">Err</span>(PadError)<span class="question-mark">?
-        </span>}
+<span class="kw">impl</span>&lt;B: ArrayLength&lt;u8&gt;&gt; Padding&lt;B&gt; <span class="kw">for </span>Iso7816 {
+    <span class="kw">const </span>TYPE: PadType = PadType::Reversible;
+
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>pad(block: <span class="kw-2">&amp;mut </span>Block&lt;B&gt;, pos: usize) {
+        <span class="kw">if </span>pos &gt;= B::USIZE {
+            <span class="macro">panic!</span>(<span class="string">&quot;`pos` is bigger or equal to block size&quot;</span>);
+        }
         block[pos] = <span class="number">0x80</span>;
-        set(<span class="kw-2">&amp;mut </span>block[pos + <span class="number">1</span>..], <span class="number">0</span>);
-        <span class="prelude-val">Ok</span>(())
+        <span class="kw">for </span>b <span class="kw">in </span><span class="kw-2">&amp;mut </span>block[pos + <span class="number">1</span>..] {
+            <span class="kw-2">*</span>b = <span class="number">0</span>;
+        }
     }
 
-    <span class="kw">fn </span>unpad(data: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;</span>[u8], UnpadError&gt; {
-        <span class="kw">if </span>data.is_empty() {
-            <span class="prelude-val">Err</span>(UnpadError)<span class="question-mark">?
-        </span>}
-        <span class="kw">let </span><span class="kw-2">mut </span>n = data.len() - <span class="number">1</span>;
-        <span class="kw">while </span>n != <span class="number">0 </span>{
-            <span class="kw">if </span>data[n] != <span class="number">0 </span>{
-                <span class="kw">break</span>;
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>unpad(block: <span class="kw-2">&amp;</span>Block&lt;B&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;</span>[u8], UnpadError&gt; {
+        <span class="kw">for </span>i <span class="kw">in </span>(<span class="number">0</span>..B::USIZE).rev() {
+            <span class="kw">match </span>block[i] {
+                <span class="number">0x80 </span>=&gt; <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="kw-2">&amp;</span>block[..i]),
+                <span class="number">0x00 </span>=&gt; <span class="kw">continue</span>,
+                <span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(UnpadError),
             }
-            n -= <span class="number">1</span>;
         }
-        <span class="kw">if </span>data[n] != <span class="number">0x80 </span>{
-            <span class="prelude-val">Err</span>(UnpadError)<span class="question-mark">?
-        </span>}
-        <span class="prelude-val">Ok</span>(<span class="kw-2">&amp;</span>data[..n])
+        <span class="prelude-val">Err</span>(UnpadError)
     }
 }
 
-<span class="doccomment">/// Don&#39;t pad the data. Useful for key wrapping. Padding will fail if the data cannot be
-/// fitted into blocks without padding.
+<span class="doccomment">/// Don&#39;t pad the data. Useful for key wrapping.
 ///
 /// ```
 /// use block_padding::{NoPadding, Padding};
+/// use generic_array::{GenericArray, typenum::U8};
 ///
 /// let msg = b&quot;test&quot;;
-/// let n = msg.len();
-/// let mut buffer = [0xff; 16];
-/// buffer[..n].copy_from_slice(msg);
-/// let padded_msg = NoPadding::pad(&amp;mut buffer, n, 4).unwrap();
-/// assert_eq!(padded_msg, b&quot;test&quot;);
-/// assert_eq!(NoPadding::unpad(&amp;padded_msg).unwrap(), msg);
+/// let pos = msg.len();
+/// let mut block: GenericArray::&lt;u8, U8&gt; = [0xff; 8].into();
+/// block[..pos].copy_from_slice(msg);
+/// NoPadding::pad(&amp;mut block, pos);
+/// assert_eq!(&amp;block[..], b&quot;test\xff\xff\xff\xff&quot;);
+/// let res = NoPadding::unpad(&amp;block).unwrap();
+/// assert_eq!(res, b&quot;test\xff\xff\xff\xff&quot;);
 /// ```
-/// ```
-/// # use block_padding::{NoPadding, Padding};
-/// # let msg = b&quot;test&quot;;
-/// # let n = msg.len();
-/// # let mut buffer = [0xff; 16];
-/// # buffer[..n].copy_from_slice(msg);
-/// let padded_msg = NoPadding::pad(&amp;mut buffer, n, 2).unwrap();
-/// assert_eq!(padded_msg, b&quot;test&quot;);
-/// assert_eq!(NoPadding::unpad(&amp;padded_msg).unwrap(), msg);
-/// ```
+///
+/// Note that even though the passed length of the message is equal to 4,
+/// the size of unpadded message is equal to the block size of 8 bytes.
+/// Also padded message contains &quot;garbage&quot; bytes stored in the block buffer.
+/// Thus `NoPadding` generally should not be used with data length of which
+/// is not multiple of block size.
 </span><span class="attribute">#[derive(Clone, Copy, Debug)]
-</span><span class="kw">pub enum </span>NoPadding {}
+</span><span class="kw">pub struct </span>NoPadding;
 
-<span class="kw">impl </span>Padding <span class="kw">for </span>NoPadding {
-    <span class="kw">fn </span>pad_block(block: <span class="kw-2">&amp;mut </span>[u8], pos: usize) -&gt; <span class="prelude-ty">Result</span>&lt;(), PadError&gt; {
-        <span class="kw">if </span>pos % block.len() != <span class="number">0 </span>{
-            <span class="prelude-val">Err</span>(PadError)<span class="question-mark">?
-        </span>}
-        <span class="prelude-val">Ok</span>(())
+<span class="kw">impl</span>&lt;B: ArrayLength&lt;u8&gt;&gt; Padding&lt;B&gt; <span class="kw">for </span>NoPadding {
+    <span class="kw">const </span>TYPE: PadType = PadType::NoPadding;
+
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>pad(_block: <span class="kw-2">&amp;mut </span>Block&lt;B&gt;, pos: usize) {
+        <span class="kw">if </span>pos &gt; B::USIZE {
+            <span class="macro">panic!</span>(<span class="string">&quot;`pos` is bigger than block size&quot;</span>);
+        }
     }
 
-    <span class="kw">fn </span>pad(buf: <span class="kw-2">&amp;mut </span>[u8], pos: usize, block_size: usize) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;mut </span>[u8], PadError&gt; {
-        <span class="kw">if </span>pos % block_size != <span class="number">0 </span>{
-            <span class="prelude-val">Err</span>(PadError)<span class="question-mark">?
-        </span>}
-        <span class="prelude-val">Ok</span>(<span class="kw-2">&amp;mut </span>buf[..pos])
-    }
-
-    <span class="kw">fn </span>unpad(data: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;</span>[u8], UnpadError&gt; {
-        <span class="prelude-val">Ok</span>(data)
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>unpad(block: <span class="kw-2">&amp;</span>Block&lt;B&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;</span>[u8], UnpadError&gt; {
+        <span class="prelude-val">Ok</span>(block)
     }
 }
 
-<span class="doccomment">/// Sets all bytes in `dst` equal to `value`
-</span><span class="attribute">#[inline(always)]
-</span><span class="kw">fn </span>set(dst: <span class="kw-2">&amp;mut </span>[u8], value: u8) {
-    <span class="comment">// SAFETY: we overwrite valid memory behind `dst`
-    // note: loop is not used here because it produces
-    // unnecessary branch which tests for zero-length slices
-    </span><span class="kw">unsafe </span>{
-        core::ptr::write_bytes(dst.as_mut_ptr(), value, dst.len());
+<span class="doccomment">/// Failed unpadding operation error.
+</span><span class="attribute">#[derive(Clone, Copy, Debug)]
+</span><span class="kw">pub struct </span>UnpadError;
+
+<span class="kw">impl </span>fmt::Display <span class="kw">for </span>UnpadError {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;(), fmt::Error&gt; {
+        f.write_str(<span class="string">&quot;Unpad Error&quot;</span>)
     }
 }
+
+<span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
+#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;std&quot;</span>)))]
+</span><span class="kw">impl </span>std::error::Error <span class="kw">for </span>UnpadError {}
 </code></pre></div>
 </section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="block_padding" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

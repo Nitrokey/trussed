@@ -1,4 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/block-buffer-0.9.0/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../block_buffer/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../block_buffer/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../block_buffer/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/block-buffer-0.10.3/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/RustCrypto/media/6ee8e381/logo.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../block_buffer/index.html"><div class="logo-container"><img src="https://raw.githubusercontent.com/RustCrypto/media/6ee8e381/logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../block_buffer/index.html"><div class="logo-container">
+                    <img src="https://raw.githubusercontent.com/RustCrypto/media/6ee8e381/logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../block_buffer/index.html">
+                        <img src="https://raw.githubusercontent.com/RustCrypto/media/6ee8e381/logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -231,238 +233,460 @@
 <span id="231">231</span>
 <span id="232">232</span>
 <span id="233">233</span>
-</pre><pre class="rust"><code><span class="attribute">#![no_std]
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Fixed size buffer for block processing of data.
+</span><span class="attribute">#![no_std]
+#![doc(
+    html_logo_url = <span class="string">&quot;https://raw.githubusercontent.com/RustCrypto/media/6ee8e381/logo.svg&quot;</span>,
+    html_favicon_url = <span class="string">&quot;https://raw.githubusercontent.com/RustCrypto/media/6ee8e381/logo.svg&quot;
+</span>)]
+#![warn(missing_docs, rust_2018_idioms)]
+
 </span><span class="kw">pub use </span>generic_array;
-<span class="attribute">#[cfg(feature = <span class="string">&quot;block-padding&quot;</span>)]
-</span><span class="kw">pub use </span>block_padding;
 
-<span class="kw">use </span>core::{slice, convert::TryInto};
-<span class="kw">use </span>generic_array::{GenericArray, ArrayLength};
-<span class="attribute">#[cfg(feature = <span class="string">&quot;block-padding&quot;</span>)]
-</span><span class="kw">use </span>block_padding::{Padding, PadError};
+<span class="kw">use </span>core::{fmt, marker::PhantomData, slice};
+<span class="kw">use </span>generic_array::{
+    typenum::{IsLess, Le, NonZero, U256},
+    ArrayLength, GenericArray,
+};
 
-<span class="doccomment">/// Buffer for block processing of data
-</span><span class="attribute">#[derive(Clone, Default)]
-</span><span class="kw">pub struct </span>BlockBuffer&lt;BlockSize: ArrayLength&lt;u8&gt;&gt;  {
-    buffer: GenericArray&lt;u8, BlockSize&gt;,
-    pos: usize,
+<span class="kw">mod </span>sealed;
+
+<span class="doccomment">/// Block on which `BlockBuffer` operates.
+</span><span class="kw">pub type </span>Block&lt;BlockSize&gt; = GenericArray&lt;u8, BlockSize&gt;;
+
+<span class="doccomment">/// Trait for buffer kinds.
+</span><span class="kw">pub trait </span>BufferKind: sealed::Sealed {}
+
+<span class="doccomment">/// Eager block buffer kind, which guarantees that buffer position
+/// always lies in the range of `0..BlockSize`.
+</span><span class="attribute">#[derive(Copy, Clone, Debug, Default)]
+</span><span class="kw">pub struct </span>Eager {}
+
+<span class="doccomment">/// Lazy block buffer kind, which guarantees that buffer position
+/// always lies in the range of `0..=BlockSize`.
+</span><span class="attribute">#[derive(Copy, Clone, Debug, Default)]
+</span><span class="kw">pub struct </span>Lazy {}
+
+<span class="kw">impl </span>BufferKind <span class="kw">for </span>Eager {}
+<span class="kw">impl </span>BufferKind <span class="kw">for </span>Lazy {}
+
+<span class="doccomment">/// Eager block buffer.
+</span><span class="kw">pub type </span>EagerBuffer&lt;B&gt; = BlockBuffer&lt;B, Eager&gt;;
+<span class="doccomment">/// Lazy block buffer.
+</span><span class="kw">pub type </span>LazyBuffer&lt;B&gt; = BlockBuffer&lt;B, Lazy&gt;;
+
+<span class="doccomment">/// Block buffer error.
+</span><span class="attribute">#[derive(Copy, Clone, Eq, PartialEq, Debug)]
+</span><span class="kw">pub struct </span>Error;
+
+<span class="kw">impl </span>fmt::Display <span class="kw">for </span>Error {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;(), fmt::Error&gt; {
+        f.write_str(<span class="string">&quot;Block buffer error&quot;</span>)
+    }
 }
 
-<span class="kw">impl</span>&lt;BlockSize: ArrayLength&lt;u8&gt;&gt; BlockBuffer&lt;BlockSize&gt; {
-    <span class="doccomment">/// Process data in `input` in blocks of size `BlockSize` using function `f`.
-    </span><span class="attribute">#[inline]
-    </span><span class="kw">pub fn </span>input_block(
-        <span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw-2">mut </span>input: <span class="kw-2">&amp;</span>[u8], <span class="kw-2">mut </span>f: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;</span>GenericArray&lt;u8, BlockSize&gt;),
-    ) {
-        <span class="kw">let </span>r = <span class="self">self</span>.remaining();
-        <span class="kw">if </span>input.len() &lt; r {
-            <span class="kw">let </span>n = input.len();
-            <span class="self">self</span>.buffer[<span class="self">self</span>.pos..<span class="self">self</span>.pos + n].copy_from_slice(input);
-            <span class="self">self</span>.pos += n;
-            <span class="kw">return</span>;
-        }
-        <span class="kw">if </span><span class="self">self</span>.pos != <span class="number">0 </span>&amp;&amp; input.len() &gt;= r {
-            <span class="kw">let </span>(l, r) = input.split_at(r);
-            input = r;
-            <span class="self">self</span>.buffer[<span class="self">self</span>.pos..].copy_from_slice(l);
-            f(<span class="kw-2">&amp;</span><span class="self">self</span>.buffer);
-        }
+<span class="doccomment">/// Buffer for block processing of data.
+</span><span class="attribute">#[derive(Debug)]
+</span><span class="kw">pub struct </span>BlockBuffer&lt;BlockSize, Kind&gt;
+<span class="kw">where
+    </span>BlockSize: ArrayLength&lt;u8&gt; + IsLess&lt;U256&gt;,
+    Le&lt;BlockSize, U256&gt;: NonZero,
+    Kind: BufferKind,
+{
+    buffer: Block&lt;BlockSize&gt;,
+    pos: u8,
+    _pd: PhantomData&lt;Kind&gt;,
+}
 
-        <span class="kw">let </span><span class="kw-2">mut </span>chunks_iter = input.chunks_exact(<span class="self">self</span>.size());
-        <span class="kw">for </span>chunk <span class="kw">in </span><span class="kw-2">&amp;mut </span>chunks_iter {
-            f(chunk.try_into().unwrap());
-        }
-        <span class="kw">let </span>rem = chunks_iter.remainder();
-
-        <span class="comment">// Copy any remaining data into the buffer.
-        </span><span class="self">self</span>.buffer[..rem.len()].copy_from_slice(rem);
-        <span class="self">self</span>.pos = rem.len();
-    }
-
-    <span class="doccomment">/// Process data in `input` in blocks of size `BlockSize` using function `f`, which accepts
-    /// slice of blocks.
-    </span><span class="attribute">#[inline]
-    </span><span class="kw">pub fn </span>input_blocks(
-        <span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw-2">mut </span>input: <span class="kw-2">&amp;</span>[u8], <span class="kw-2">mut </span>f: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;</span>[GenericArray&lt;u8, BlockSize&gt;]),
-    ) {
-        <span class="kw">let </span>r = <span class="self">self</span>.remaining();
-        <span class="kw">if </span>input.len() &lt; r {
-            <span class="kw">let </span>n = input.len();
-            <span class="self">self</span>.buffer[<span class="self">self</span>.pos..<span class="self">self</span>.pos + n].copy_from_slice(input);
-            <span class="self">self</span>.pos += n;
-            <span class="kw">return</span>;
-        }
-        <span class="kw">if </span><span class="self">self</span>.pos != <span class="number">0 </span>&amp;&amp; input.len() &gt;= r {
-            <span class="kw">let </span>(l, r) = input.split_at(r);
-            input = r;
-            <span class="self">self</span>.buffer[<span class="self">self</span>.pos..].copy_from_slice(l);
-            <span class="self">self</span>.pos = <span class="number">0</span>;
-            f(slice::from_ref(<span class="kw-2">&amp;</span><span class="self">self</span>.buffer));
-        }
-
-        <span class="comment">// While we have at least a full buffer size chunks&#39;s worth of data,
-        // process its data without copying into the buffer
-        </span><span class="kw">let </span>n_blocks = input.len()/<span class="self">self</span>.size();
-        <span class="kw">let </span>(left, right) = input.split_at(n_blocks<span class="kw-2">*</span><span class="self">self</span>.size());
-        <span class="comment">// SAFETY: we guarantee that `blocks` does not point outside of `input` 
-        </span><span class="kw">let </span>blocks = <span class="kw">unsafe </span>{
-            slice::from_raw_parts(
-                left.as_ptr() <span class="kw">as </span><span class="kw-2">*const </span>GenericArray&lt;u8, BlockSize&gt;,
-                n_blocks,
-            )
-        };
-        f(blocks);
-
-        <span class="comment">// Copy remaining data into the buffer.
-        </span><span class="kw">let </span>n = right.len();
-        <span class="self">self</span>.buffer[..n].copy_from_slice(right);
-        <span class="self">self</span>.pos = n;
-    }
-
-    <span class="doccomment">/// Variant that doesn&#39;t flush the buffer until there&#39;s additional
-    /// data to be processed. Suitable for tweakable block ciphers
-    /// like Threefish that need to know whether a block is the *last*
-    /// data block before processing it.
-    </span><span class="attribute">#[inline]
-    </span><span class="kw">pub fn </span>input_lazy(
-        <span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw-2">mut </span>input: <span class="kw-2">&amp;</span>[u8], <span class="kw-2">mut </span>f: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;</span>GenericArray&lt;u8, BlockSize&gt;),
-    ) {
-        <span class="kw">let </span>r = <span class="self">self</span>.remaining();
-        <span class="kw">if </span>input.len() &lt;= r {
-            <span class="kw">let </span>n = input.len();
-            <span class="self">self</span>.buffer[<span class="self">self</span>.pos..<span class="self">self</span>.pos + n].copy_from_slice(input);
-            <span class="self">self</span>.pos += n;
-            <span class="kw">return</span>;
-        }
-        <span class="kw">if </span><span class="self">self</span>.pos != <span class="number">0 </span>&amp;&amp; input.len() &gt; r {
-            <span class="kw">let </span>(l, r) = input.split_at(r);
-            input = r;
-            <span class="self">self</span>.buffer[<span class="self">self</span>.pos..].copy_from_slice(l);
-            f(<span class="kw-2">&amp;</span><span class="self">self</span>.buffer);
-        }
-
-        <span class="kw">while </span>input.len() &gt; <span class="self">self</span>.size() {
-            <span class="kw">let </span>(block, r) = input.split_at(<span class="self">self</span>.size());
-            input = r;
-            f(block.try_into().unwrap());
-        }
-
-        <span class="self">self</span>.buffer[..input.len()].copy_from_slice(input);
-        <span class="self">self</span>.pos = input.len();
-    }
-
-    <span class="doccomment">/// Pad buffer with `prefix` and make sure that internall buffer
-    /// has at least `up_to` free bytes. All remaining bytes get
-    /// zeroed-out.
-    </span><span class="attribute">#[inline]
-    </span><span class="kw">fn </span>digest_pad(
-        <span class="kw-2">&amp;mut </span><span class="self">self</span>, up_to: usize, <span class="kw-2">mut </span>f: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;</span>GenericArray&lt;u8, BlockSize&gt;),
-    ) {
-        <span class="kw">if </span><span class="self">self</span>.pos == <span class="self">self</span>.size() {
-            f(<span class="kw-2">&amp;</span><span class="self">self</span>.buffer);
-            <span class="self">self</span>.pos = <span class="number">0</span>;
-        }
-        <span class="self">self</span>.buffer[<span class="self">self</span>.pos] = <span class="number">0x80</span>;
-        <span class="self">self</span>.pos += <span class="number">1</span>;
-
-        set_zero(<span class="kw-2">&amp;mut </span><span class="self">self</span>.buffer[<span class="self">self</span>.pos..]);
-
-        <span class="kw">if </span><span class="self">self</span>.remaining() &lt; up_to {
-            f(<span class="kw-2">&amp;</span><span class="self">self</span>.buffer);
-            set_zero(<span class="kw-2">&amp;mut </span><span class="self">self</span>.buffer[..<span class="self">self</span>.pos]);
+<span class="kw">impl</span>&lt;BlockSize, Kind&gt; Default <span class="kw">for </span>BlockBuffer&lt;BlockSize, Kind&gt;
+<span class="kw">where
+    </span>BlockSize: ArrayLength&lt;u8&gt; + IsLess&lt;U256&gt;,
+    Le&lt;BlockSize, U256&gt;: NonZero,
+    Kind: BufferKind,
+{
+    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            buffer: Default::default(),
+            pos: <span class="number">0</span>,
+            _pd: PhantomData,
         }
     }
+}
 
-    <span class="doccomment">/// Pad message with 0x80, zeros and 64-bit message length
-    /// using big-endian byte order
-    </span><span class="attribute">#[inline]
-    </span><span class="kw">pub fn </span>len64_padding_be(
-        <span class="kw-2">&amp;mut </span><span class="self">self</span>, data_len: u64, <span class="kw-2">mut </span>f: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;</span>GenericArray&lt;u8, BlockSize&gt;),
-    ) {
-        <span class="self">self</span>.digest_pad(<span class="number">8</span>, <span class="kw-2">&amp;mut </span>f);
-        <span class="kw">let </span>b = data_len.to_be_bytes();
-        <span class="kw">let </span>n = <span class="self">self</span>.buffer.len() - b.len();
-        <span class="self">self</span>.buffer[n..].copy_from_slice(<span class="kw-2">&amp;</span>b);
-        f(<span class="kw-2">&amp;</span><span class="self">self</span>.buffer);
-        <span class="self">self</span>.pos = <span class="number">0</span>;
+<span class="kw">impl</span>&lt;BlockSize, Kind&gt; Clone <span class="kw">for </span>BlockBuffer&lt;BlockSize, Kind&gt;
+<span class="kw">where
+    </span>BlockSize: ArrayLength&lt;u8&gt; + IsLess&lt;U256&gt;,
+    Le&lt;BlockSize, U256&gt;: NonZero,
+    Kind: BufferKind,
+{
+    <span class="kw">fn </span>clone(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            buffer: <span class="self">self</span>.buffer.clone(),
+            pos: <span class="self">self</span>.pos,
+            _pd: PhantomData,
+        }
     }
+}
 
-    <span class="doccomment">/// Pad message with 0x80, zeros and 64-bit message length
-    /// using little-endian byte order
-    </span><span class="attribute">#[inline]
-    </span><span class="kw">pub fn </span>len64_padding_le(
-        <span class="kw-2">&amp;mut </span><span class="self">self</span>, data_len: u64, <span class="kw-2">mut </span>f: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;</span>GenericArray&lt;u8, BlockSize&gt;),
-    ) {
-        <span class="self">self</span>.digest_pad(<span class="number">8</span>, <span class="kw-2">&amp;mut </span>f);
-        <span class="kw">let </span>b = data_len.to_le_bytes();
-        <span class="kw">let </span>n = <span class="self">self</span>.buffer.len() - b.len();
-        <span class="self">self</span>.buffer[n..].copy_from_slice(<span class="kw-2">&amp;</span>b);
-        f(<span class="kw-2">&amp;</span><span class="self">self</span>.buffer);
-        <span class="self">self</span>.pos = <span class="number">0</span>;
-    }
-
-    <span class="doccomment">/// Pad message with 0x80, zeros and 128-bit message length
-    /// using big-endian byte order
-    </span><span class="attribute">#[inline]
-    </span><span class="kw">pub fn </span>len128_padding_be(
-        <span class="kw-2">&amp;mut </span><span class="self">self</span>, data_len: u128, <span class="kw-2">mut </span>f: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;</span>GenericArray&lt;u8, BlockSize&gt;),
-    ) {
-        <span class="self">self</span>.digest_pad(<span class="number">16</span>, <span class="kw-2">&amp;mut </span>f);
-        <span class="kw">let </span>b = data_len.to_be_bytes();
-        <span class="kw">let </span>n = <span class="self">self</span>.buffer.len() - b.len();
-        <span class="self">self</span>.buffer[n..].copy_from_slice(<span class="kw-2">&amp;</span>b);
-        f(<span class="kw-2">&amp;</span><span class="self">self</span>.buffer);
-        <span class="self">self</span>.pos = <span class="number">0</span>;
-    }
-
-    <span class="doccomment">/// Pad message with a given padding `P`
+<span class="kw">impl</span>&lt;BlockSize, Kind&gt; BlockBuffer&lt;BlockSize, Kind&gt;
+<span class="kw">where
+    </span>BlockSize: ArrayLength&lt;u8&gt; + IsLess&lt;U256&gt;,
+    Le&lt;BlockSize, U256&gt;: NonZero,
+    Kind: BufferKind,
+{
+    <span class="doccomment">/// Create new buffer from slice.
     ///
-    /// Returns `PadError` if internall buffer is full, which can only happen if
-    /// `input_lazy` was used.
-    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;block-padding&quot;</span>)]
-    #[inline]
-    </span><span class="kw">pub fn </span>pad_with&lt;P: Padding&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>)
-        -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;mut </span>GenericArray&lt;u8, BlockSize&gt;, PadError&gt;
-    {
-        P::pad_block(<span class="kw-2">&amp;mut </span><span class="self">self</span>.buffer[..], <span class="self">self</span>.pos)<span class="question-mark">?</span>;
-        <span class="self">self</span>.pos = <span class="number">0</span>;
-        <span class="prelude-val">Ok</span>(<span class="kw-2">&amp;mut </span><span class="self">self</span>.buffer)
+    /// # Panics
+    /// If slice length is not valid for used buffer kind.
+    </span><span class="attribute">#[inline(always)]
+    </span><span class="kw">pub fn </span>new(buf: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::try_new(buf).unwrap()
     }
 
-    <span class="doccomment">/// Return size of the internall buffer in bytes
+    <span class="doccomment">/// Create new buffer from slice.
+    ///
+    /// Returns an error if slice length is not valid for used buffer kind.
+    </span><span class="attribute">#[inline(always)]
+    </span><span class="kw">pub fn </span>try_new(buf: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, Error&gt; {
+        <span class="kw">let </span>pos = buf.len();
+        <span class="kw">if </span>!Kind::invariant(pos, BlockSize::USIZE) {
+            <span class="kw">return </span><span class="prelude-val">Err</span>(Error);
+        }
+        <span class="kw">let </span><span class="kw-2">mut </span>buffer = Block::&lt;BlockSize&gt;::default();
+        buffer[..pos].copy_from_slice(buf);
+        <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
+            buffer,
+            pos: pos <span class="kw">as </span>u8,
+            _pd: PhantomData,
+        })
+    }
+
+    <span class="doccomment">/// Digest data in `input` in blocks of size `BlockSize` using
+    /// the `compress` function, which accepts slice of blocks.
     </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>digest_blocks(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        <span class="kw-2">mut </span>input: <span class="kw-2">&amp;</span>[u8],
+        <span class="kw-2">mut </span>compress: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;</span>[Block&lt;BlockSize&gt;]),
+    ) {
+        <span class="kw">let </span>pos = <span class="self">self</span>.get_pos();
+        <span class="comment">// using `self.remaining()` for some reason
+        // prevents panic elimination
+        </span><span class="kw">let </span>rem = <span class="self">self</span>.size() - pos;
+        <span class="kw">let </span>n = input.len();
+        <span class="comment">// Note that checking condition `pos + n &lt; BlockSize` is
+        // equivalent to checking `n &lt; rem`, where `rem` is equal
+        // to `BlockSize - pos`. Using the latter allows us to work
+        // around compiler accounting for possible overflow of
+        // `pos + n` which results in it inserting unreachable
+        // panic branches. Using `unreachable_unchecked` in `get_pos`
+        // we convince compiler that `BlockSize - pos` never underflows.
+        </span><span class="kw">if </span>Kind::invariant(n, rem) {
+            <span class="comment">// double slicing allows to remove panic branches
+            </span><span class="self">self</span>.buffer[pos..][..n].copy_from_slice(input);
+            <span class="self">self</span>.set_pos_unchecked(pos + n);
+            <span class="kw">return</span>;
+        }
+        <span class="kw">if </span>pos != <span class="number">0 </span>{
+            <span class="kw">let </span>(left, right) = input.split_at(rem);
+            input = right;
+            <span class="self">self</span>.buffer[pos..].copy_from_slice(left);
+            compress(slice::from_ref(<span class="kw-2">&amp;</span><span class="self">self</span>.buffer));
+        }
+
+        <span class="kw">let </span>(blocks, leftover) = Kind::split_blocks(input);
+        <span class="kw">if </span>!blocks.is_empty() {
+            compress(blocks);
+        }
+
+        <span class="kw">let </span>n = leftover.len();
+        <span class="self">self</span>.buffer[..n].copy_from_slice(leftover);
+        <span class="self">self</span>.set_pos_unchecked(n);
+    }
+
+    <span class="doccomment">/// Reset buffer by setting cursor position to zero.
+    </span><span class="attribute">#[inline(always)]
+    </span><span class="kw">pub fn </span>reset(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="self">self</span>.set_pos_unchecked(<span class="number">0</span>);
+    }
+
+    <span class="doccomment">/// Pad remaining data with zeros and return resulting block.
+    </span><span class="attribute">#[inline(always)]
+    </span><span class="kw">pub fn </span>pad_with_zeros(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span>Block&lt;BlockSize&gt; {
+        <span class="kw">let </span>pos = <span class="self">self</span>.get_pos();
+        <span class="self">self</span>.buffer[pos..].iter_mut().for_each(|b| <span class="kw-2">*</span>b = <span class="number">0</span>);
+        <span class="self">self</span>.set_pos_unchecked(<span class="number">0</span>);
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>.buffer
+    }
+
+    <span class="doccomment">/// Return current cursor position.
+    </span><span class="attribute">#[inline(always)]
+    </span><span class="kw">pub fn </span>get_pos(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+        <span class="kw">let </span>pos = <span class="self">self</span>.pos <span class="kw">as </span>usize;
+        <span class="kw">if </span>!Kind::invariant(pos, BlockSize::USIZE) {
+            <span class="macro">debug_assert!</span>(<span class="bool-val">false</span>);
+            <span class="comment">// SAFETY: `pos` never breaks the invariant
+            </span><span class="kw">unsafe </span>{
+                core::hint::unreachable_unchecked();
+            }
+        }
+        pos
+    }
+
+    <span class="doccomment">/// Return slice of data stored inside the buffer.
+    </span><span class="attribute">#[inline(always)]
+    </span><span class="kw">pub fn </span>get_data(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[u8] {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.buffer[..<span class="self">self</span>.get_pos()]
+    }
+
+    <span class="doccomment">/// Set buffer content and cursor position.
+    ///
+    /// # Panics
+    /// If `pos` is bigger or equal to block size.
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>set(<span class="kw-2">&amp;mut </span><span class="self">self</span>, buf: Block&lt;BlockSize&gt;, pos: usize) {
+        <span class="macro">assert!</span>(Kind::invariant(pos, BlockSize::USIZE));
+        <span class="self">self</span>.buffer = buf;
+        <span class="self">self</span>.set_pos_unchecked(pos);
+    }
+
+    <span class="doccomment">/// Return size of the internall buffer in bytes.
+    </span><span class="attribute">#[inline(always)]
     </span><span class="kw">pub fn </span>size(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
-        BlockSize::to_usize()
+        BlockSize::USIZE
     }
 
-    <span class="doccomment">/// Return current cursor position
-    </span><span class="attribute">#[inline]
-    </span><span class="kw">pub fn </span>position(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
-        <span class="self">self</span>.pos
-    }
-
-    <span class="doccomment">/// Return number of remaining bytes in the internall buffer
-    </span><span class="attribute">#[inline]
+    <span class="doccomment">/// Return number of remaining bytes in the internall buffer.
+    </span><span class="attribute">#[inline(always)]
     </span><span class="kw">pub fn </span>remaining(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
-        <span class="self">self</span>.size() - <span class="self">self</span>.pos
+        <span class="self">self</span>.size() - <span class="self">self</span>.get_pos()
     }
 
-    <span class="doccomment">/// Reset buffer by setting cursor position to zero
-    </span><span class="attribute">#[inline]
-    </span><span class="kw">pub fn </span>reset(<span class="kw-2">&amp;mut </span><span class="self">self</span>)  {
-        <span class="self">self</span>.pos = <span class="number">0
-    </span>}
+    <span class="attribute">#[inline(always)]
+    </span><span class="kw">fn </span>set_pos_unchecked(<span class="kw-2">&amp;mut </span><span class="self">self</span>, pos: usize) {
+        <span class="macro">debug_assert!</span>(Kind::invariant(pos, BlockSize::USIZE));
+        <span class="self">self</span>.pos = pos <span class="kw">as </span>u8;
+    }
 }
 
-<span class="doccomment">/// Sets all bytes in `dst` to zero
-</span><span class="attribute">#[inline(always)]
-</span><span class="kw">fn </span>set_zero(dst: <span class="kw-2">&amp;mut </span>[u8]) {
-    <span class="comment">// SAFETY: we overwrite valid memory behind `dst`
-    // note: loop is not used here because it produces
-    // unnecessary branch which tests for zero-length slices
-    </span><span class="kw">unsafe </span>{
-        core::ptr::write_bytes(dst.as_mut_ptr(), <span class="number">0</span>, dst.len());
+<span class="kw">impl</span>&lt;BlockSize&gt; BlockBuffer&lt;BlockSize, Eager&gt;
+<span class="kw">where
+    </span>BlockSize: ArrayLength&lt;u8&gt; + IsLess&lt;U256&gt;,
+    Le&lt;BlockSize, U256&gt;: NonZero,
+{
+    <span class="doccomment">/// Set `data` to generated blocks.
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>set_data(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        <span class="kw-2">mut </span>data: <span class="kw-2">&amp;mut </span>[u8],
+        <span class="kw-2">mut </span>process_blocks: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;mut </span>[Block&lt;BlockSize&gt;]),
+    ) {
+        <span class="kw">let </span>pos = <span class="self">self</span>.get_pos();
+        <span class="kw">let </span>r = <span class="self">self</span>.remaining();
+        <span class="kw">let </span>n = data.len();
+        <span class="kw">if </span>pos != <span class="number">0 </span>{
+            <span class="kw">if </span>n &lt; r {
+                <span class="comment">// double slicing allows to remove panic branches
+                </span>data.copy_from_slice(<span class="kw-2">&amp;</span><span class="self">self</span>.buffer[pos..][..n]);
+                <span class="self">self</span>.set_pos_unchecked(pos + n);
+                <span class="kw">return</span>;
+            }
+            <span class="kw">let </span>(left, right) = data.split_at_mut(r);
+            data = right;
+            left.copy_from_slice(<span class="kw-2">&amp;</span><span class="self">self</span>.buffer[pos..]);
+        }
+
+        <span class="kw">let </span>(blocks, leftover) = to_blocks_mut(data);
+        process_blocks(blocks);
+
+        <span class="kw">let </span>n = leftover.len();
+        <span class="kw">if </span>n != <span class="number">0 </span>{
+            <span class="kw">let </span><span class="kw-2">mut </span>block = Default::default();
+            process_blocks(slice::from_mut(<span class="kw-2">&amp;mut </span>block));
+            leftover.copy_from_slice(<span class="kw-2">&amp;</span>block[..n]);
+            <span class="self">self</span>.buffer = block;
+        }
+        <span class="self">self</span>.set_pos_unchecked(n);
     }
+
+    <span class="doccomment">/// Compress remaining data after padding it with `delim`, zeros and
+    /// the `suffix` bytes. If there is not enough unused space, `compress`
+    /// will be called twice.
+    ///
+    /// # Panics
+    /// If suffix length is bigger than block size.
+    </span><span class="attribute">#[inline(always)]
+    </span><span class="kw">pub fn </span>digest_pad(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        delim: u8,
+        suffix: <span class="kw-2">&amp;</span>[u8],
+        <span class="kw-2">mut </span>compress: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;</span>Block&lt;BlockSize&gt;),
+    ) {
+        <span class="kw">if </span>suffix.len() &gt; BlockSize::USIZE {
+            <span class="macro">panic!</span>(<span class="string">&quot;suffix is too long&quot;</span>);
+        }
+        <span class="kw">let </span>pos = <span class="self">self</span>.get_pos();
+        <span class="self">self</span>.buffer[pos] = delim;
+        <span class="kw">for </span>b <span class="kw">in </span><span class="kw-2">&amp;mut </span><span class="self">self</span>.buffer[pos + <span class="number">1</span>..] {
+            <span class="kw-2">*</span>b = <span class="number">0</span>;
+        }
+
+        <span class="kw">let </span>n = <span class="self">self</span>.size() - suffix.len();
+        <span class="kw">if </span><span class="self">self</span>.size() - pos - <span class="number">1 </span>&lt; suffix.len() {
+            compress(<span class="kw-2">&amp;</span><span class="self">self</span>.buffer);
+            <span class="kw">let </span><span class="kw-2">mut </span>block = Block::&lt;BlockSize&gt;::default();
+            block[n..].copy_from_slice(suffix);
+            compress(<span class="kw-2">&amp;</span>block);
+        } <span class="kw">else </span>{
+            <span class="self">self</span>.buffer[n..].copy_from_slice(suffix);
+            compress(<span class="kw-2">&amp;</span><span class="self">self</span>.buffer);
+        }
+        <span class="self">self</span>.set_pos_unchecked(<span class="number">0</span>)
+    }
+
+    <span class="doccomment">/// Pad message with 0x80, zeros and 64-bit message length using
+    /// big-endian byte order.
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>len64_padding_be(<span class="kw-2">&amp;mut </span><span class="self">self</span>, data_len: u64, compress: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;</span>Block&lt;BlockSize&gt;)) {
+        <span class="self">self</span>.digest_pad(<span class="number">0x80</span>, <span class="kw-2">&amp;</span>data_len.to_be_bytes(), compress);
+    }
+
+    <span class="doccomment">/// Pad message with 0x80, zeros and 64-bit message length using
+    /// little-endian byte order.
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>len64_padding_le(<span class="kw-2">&amp;mut </span><span class="self">self</span>, data_len: u64, compress: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;</span>Block&lt;BlockSize&gt;)) {
+        <span class="self">self</span>.digest_pad(<span class="number">0x80</span>, <span class="kw-2">&amp;</span>data_len.to_le_bytes(), compress);
+    }
+
+    <span class="doccomment">/// Pad message with 0x80, zeros and 128-bit message length using
+    /// big-endian byte order.
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">pub fn </span>len128_padding_be(<span class="kw-2">&amp;mut </span><span class="self">self</span>, data_len: u128, compress: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;</span>Block&lt;BlockSize&gt;)) {
+        <span class="self">self</span>.digest_pad(<span class="number">0x80</span>, <span class="kw-2">&amp;</span>data_len.to_be_bytes(), compress);
+    }
+}
+
+<span class="doccomment">/// Split message into mutable slice of parallel blocks, blocks, and leftover bytes.
+</span><span class="attribute">#[inline(always)]
+</span><span class="kw">fn </span>to_blocks_mut&lt;N: ArrayLength&lt;u8&gt;&gt;(data: <span class="kw-2">&amp;mut </span>[u8]) -&gt; (<span class="kw-2">&amp;mut </span>[Block&lt;N&gt;], <span class="kw-2">&amp;mut </span>[u8]) {
+    <span class="kw">let </span>nb = data.len() / N::USIZE;
+    <span class="kw">let </span>(left, right) = data.split_at_mut(nb * N::USIZE);
+    <span class="kw">let </span>p = left.as_mut_ptr() <span class="kw">as </span><span class="kw-2">*mut </span>Block&lt;N&gt;;
+    <span class="comment">// SAFETY: we guarantee that `blocks` does not point outside of `data`, and `p` is valid for
+    // mutation
+    </span><span class="kw">let </span>blocks = <span class="kw">unsafe </span>{ slice::from_raw_parts_mut(p, nb) };
+    (blocks, right)
 }
 </code></pre></div>
 </section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="block_buffer" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

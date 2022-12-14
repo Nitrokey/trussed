@@ -540,6 +540,38 @@
 <span id="540">540</span>
 <span id="541">541</span>
 <span id="542">542</span>
+<span id="543">543</span>
+<span id="544">544</span>
+<span id="545">545</span>
+<span id="546">546</span>
+<span id="547">547</span>
+<span id="548">548</span>
+<span id="549">549</span>
+<span id="550">550</span>
+<span id="551">551</span>
+<span id="552">552</span>
+<span id="553">553</span>
+<span id="554">554</span>
+<span id="555">555</span>
+<span id="556">556</span>
+<span id="557">557</span>
+<span id="558">558</span>
+<span id="559">559</span>
+<span id="560">560</span>
+<span id="561">561</span>
+<span id="562">562</span>
+<span id="563">563</span>
+<span id="564">564</span>
+<span id="565">565</span>
+<span id="566">566</span>
+<span id="567">567</span>
+<span id="568">568</span>
+<span id="569">569</span>
+<span id="570">570</span>
+<span id="571">571</span>
+<span id="572">572</span>
+<span id="573">573</span>
+<span id="574">574</span>
 </pre><pre class="rust"><code><span class="kw">use </span>core::marker::PhantomData;
 <span class="kw">use </span>core::ops::Deref;
 
@@ -1053,6 +1085,14 @@
     X255,
     <span class="doccomment">/// Used to serialize the output of a diffie-hellman
     </span>SharedSecret,
+    <span class="comment">//TODO: Do we want to distinguish PKCS_v1.5 vs PSS/OAEP right here?
+    </span>Rsa2048,
+    Rsa2048Pkcs,
+    Rsa2048Pss,
+    Rsa3072Pkcs,
+    Rsa3072Pss,
+    Rsa4096Pkcs,
+    Rsa4096Pss,
 }
 
 <span class="kw">pub type </span>LongData = Bytes&lt;MAX_LONG_DATA_LENGTH&gt;;
@@ -1060,6 +1100,7 @@
 <span class="kw">pub type </span>ShortData = Bytes&lt;MAX_SHORT_DATA_LENGTH&gt;;
 
 <span class="kw">pub type </span>Message = Bytes&lt;MAX_MESSAGE_LENGTH&gt;;
+<span class="kw">pub type </span>SerializedKey = Bytes&lt;MAX_KEY_MATERIAL_LENGTH&gt;;
 
 <span class="attribute">#[derive(Copy, Clone, Eq, PartialEq, Debug, Serialize, Deserialize)]
 </span><span class="kw">pub enum </span>KeySerialization {
@@ -1069,6 +1110,15 @@
     </span>EcdhEsHkdf256,
     Raw,
     Sec1,
+    <span class="doccomment">/// RSA OpenPGP private key import format
+    ///
+    /// Corresponds to [RsaCrtImportFormat](RsaCrtImportFormat)
+    </span>RsaCrt,
+    <span class="doccomment">/// RSA Public key modulus
+    </span>RsaN,
+    <span class="doccomment">/// RSA Public key exponent
+    </span>RsaE,
+    Pkcs8Der,
 }
 
 <span class="kw">pub type </span>Signature = Bytes&lt;MAX_SIGNATURE_LENGTH&gt;;
@@ -1082,5 +1132,19 @@
 </span>}
 
 <span class="kw">pub type </span>UserAttribute = Bytes&lt;MAX_USER_ATTRIBUTE_LENGTH&gt;;
+
+<span class="doccomment">/// Data format for RSA Private key serialization in [KeySerialization::Raw](crate::types::KeySerialization::Raw)
+/// format in [unsafe_inject_key](crate::client::CryptoClient::unsafe_inject_key)
+///
+/// Serialized using [postcard_serialize_bytes](crate::postcard_serialize_bytes). All data are big endian large integers
+</span><span class="attribute">#[derive(Debug, Deserialize, Serialize)]
+</span><span class="kw">pub struct </span>RsaCrtImportFormat&lt;<span class="lifetime">&#39;d</span>&gt; {
+    <span class="kw">pub </span>e: <span class="kw-2">&amp;</span><span class="lifetime">&#39;d </span>[u8],
+    <span class="kw">pub </span>p: <span class="kw-2">&amp;</span><span class="lifetime">&#39;d </span>[u8],
+    <span class="kw">pub </span>q: <span class="kw-2">&amp;</span><span class="lifetime">&#39;d </span>[u8],
+    <span class="kw">pub </span>qinv: <span class="kw-2">&amp;</span><span class="lifetime">&#39;d </span>[u8],
+    <span class="kw">pub </span>dp: <span class="kw-2">&amp;</span><span class="lifetime">&#39;d </span>[u8],
+    <span class="kw">pub </span>dq: <span class="kw-2">&amp;</span><span class="lifetime">&#39;d </span>[u8],
+}
 </code></pre></div>
 </section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="trussed" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

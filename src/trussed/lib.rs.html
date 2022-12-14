@@ -59,6 +59,10 @@
 <span id="59">59</span>
 <span id="60">60</span>
 <span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
 </pre><pre class="rust"><code><span class="attribute">#![cfg_attr(not(any(feature = <span class="string">&quot;std&quot;</span>, test)), no_std)]
 #![cfg_attr(docsrs, feature(doc_cfg))]
 </span><span class="doccomment">//! # Trussed
@@ -77,6 +81,10 @@
 </span><span class="attribute">#[macro_use]
 </span><span class="kw">extern crate </span>delog;
 <span class="macro">generate_macros!</span>();
+
+<span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]
+#[macro_use]
+</span><span class="kw">extern crate </span>alloc;
 
 <span class="kw">pub use </span>interchange::Interchange;
 

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/aead-0.4.3/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/RustCrypto/media/8f1a9894/logo.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aead/index.html"><div class="logo-container"><img src="https://raw.githubusercontent.com/RustCrypto/media/8f1a9894/logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aead/index.html"><div class="logo-container">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/aead-0.5.1/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/RustCrypto/media/8f1a9894/logo.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aead/index.html"><div class="logo-container"><img src="https://raw.githubusercontent.com/RustCrypto/media/8f1a9894/logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aead/index.html"><div class="logo-container">
                     <img src="https://raw.githubusercontent.com/RustCrypto/media/8f1a9894/logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aead/index.html">
                         <img src="https://raw.githubusercontent.com/RustCrypto/media/8f1a9894/logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
@@ -533,6 +533,49 @@
 <span id="531">531</span>
 <span id="532">532</span>
 <span id="533">533</span>
+<span id="534">534</span>
+<span id="535">535</span>
+<span id="536">536</span>
+<span id="537">537</span>
+<span id="538">538</span>
+<span id="539">539</span>
+<span id="540">540</span>
+<span id="541">541</span>
+<span id="542">542</span>
+<span id="543">543</span>
+<span id="544">544</span>
+<span id="545">545</span>
+<span id="546">546</span>
+<span id="547">547</span>
+<span id="548">548</span>
+<span id="549">549</span>
+<span id="550">550</span>
+<span id="551">551</span>
+<span id="552">552</span>
+<span id="553">553</span>
+<span id="554">554</span>
+<span id="555">555</span>
+<span id="556">556</span>
+<span id="557">557</span>
+<span id="558">558</span>
+<span id="559">559</span>
+<span id="560">560</span>
+<span id="561">561</span>
+<span id="562">562</span>
+<span id="563">563</span>
+<span id="564">564</span>
+<span id="565">565</span>
+<span id="566">566</span>
+<span id="567">567</span>
+<span id="568">568</span>
+<span id="569">569</span>
+<span id="570">570</span>
+<span id="571">571</span>
+<span id="572">572</span>
+<span id="573">573</span>
+<span id="574">574</span>
+<span id="575">575</span>
+<span id="576">576</span>
 </pre><pre class="rust"><code><span class="doccomment">//! [Authenticated Encryption with Associated Data] (AEAD) traits
 //!
 //! This crate provides an abstract interface for AEAD ciphers, which guarantee
@@ -553,8 +596,7 @@
 #![forbid(unsafe_code, clippy::unwrap_used)]
 #![doc(
     html_logo_url = <span class="string">&quot;https://raw.githubusercontent.com/RustCrypto/media/8f1a9894/logo.svg&quot;</span>,
-    html_favicon_url = <span class="string">&quot;https://raw.githubusercontent.com/RustCrypto/media/8f1a9894/logo.svg&quot;</span>,
-    html_root_url = <span class="string">&quot;https://docs.rs/aead/0.4.3&quot;
+    html_favicon_url = <span class="string">&quot;https://raw.githubusercontent.com/RustCrypto/media/8f1a9894/logo.svg&quot;
 </span>)]
 #![warn(missing_docs, rust_2018_idioms)]
 
@@ -572,7 +614,16 @@
 #[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;stream&quot;</span>)))]
 </span><span class="kw">pub mod </span>stream;
 
+<span class="kw">pub use </span>crypto_common::{Key, KeyInit, KeySizeUser};
 <span class="kw">pub use </span>generic_array::{<span class="self">self</span>, typenum::consts};
+
+<span class="attribute">#[cfg(feature = <span class="string">&quot;bytes&quot;</span>)]
+#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;bytes&quot;</span>)))]
+</span><span class="kw">pub use </span>bytes;
+
+<span class="attribute">#[cfg(feature = <span class="string">&quot;getrandom&quot;</span>)]
+#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;getrandom&quot;</span>)))]
+</span><span class="kw">pub use </span>crypto_common::rand_core::OsRng;
 
 <span class="attribute">#[cfg(feature = <span class="string">&quot;heapless&quot;</span>)]
 #[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;heapless&quot;</span>)))]
@@ -580,13 +631,16 @@
 
 <span class="attribute">#[cfg(feature = <span class="string">&quot;rand_core&quot;</span>)]
 #[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;rand_core&quot;</span>)))]
-</span><span class="kw">pub use </span>rand_core;
+</span><span class="kw">pub use </span>crypto_common::rand_core;
 
 <span class="kw">use </span>core::fmt;
 <span class="kw">use </span>generic_array::{typenum::Unsigned, ArrayLength, GenericArray};
 
 <span class="attribute">#[cfg(feature = <span class="string">&quot;alloc&quot;</span>)]
 </span><span class="kw">use </span>alloc::vec::Vec;
+
+<span class="attribute">#[cfg(feature = <span class="string">&quot;bytes&quot;</span>)]
+</span><span class="kw">use </span>bytes::BytesMut;
 
 <span class="attribute">#[cfg(feature = <span class="string">&quot;rand_core&quot;</span>)]
 </span><span class="kw">use </span>rand_core::{CryptoRng, RngCore};
@@ -610,47 +664,11 @@
 <span class="attribute">#[cfg(feature = <span class="string">&quot;std&quot;</span>)]
 </span><span class="kw">impl </span>std::error::Error <span class="kw">for </span>Error {}
 
-<span class="doccomment">/// Key for a [`NewAead`] algorithm
-</span><span class="comment">// TODO(tarcieri): make this a struct and zeroize on drop?
-</span><span class="kw">pub type </span>Key&lt;A&gt; = GenericArray&lt;u8, &lt;A <span class="kw">as </span>NewAead&gt;::KeySize&gt;;
-
 <span class="doccomment">/// Nonce: single-use value for ensuring ciphertexts are unique
 </span><span class="kw">pub type </span>Nonce&lt;A&gt; = GenericArray&lt;u8, &lt;A <span class="kw">as </span>AeadCore&gt;::NonceSize&gt;;
 
 <span class="doccomment">/// Tag: authentication code which ensures ciphertexts are authentic
 </span><span class="kw">pub type </span>Tag&lt;A&gt; = GenericArray&lt;u8, &lt;A <span class="kw">as </span>AeadCore&gt;::TagSize&gt;;
-
-<span class="doccomment">/// Instantiate either a stateless [`Aead`] or stateful [`AeadMut`] algorithm.
-</span><span class="kw">pub trait </span>NewAead {
-    <span class="doccomment">/// The size of the key array required by this algorithm.
-    </span><span class="kw">type </span>KeySize: ArrayLength&lt;u8&gt;;
-
-    <span class="doccomment">/// Create a new AEAD instance with the given key.
-    </span><span class="kw">fn </span>new(key: <span class="kw-2">&amp;</span>Key&lt;<span class="self">Self</span>&gt;) -&gt; <span class="self">Self</span>;
-
-    <span class="doccomment">/// Create new AEAD instance from key given as a byte slice..
-    ///
-    /// Default implementation will accept only keys with length equal to `KeySize`.
-    </span><span class="kw">fn </span>new_from_slice(key: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt;
-    <span class="kw">where
-        </span><span class="self">Self</span>: Sized,
-    {
-        <span class="kw">if </span>key.len() != <span class="self">Self</span>::KeySize::to_usize() {
-            <span class="prelude-val">Err</span>(Error)
-        } <span class="kw">else </span>{
-            <span class="prelude-val">Ok</span>(<span class="self">Self</span>::new(GenericArray::from_slice(key)))
-        }
-    }
-
-    <span class="doccomment">/// Generate a random key for this AEAD using the provided [`CryptoRng`].
-    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;rand_core&quot;</span>)]
-    #[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;rand_core&quot;</span>)))]
-    </span><span class="kw">fn </span>generate_key(<span class="kw-2">mut </span>rng: <span class="kw">impl </span>CryptoRng + RngCore) -&gt; Key&lt;<span class="self">Self</span>&gt; {
-        <span class="kw">let </span><span class="kw-2">mut </span>key = Key::&lt;<span class="self">Self</span>&gt;::default();
-        rng.fill_bytes(<span class="kw-2">&amp;mut </span>key);
-        key
-    }
-}
 
 <span class="doccomment">/// Authenticated Encryption with Associated Data (AEAD) algorithm core trait.
 ///
@@ -666,6 +684,52 @@
     <span class="doccomment">/// The upper bound amount of additional space required to support a
     /// ciphertext vs. a plaintext.
     </span><span class="kw">type </span>CiphertextOverhead: ArrayLength&lt;u8&gt; + Unsigned;
+
+    <span class="doccomment">/// Generate a random nonce for this AEAD algorithm.
+    ///
+    /// AEAD algorithms accept a parameter to encryption/decryption called
+    /// a &quot;nonce&quot; which must be unique every time encryption is performed and
+    /// never repeated for the same key. The nonce is often prepended to the
+    /// ciphertext. The nonce used to produce a given ciphertext must be passed
+    /// to the decryption function in order for it to decrypt correctly.
+    ///
+    /// Nonces don&#39;t necessarily have to be random, but it is one strategy
+    /// which is implemented by this function.
+    ///
+    /// # ⚠️Security Warning
+    ///
+    /// AEAD algorithms often fail catastrophically if nonces are ever repeated
+    /// (with SIV modes being an exception).
+    ///
+    /// Using random nonces runs the risk of repeating them unless the nonce
+    /// size is particularly large (e.g. 192-bit extended nonces used by the
+    /// `XChaCha20Poly1305` and `XSalsa20Poly1305` constructions.
+    ///
+    /// [NIST SP 800-38D] recommends the following:
+    ///
+    /// &gt; The total number of invocations of the authenticated encryption
+    /// &gt; function shall not exceed 2^32, including all IV lengths and all
+    /// &gt; instances of the authenticated encryption function with the given key.
+    ///
+    /// Following this guideline, only 4,294,967,296 messages with random
+    /// nonces can be encrypted under a given key. While this bound is high,
+    /// it&#39;s possible to encounter in practice, and systems which might
+    /// reach it should consider alternatives to purely random nonces, like
+    /// a counter or a combination of a random nonce + counter.
+    ///
+    /// See the [`stream`] module for a ready-made implementation of the latter.
+    ///
+    /// [NIST SP 800-38D]: https://csrc.nist.gov/publications/detail/sp/800-38d/final
+    </span><span class="attribute">#[cfg(feature = <span class="string">&quot;rand_core&quot;</span>)]
+    #[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;rand_core&quot;</span>)))]
+    </span><span class="kw">fn </span>generate_nonce(<span class="kw-2">mut </span>rng: <span class="kw">impl </span>CryptoRng + RngCore) -&gt; Nonce&lt;<span class="self">Self</span>&gt;
+    <span class="kw">where
+        </span>Nonce&lt;<span class="self">Self</span>&gt;: Default,
+    {
+        <span class="kw">let </span><span class="kw-2">mut </span>nonce = Nonce::&lt;<span class="self">Self</span>&gt;::default();
+        rng.fill_bytes(<span class="kw-2">&amp;mut </span>nonce);
+        nonce
+    }
 }
 
 <span class="doccomment">/// Authenticated Encryption with Associated Data (AEAD) algorithm.
@@ -981,8 +1045,10 @@
     }
 }
 
-<span class="doccomment">/// AEAD payloads are a combination of a message (plaintext or ciphertext)
-/// and &quot;additional associated data&quot; (AAD) to be authenticated (in cleartext)
+<span class="doccomment">/// AEAD payloads (message + AAD).
+///
+/// Combination of a message (plaintext or ciphertext) and
+/// &quot;additional associated data&quot; (AAD) to be authenticated (in cleartext)
 /// along with the message.
 ///
 /// If you don&#39;t care about AAD, you can pass a `&amp;[u8]` as the payload to
@@ -1038,6 +1104,26 @@
 
     <span class="kw">fn </span>truncate(<span class="kw-2">&amp;mut </span><span class="self">self</span>, len: usize) {
         Vec::truncate(<span class="self">self</span>, len);
+    }
+}
+
+<span class="attribute">#[cfg(feature = <span class="string">&quot;bytes&quot;</span>)]
+</span><span class="kw">impl </span>Buffer <span class="kw">for </span>BytesMut {
+    <span class="kw">fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+        BytesMut::len(<span class="self">self</span>)
+    }
+
+    <span class="kw">fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        BytesMut::is_empty(<span class="self">self</span>)
+    }
+
+    <span class="kw">fn </span>extend_from_slice(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        BytesMut::extend_from_slice(<span class="self">self</span>, other);
+        <span class="prelude-val">Ok</span>(())
+    }
+
+    <span class="kw">fn </span>truncate(<span class="kw-2">&amp;mut </span><span class="self">self</span>, len: usize) {
+        BytesMut::truncate(<span class="self">self</span>, len);
     }
 }
 

@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/des-0.7.0/src/des.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>des.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/RustCrypto/meta/master/logo.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../des/index.html"><div class="logo-container"><img src="https://raw.githubusercontent.com/RustCrypto/meta/master/logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../des/index.html"><div class="logo-container">
-                    <img src="https://raw.githubusercontent.com/RustCrypto/meta/master/logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../des/index.html">
-                        <img src="https://raw.githubusercontent.com/RustCrypto/meta/master/logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/des-0.8.1/src/des.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>des.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/RustCrypto/media/26acc39f/logo.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../des/index.html"><div class="logo-container"><img src="https://raw.githubusercontent.com/RustCrypto/media/26acc39f/logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../des/index.html"><div class="logo-container">
+                    <img src="https://raw.githubusercontent.com/RustCrypto/media/26acc39f/logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../des/index.html">
+                        <img src="https://raw.githubusercontent.com/RustCrypto/media/26acc39f/logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -218,21 +218,40 @@
 <span id="216">216</span>
 <span id="217">217</span>
 <span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Data Encryption Standard (DES) block cipher.
 
 </span><span class="attribute">#![allow(clippy::unreadable_literal)]
 
-</span><span class="kw">use </span>byteorder::{ByteOrder, BE};
-<span class="kw">use </span>cipher::{
-    consts::{U1, U8},
-    generic_array::GenericArray,
-    BlockCipher, BlockDecrypt, BlockEncrypt, NewBlockCipher,
-};
+</span><span class="kw">use </span>cipher::{consts::U8, AlgorithmName, BlockCipher, Key, KeyInit, KeySizeUser};
+<span class="kw">use </span>core::fmt;
+
+<span class="attribute">#[cfg(feature = <span class="string">&quot;zeroize&quot;</span>)]
+</span><span class="kw">use </span>cipher::zeroize::{Zeroize, ZeroizeOnDrop};
 
 <span class="kw">use </span><span class="kw">crate</span>::consts::{SBOXES, SHIFTS};
 
 <span class="doccomment">/// Data Encryption Standard (DES) block cipher.
-</span><span class="attribute">#[derive(Copy, Clone)]
+</span><span class="attribute">#[derive(Clone)]
 </span><span class="kw">pub struct </span>Des {
     <span class="kw">pub</span>(<span class="kw">crate</span>) keys: [u64; <span class="number">16</span>],
 }
@@ -406,35 +425,56 @@
     }
 }
 
-<span class="kw">impl </span>NewBlockCipher <span class="kw">for </span>Des {
+<span class="kw">impl </span>BlockCipher <span class="kw">for </span>Des {}
+
+<span class="kw">impl </span>KeySizeUser <span class="kw">for </span>Des {
     <span class="kw">type </span>KeySize = U8;
+}
 
-    <span class="kw">fn </span>new(key: <span class="kw-2">&amp;</span>GenericArray&lt;u8, U8&gt;) -&gt; <span class="self">Self </span>{
-        Des {
-            keys: gen_keys(BE::read_u64(key)),
-        }
+<span class="kw">impl </span>KeyInit <span class="kw">for </span>Des {
+    <span class="attribute">#[inline]
+    </span><span class="kw">fn </span>new(key: <span class="kw-2">&amp;</span>Key&lt;<span class="self">Self</span>&gt;) -&gt; <span class="self">Self </span>{
+        <span class="kw">let </span>keys = gen_keys(u64::from_be_bytes(key.clone().into()));
+        <span class="self">Self </span>{ keys }
     }
 }
 
-<span class="kw">impl </span>BlockCipher <span class="kw">for </span>Des {
-    <span class="kw">type </span>BlockSize = U8;
-    <span class="kw">type </span>ParBlocks = U1;
-}
-
-<span class="kw">impl </span>BlockEncrypt <span class="kw">for </span>Des {
-    <span class="kw">fn </span>encrypt_block(<span class="kw-2">&amp;</span><span class="self">self</span>, block: <span class="kw-2">&amp;mut </span>GenericArray&lt;u8, U8&gt;) {
-        <span class="kw">let </span>data = BE::read_u64(block);
-        BE::write_u64(block, <span class="self">self</span>.encrypt(data));
+<span class="kw">impl </span>fmt::Debug <span class="kw">for </span>Des {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+        f.write_str(<span class="string">&quot;Des { ... }&quot;</span>)
     }
 }
 
-<span class="kw">impl </span>BlockDecrypt <span class="kw">for </span>Des {
-    <span class="kw">fn </span>decrypt_block(<span class="kw-2">&amp;</span><span class="self">self</span>, block: <span class="kw-2">&amp;mut </span>GenericArray&lt;u8, U8&gt;) {
-        <span class="kw">let </span>data = BE::read_u64(block);
-        BE::write_u64(block, <span class="self">self</span>.decrypt(data));
+<span class="kw">impl </span>AlgorithmName <span class="kw">for </span>Des {
+    <span class="kw">fn </span>write_alg_name(f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+        f.write_str(<span class="string">&quot;Des&quot;</span>)
     }
 }
 
-<span class="macro">opaque_debug::implement!</span>(Des);
+<span class="attribute">#[cfg(feature = <span class="string">&quot;zeroize&quot;</span>)]
+#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;zeroize&quot;</span>)))]
+</span><span class="kw">impl </span>Drop <span class="kw">for </span>Des {
+    <span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="self">self</span>.keys.zeroize();
+    }
+}
+
+<span class="attribute">#[cfg(feature = <span class="string">&quot;zeroize&quot;</span>)]
+#[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;zeroize&quot;</span>)))]
+</span><span class="kw">impl </span>ZeroizeOnDrop <span class="kw">for </span>Des {}
+
+<span class="macro">cipher::impl_simple_block_encdec!</span>(
+    Des, U8, cipher, block,
+    encrypt: {
+        <span class="kw">let </span><span class="kw-2">mut </span>data = u64::from_be_bytes(block.clone_in().into());
+        data = cipher.encrypt(data);
+        block.get_out().copy_from_slice(<span class="kw-2">&amp;</span>data.to_be_bytes());
+    }
+    decrypt: {
+        <span class="kw">let </span><span class="kw-2">mut </span>data = u64::from_be_bytes(block.clone_in().into());
+        data = cipher.decrypt(data);
+        block.get_out().copy_from_slice(<span class="kw-2">&amp;</span>data.to_be_bytes());
+    }
+);
 </code></pre></div>
 </section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="des" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>

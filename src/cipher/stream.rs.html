@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/cipher-0.3.0/src/stream.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>stream.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/RustCrypto/meta/master/logo.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../cipher/index.html"><div class="logo-container"><img src="https://raw.githubusercontent.com/RustCrypto/meta/master/logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../cipher/index.html"><div class="logo-container">
-                    <img src="https://raw.githubusercontent.com/RustCrypto/meta/master/logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../cipher/index.html">
-                        <img src="https://raw.githubusercontent.com/RustCrypto/meta/master/logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/cipher-0.4.3/src/stream.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>stream.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/RustCrypto/media/6ee8e381/logo.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../cipher/index.html"><div class="logo-container"><img src="https://raw.githubusercontent.com/RustCrypto/media/6ee8e381/logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../cipher/index.html"><div class="logo-container">
+                    <img src="https://raw.githubusercontent.com/RustCrypto/media/6ee8e381/logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../cipher/index.html">
+                        <img src="https://raw.githubusercontent.com/RustCrypto/media/6ee8e381/logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -133,53 +133,257 @@
 <span id="131">131</span>
 <span id="132">132</span>
 <span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
+<span id="170">170</span>
+<span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
+<span id="204">204</span>
+<span id="205">205</span>
+<span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Traits which define functionality of stream ciphers.
 //!
 //! See [RustCrypto/stream-ciphers](https://github.com/RustCrypto/stream-ciphers)
 //! for ciphers implementation.
 
-</span><span class="kw">use </span><span class="kw">crate</span>::errors::{LoopError, OverflowError};
-<span class="kw">use </span>core::convert::{TryFrom, TryInto};
+</span><span class="kw">use </span><span class="kw">crate</span>::errors::{OverflowError, StreamCipherError};
+<span class="kw">use </span><span class="kw">crate</span>::stream_core::Counter;
+<span class="kw">use crate</span>::{Block, BlockDecryptMut, BlockEncryptMut};
+<span class="kw">use </span>inout::{InOutBuf, NotEqualError};
+
+<span class="doccomment">/// Marker trait for block-level asynchronous stream ciphers
+</span><span class="kw">pub trait </span>AsyncStreamCipher: Sized {
+    <span class="doccomment">/// Encrypt data using `InOutBuf`.
+    </span><span class="kw">fn </span>encrypt_inout(<span class="kw-2">mut </span><span class="self">self</span>, data: InOutBuf&lt;<span class="lifetime">&#39;_</span>, <span class="lifetime">&#39;_</span>, u8&gt;)
+    <span class="kw">where
+        </span><span class="self">Self</span>: BlockEncryptMut,
+    {
+        <span class="kw">let </span>(blocks, <span class="kw-2">mut </span>tail) = data.into_chunks();
+        <span class="self">self</span>.encrypt_blocks_inout_mut(blocks);
+        <span class="kw">let </span><span class="kw-2">mut </span>block = Block::&lt;<span class="self">Self</span>&gt;::default();
+        <span class="kw">let </span>n = tail.len();
+        <span class="kw">if </span>n != <span class="number">0 </span>{
+            block[..n].copy_from_slice(tail.get_in());
+            <span class="self">self</span>.encrypt_block_mut(<span class="kw-2">&amp;mut </span>block);
+            tail.get_out().copy_from_slice(<span class="kw-2">&amp;</span>block[..n]);
+        }
+    }
+
+    <span class="doccomment">/// Decrypt data using `InOutBuf`.
+    </span><span class="kw">fn </span>decrypt_inout(<span class="kw-2">mut </span><span class="self">self</span>, data: InOutBuf&lt;<span class="lifetime">&#39;_</span>, <span class="lifetime">&#39;_</span>, u8&gt;)
+    <span class="kw">where
+        </span><span class="self">Self</span>: BlockDecryptMut,
+    {
+        <span class="kw">let </span>(blocks, <span class="kw-2">mut </span>tail) = data.into_chunks();
+        <span class="self">self</span>.decrypt_blocks_inout_mut(blocks);
+        <span class="kw">let </span><span class="kw-2">mut </span>block = Block::&lt;<span class="self">Self</span>&gt;::default();
+        <span class="kw">let </span>n = tail.len();
+        <span class="kw">if </span>n != <span class="number">0 </span>{
+            block[..n].copy_from_slice(tail.get_in());
+            <span class="self">self</span>.decrypt_block_mut(<span class="kw-2">&amp;mut </span>block);
+            tail.get_out().copy_from_slice(<span class="kw-2">&amp;</span>block[..n]);
+        }
+    }
+    <span class="doccomment">/// Encrypt data in place.
+    </span><span class="kw">fn </span>encrypt(<span class="self">self</span>, buf: <span class="kw-2">&amp;mut </span>[u8])
+    <span class="kw">where
+        </span><span class="self">Self</span>: BlockEncryptMut,
+    {
+        <span class="self">self</span>.encrypt_inout(buf.into());
+    }
+
+    <span class="doccomment">/// Decrypt data in place.
+    </span><span class="kw">fn </span>decrypt(<span class="self">self</span>, buf: <span class="kw-2">&amp;mut </span>[u8])
+    <span class="kw">where
+        </span><span class="self">Self</span>: BlockDecryptMut,
+    {
+        <span class="self">self</span>.decrypt_inout(buf.into());
+    }
+
+    <span class="doccomment">/// Encrypt data from buffer to buffer.
+    </span><span class="kw">fn </span>encrypt_b2b(<span class="self">self</span>, in_buf: <span class="kw-2">&amp;</span>[u8], out_buf: <span class="kw-2">&amp;mut </span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;(), NotEqualError&gt;
+    <span class="kw">where
+        </span><span class="self">Self</span>: BlockEncryptMut,
+    {
+        InOutBuf::new(in_buf, out_buf).map(|b| <span class="self">self</span>.encrypt_inout(b))
+    }
+
+    <span class="doccomment">/// Decrypt data from buffer to buffer.
+    </span><span class="kw">fn </span>decrypt_b2b(<span class="self">self</span>, in_buf: <span class="kw-2">&amp;</span>[u8], out_buf: <span class="kw-2">&amp;mut </span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;(), NotEqualError&gt;
+    <span class="kw">where
+        </span><span class="self">Self</span>: BlockDecryptMut,
+    {
+        InOutBuf::new(in_buf, out_buf).map(|b| <span class="self">self</span>.decrypt_inout(b))
+    }
+}
 
 <span class="doccomment">/// Synchronous stream cipher core trait.
 </span><span class="kw">pub trait </span>StreamCipher {
-    <span class="doccomment">/// Apply keystream to the data.
+    <span class="doccomment">/// Apply keystream to `inout` data.
     ///
-    /// It will XOR generated keystream with the data, which can be both
-    /// encryption and decryption.
+    /// If end of the keystream will be achieved with the given data length,
+    /// method will return [`StreamCipherError`] without modifying provided `data`.
+    </span><span class="kw">fn </span>try_apply_keystream_inout(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        buf: InOutBuf&lt;<span class="lifetime">&#39;_</span>, <span class="lifetime">&#39;_</span>, u8&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), StreamCipherError&gt;;
+
+    <span class="doccomment">/// Apply keystream to data behind `buf`.
+    ///
+    /// If end of the keystream will be achieved with the given data length,
+    /// method will return [`StreamCipherError`] without modifying provided `data`.
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>try_apply_keystream(<span class="kw-2">&amp;mut </span><span class="self">self</span>, buf: <span class="kw-2">&amp;mut </span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;(), StreamCipherError&gt; {
+        <span class="self">self</span>.try_apply_keystream_inout(buf.into())
+    }
+
+    <span class="doccomment">/// Apply keystream to `inout` data.
+    ///
+    /// It will XOR generated keystream with the data behind `in` pointer
+    /// and will write result to `out` pointer.
     ///
     /// # Panics
     /// If end of the keystream will be reached with the given data length,
     /// method will panic without modifying the provided `data`.
     </span><span class="attribute">#[inline]
-    </span><span class="kw">fn </span>apply_keystream(<span class="kw-2">&amp;mut </span><span class="self">self</span>, data: <span class="kw-2">&amp;mut </span>[u8]) {
-        <span class="self">self</span>.try_apply_keystream(data).unwrap();
+    </span><span class="kw">fn </span>apply_keystream_inout(<span class="kw-2">&amp;mut </span><span class="self">self</span>, buf: InOutBuf&lt;<span class="lifetime">&#39;_</span>, <span class="lifetime">&#39;_</span>, u8&gt;) {
+        <span class="self">self</span>.try_apply_keystream_inout(buf).unwrap();
     }
 
-    <span class="doccomment">/// Apply keystream to the data, but return an error if end of a keystream
-    /// will be reached.
+    <span class="doccomment">/// Apply keystream to data in-place.
     ///
-    /// If end of the keystream will be achieved with the given data length,
-    /// method will return `Err(LoopError)` without modifying provided `data`.
-    </span><span class="kw">fn </span>try_apply_keystream(<span class="kw-2">&amp;mut </span><span class="self">self</span>, data: <span class="kw-2">&amp;mut </span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;(), LoopError&gt;;
+    /// It will XOR generated keystream with `data` and will write result
+    /// to the same buffer.
+    ///
+    /// # Panics
+    /// If end of the keystream will be reached with the given data length,
+    /// method will panic without modifying the provided `data`.
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>apply_keystream(<span class="kw-2">&amp;mut </span><span class="self">self</span>, buf: <span class="kw-2">&amp;mut </span>[u8]) {
+        <span class="self">self</span>.try_apply_keystream(buf).unwrap();
+    }
+
+    <span class="doccomment">/// Apply keystream to data buffer-to-buffer.
+    ///
+    /// It will XOR generated keystream with data from the `input` buffer
+    /// and will write result to the `output` buffer.
+    ///
+    /// Returns [`StreamCipherError`] if provided `in_blocks` and `out_blocks`
+    /// have different lengths or if end of the keystream will be reached with
+    /// the given input data length.
+    </span><span class="attribute">#[inline]
+    </span><span class="kw">fn </span>apply_keystream_b2b(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        input: <span class="kw-2">&amp;</span>[u8],
+        output: <span class="kw-2">&amp;mut </span>[u8],
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), StreamCipherError&gt; {
+        InOutBuf::new(input, output)
+            .map_err(|<span class="kw">_</span>| StreamCipherError)
+            .and_then(|buf| <span class="self">self</span>.try_apply_keystream_inout(buf))
+    }
 }
 
 <span class="doccomment">/// Trait for seekable stream ciphers.
 ///
 /// Methods of this trait are generic over the [`SeekNum`] trait, which is
-/// implemented for primitive numeric types, i.e.: `i/u8`, `i/u16`, `i/u32`,
-/// `i/u64`, `i/u128`, and `i/usize`.
+/// implemented for primitive numeric types, i.e.: `i32`, `u32`, `u64`,
+/// `u128`, and `usize`.
 </span><span class="kw">pub trait </span>StreamCipherSeek {
     <span class="doccomment">/// Try to get current keystream position
     ///
-    /// Returns [`LoopError`] if position can not be represented by type `T`
+    /// Returns [`OverflowError`] if position can not be represented by type `T`
     </span><span class="kw">fn </span>try_current_pos&lt;T: SeekNum&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;T, OverflowError&gt;;
 
     <span class="doccomment">/// Try to seek to the given position
     ///
-    /// Returns [`LoopError`] if provided position value is bigger than
+    /// Returns [`StreamCipherError`] if provided position value is bigger than
     /// keystream length.
-    </span><span class="kw">fn </span>try_seek&lt;T: SeekNum&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, pos: T) -&gt; <span class="prelude-ty">Result</span>&lt;(), LoopError&gt;;
+    </span><span class="kw">fn </span>try_seek&lt;T: SeekNum&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, pos: T) -&gt; <span class="prelude-ty">Result</span>&lt;(), StreamCipherError&gt;;
 
     <span class="doccomment">/// Get current keystream position
     ///
@@ -198,63 +402,45 @@
     }
 }
 
-<span class="doccomment">/// Asynchronous stream cipher core trait.
-</span><span class="kw">pub trait </span>AsyncStreamCipher {
-    <span class="doccomment">/// Encrypt data in place.
-    </span><span class="kw">fn </span>encrypt(<span class="kw-2">&amp;mut </span><span class="self">self</span>, data: <span class="kw-2">&amp;mut </span>[u8]);
-
-    <span class="doccomment">/// Decrypt data in place.
-    </span><span class="kw">fn </span>decrypt(<span class="kw-2">&amp;mut </span><span class="self">self</span>, data: <span class="kw-2">&amp;mut </span>[u8]);
-}
-
 <span class="kw">impl</span>&lt;C: StreamCipher&gt; StreamCipher <span class="kw">for </span><span class="kw-2">&amp;mut </span>C {
     <span class="attribute">#[inline]
-    </span><span class="kw">fn </span>apply_keystream(<span class="kw-2">&amp;mut </span><span class="self">self</span>, data: <span class="kw-2">&amp;mut </span>[u8]) {
-        C::apply_keystream(<span class="self">self</span>, data);
-    }
-
-    <span class="attribute">#[inline]
-    </span><span class="kw">fn </span>try_apply_keystream(<span class="kw-2">&amp;mut </span><span class="self">self</span>, data: <span class="kw-2">&amp;mut </span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;(), LoopError&gt; {
-        C::try_apply_keystream(<span class="self">self</span>, data)
+    </span><span class="kw">fn </span>try_apply_keystream_inout(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        buf: InOutBuf&lt;<span class="lifetime">&#39;_</span>, <span class="lifetime">&#39;_</span>, u8&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), StreamCipherError&gt; {
+        C::try_apply_keystream_inout(<span class="self">self</span>, buf)
     }
 }
 
 <span class="doccomment">/// Trait implemented for numeric types which can be used with the
 /// [`StreamCipherSeek`] trait.
 ///
-/// This trait is implemented for primitive numeric types, i.e. `i/u8`,
-/// `u16`, `u32`, `u64`, `u128`, `usize`, and `i32`. It is not intended
-/// to be implemented in third-party crates.
-</span><span class="attribute">#[rustfmt::skip]
-</span><span class="kw">pub trait </span>SeekNum:
-    Sized
-    + TryInto&lt;u8&gt; + TryFrom&lt;u8&gt; + TryInto&lt;i8&gt; + TryFrom&lt;i8&gt;
-    + TryInto&lt;u16&gt; + TryFrom&lt;u16&gt; + TryInto&lt;i16&gt; + TryFrom&lt;i16&gt;
-    + TryInto&lt;u32&gt; + TryFrom&lt;u32&gt; + TryInto&lt;i32&gt; + TryFrom&lt;i32&gt;
-    + TryInto&lt;u64&gt; + TryFrom&lt;u64&gt; + TryInto&lt;i64&gt; + TryFrom&lt;i64&gt;
-    + TryInto&lt;u128&gt; + TryFrom&lt;u128&gt; + TryInto&lt;i128&gt; + TryFrom&lt;i128&gt;
-    + TryInto&lt;usize&gt; + TryFrom&lt;usize&gt; + TryInto&lt;isize&gt; + TryFrom&lt;isize&gt;
-{
+/// This trait is implemented for `i32`, `u32`, `u64`, `u128`, and `usize`.
+/// It is not intended to be implemented in third-party crates.
+</span><span class="kw">pub trait </span>SeekNum: Sized {
     <span class="doccomment">/// Try to get position for block number `block`, byte position inside
     /// block `byte`, and block size `bs`.
-    </span><span class="kw">fn </span>from_block_byte&lt;T: SeekNum&gt;(block: T, byte: u8, bs: u8) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, OverflowError&gt;;
+    </span><span class="kw">fn </span>from_block_byte&lt;T: Counter&gt;(block: T, byte: u8, bs: u8) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, OverflowError&gt;;
 
     <span class="doccomment">/// Try to get block number and bytes position for given block size `bs`.
-    </span><span class="kw">fn </span>to_block_byte&lt;T: SeekNum&gt;(<span class="self">self</span>, bs: u8) -&gt; <span class="prelude-ty">Result</span>&lt;(T, u8), OverflowError&gt;;
+    </span><span class="kw">fn </span>into_block_byte&lt;T: Counter&gt;(<span class="self">self</span>, bs: u8) -&gt; <span class="prelude-ty">Result</span>&lt;(T, u8), OverflowError&gt;;
 }
 
 <span class="macro">macro_rules! </span>impl_seek_num {
     {$(<span class="macro-nonterminal">$t</span>:ty )<span class="kw-2">*</span>} =&gt; {
         $(
             <span class="kw">impl </span>SeekNum <span class="kw">for </span><span class="macro-nonterminal">$t </span>{
-                <span class="kw">fn </span>from_block_byte&lt;T: TryInto&lt;<span class="self">Self</span>&gt;&gt;(block: T, byte: u8, bs: u8) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, OverflowError&gt; {
+                <span class="kw">fn </span>from_block_byte&lt;T: Counter&gt;(block: T, byte: u8, bs: u8) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, OverflowError&gt; {
                     <span class="macro">debug_assert!</span>(byte &lt; bs);
-                    <span class="kw">let </span>block = block.try_into().map_err(|<span class="kw">_</span>| OverflowError)<span class="question-mark">?</span>;
+                    <span class="kw">let </span><span class="kw-2">mut </span>block: <span class="self">Self </span>= block.try_into().map_err(|<span class="kw">_</span>| OverflowError)<span class="question-mark">?</span>;
+                    <span class="kw">if </span>byte != <span class="number">0 </span>{
+                        block -= <span class="number">1</span>;
+                    }
                     <span class="kw">let </span>pos = block.checked_mul(bs <span class="kw">as </span><span class="self">Self</span>).ok_or(OverflowError)<span class="question-mark">? </span>+ (byte <span class="kw">as </span><span class="self">Self</span>);
                     <span class="prelude-val">Ok</span>(pos)
                 }
 
-                <span class="kw">fn </span>to_block_byte&lt;T: TryFrom&lt;<span class="self">Self</span>&gt;&gt;(<span class="self">self</span>, bs: u8) -&gt; <span class="prelude-ty">Result</span>&lt;(T, u8), OverflowError&gt; {
+                <span class="kw">fn </span>into_block_byte&lt;T: Counter&gt;(<span class="self">self</span>, bs: u8) -&gt; <span class="prelude-ty">Result</span>&lt;(T, u8), OverflowError&gt; {
                     <span class="kw">let </span>bs = bs <span class="kw">as </span><span class="self">Self</span>;
                     <span class="kw">let </span>byte = <span class="self">self </span>% bs;
                     <span class="kw">let </span>block = T::try_from(<span class="self">self</span>/bs).map_err(|<span class="kw">_</span>| OverflowError)<span class="question-mark">?</span>;
@@ -265,6 +451,6 @@
     };
 }
 
-<span class="macro">impl_seek_num! </span>{ u8 u16 u32 u64 u128 usize i32 }
+<span class="macro">impl_seek_num! </span>{ i32 u32 u64 u128 usize }
 </code></pre></div>
 </section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="cipher" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>
