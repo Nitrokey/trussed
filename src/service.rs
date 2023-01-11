@@ -1,6 +1,4 @@
 use chacha20::ChaCha8Rng;
-use heapless_bytes::Unsigned;
-use interchange::Responder;
 use littlefs2::path::PathBuf;
 pub use rand_core::{RngCore, SeedableRng};
 
@@ -9,6 +7,8 @@ use crate::config::*;
 use crate::error::Error;
 pub use crate::key;
 use crate::mechanisms;
+use crate::pipe::Interchange;
+use crate::pipe::Responder;
 pub use crate::pipe::ServiceEndpoint;
 use crate::platform::*;
 pub use crate::store::{
@@ -76,18 +76,22 @@ impl<P: Platform> ServiceResources<P> {
     }
 }
 
-pub struct Service<P, B>
+pub struct Service<'a, P, B, const CLIENT_COUNT: usize>
 where
     P: Platform,
     B: Backends<P>,
 {
-    eps: Vec<ServiceEndpoint<P::B, P::I>, { MAX_SERVICE_CLIENTS::USIZE }>,
+    eps: Vec<ServiceEndpoint<'a, P::B>, CLIENT_COUNT>,
     resources: ServiceResources<P>,
     backends: B,
+    interchange: &'a Interchange<P::B, CLIENT_COUNT>,
 }
 
 // need to be able to send crypto service to an interrupt handler
-unsafe impl<P: Platform, B: Backends<P>> Send for Service<P, B> {}
+unsafe impl<'a, P: Platform, B: Backends<P>, const CLIENT_COUNT: usize> Send
+    for Service<'a, P, B, CLIENT_COUNT>
+{
+}
 
 impl<P: Platform> ServiceResources<P> {
     #[inline(never)]
@@ -678,19 +682,24 @@ impl<P: Platform> ServiceResources<P> {
     }
 }
 
-impl<P: Platform> Service<P, ()> {
-    pub fn new(platform: P) -> Self {
-        Self::with_backends(platform, ())
+impl<'a, P: Platform, const CLIENT_COUNT: usize> Service<'a, P, (), CLIENT_COUNT> {
+    pub fn new(platform: P, interchange: &'a Interchange<P::B, CLIENT_COUNT>) -> Self {
+        Self::with_backends(platform, interchange, ())
     }
 }
 
-impl<P: Platform, B: Backends<P>> Service<P, B> {
-    pub fn with_backends(platform: P, backends: B) -> Self {
+impl<'a, P: Platform, B: Backends<P>, const CLIENT_COUNT: usize> Service<'a, P, B, CLIENT_COUNT> {
+    pub fn with_backends(
+        platform: P,
+        interchange: &'a Interchange<P::B, CLIENT_COUNT>,
+        backends: B,
+    ) -> Self {
         let resources = ServiceResources::new(platform);
         Self {
             eps: Vec::new(),
             resources,
             backends,
+            interchange,
         }
     }
 
@@ -701,9 +710,8 @@ impl<P: Platform, B: Backends<P>> Service<P, B> {
         &mut self,
         client_id: &str,
         syscall: S,
-    ) -> Result<crate::client::ClientImplementation<P::B, P::I, S>, ()> {
-        use interchange::Interchange;
-        let (requester, responder) = P::I::claim().ok_or(())?;
+    ) -> Result<crate::client::ClientImplementation<'a, P::B, S>, ()> {
+        let (requester, responder) = self.interchange.claim().ok_or(())?;
         let client_ctx = ClientContext::from(client_id);
         self.add_endpoint(responder, client_ctx)
             .map_err(|_service_endpoint| ())?;
@@ -715,12 +723,11 @@ impl<P: Platform, B: Backends<P>> Service<P, B> {
     /// (directly call self for processing). This method is only useful for single-threaded
     /// single-app runners.
     #[allow(clippy::result_unit_err)]
-    pub fn try_as_new_client(
-        &mut self,
+    pub fn try_as_new_client<'s: 'a>(
+        &'s mut self,
         client_id: &str,
-    ) -> Result<crate::client::ClientImplementation<P::B, P::I, &mut Self>, ()> {
-        use interchange::Interchange;
-        let (requester, responder) = P::I::claim().ok_or(())?;
+    ) -> Result<crate::client::ClientImplementation<'a, P::B, &'s mut Self>, ()> {
+        let (requester, responder) = self.interchange.claim().ok_or(())?;
         let client_ctx = ClientContext::from(client_id);
         self.add_endpoint(responder, client_ctx)
             .map_err(|_service_endpoint| ())?;
@@ -731,12 +738,14 @@ impl<P: Platform, B: Backends<P>> Service<P, B> {
     /// Similar to [try_as_new_client][Service::try_as_new_client] except that the returning client owns the
     /// Service and is therefore `'static`
     #[allow(clippy::result_unit_err)]
-    pub fn try_into_new_client(
+    pub fn try_into_new_client<'s>(
         mut self,
-        client_id: &str,
-    ) -> Result<crate::client::ClientImplementation<P::B, P::I, Self>, ()> {
-        use interchange::Interchange;
-        let (requester, responder) = P::I::claim().ok_or(())?;
+        client_id: &'s str,
+    ) -> Result<crate::client::ClientImplementation<'a, P::B, Self>, ()>
+    where
+        'a: 's,
+    {
+        let (requester, responder) = self.interchange.claim().ok_or(())?;
         let client_ctx = ClientContext::from(client_id);
         self.add_endpoint(responder, client_ctx)
             .map_err(|_service_endpoint| ())?;
@@ -746,9 +755,9 @@ impl<P: Platform, B: Backends<P>> Service<P, B> {
 
     pub fn add_endpoint(
         &mut self,
-        interchange: Responder<P::I>,
+        interchange: Responder<'a, P::B>,
         client_ctx: impl Into<ClientContext<P::B>>,
-    ) -> Result<(), ServiceEndpoint<P::B, P::I>> {
+    ) -> Result<(), ServiceEndpoint<P::B>> {
         let client_ctx = client_ctx.into();
         if client_ctx.path == PathBuf::from("trussed") {
             panic!("trussed is a reserved client ID");
@@ -828,7 +837,7 @@ impl<P: Platform, B: Backends<P>> Service<P, B> {
                     .platform
                     .user_interface()
                     .set_status(ui::Status::Idle);
-                ep.interchange.respond(&reply_result).ok();
+                ep.interchange.respond(reply_result).ok();
             }
         }
         debug_now!(
@@ -855,7 +864,8 @@ impl<P: Platform, B: Backends<P>> Service<P, B> {
     }
 }
 
-impl<P, B> crate::client::Syscall for &mut Service<P, B>
+impl<'a, P, B, const CLIENT_COUNT: usize> crate::client::Syscall
+    for &mut Service<'a, P, B, CLIENT_COUNT>
 where
     P: Platform,
     B: Backends<P>,
@@ -865,7 +875,7 @@ where
     }
 }
 
-impl<P, B> crate::client::Syscall for Service<P, B>
+impl<'a, P, B, const CLIENT_COUNT: usize> crate::client::Syscall for Service<'a, P, B, CLIENT_COUNT>
 where
     P: Platform,
     B: Backends<P>,

@@ -7,13 +7,9 @@
 //! TODO: Currently, `Platform::R` lacks the `CryptoRng` bound.
 
 // pub use rand_core::{CryptoRng, RngCore};
-use crate::api::{Reply, Request};
-use crate::error::Result;
-use core::fmt::Debug;
-use interchange::Interchange;
-
 pub use crate::store::Store;
 pub use crate::types::{consent, reboot, ui, ClientContext, ServiceBackend};
+use core::fmt::Debug;
 pub use rand_core::{CryptoRng, RngCore};
 
 pub trait UserInterface {
@@ -60,7 +56,6 @@ pub trait UserInterface {
 // and a macro.
 pub unsafe trait Platform {
     type B: 'static + Debug + PartialEq;
-    type I: Interchange<REQUEST = Request<Self::B>, RESPONSE = Result<Reply>> + 'static;
     // temporarily remove CryptoRng bound until HALs come along
     type R: CryptoRng + RngCore;
     type S: Store;
@@ -101,7 +96,6 @@ macro_rules! platform {
 
         unsafe impl $crate::platform::Platform for $PlatformName {
             type B = ();
-            type I = $Interchange;
             type R = $Rng;
             type S = $Store;
             type UI = $UserInterface;

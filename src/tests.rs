@@ -1,8 +1,6 @@
 #![cfg(test)]
 use chacha20::ChaCha20;
 
-use crate::api::{Reply, Request};
-use crate::pipe::CLIENT_COUNT;
 use crate::types::*;
 use crate::*;
 use entropy::shannon_entropy;
@@ -11,10 +9,6 @@ use littlefs2::const_ram_storage;
 use littlefs2::fs::{Allocation, Filesystem};
 
 use crate::client::{CryptoClient as _, FilesystemClient as _};
-
-interchange::interchange! {
-    TrussedInterchange: (Request<()>, Result<Reply, Error>, CLIENT_COUNT)
-}
 
 pub struct MockRng(ChaCha20);
 
@@ -187,13 +181,13 @@ macro_rules! setup {
         let pc_interface: UserInterface = Default::default();
 
         let platform = $platform::new(rng, store, pc_interface);
-        let mut trussed = crate::service::Service::new(platform);
+        let interchange = Interchange::new();
+        let (test_trussed_requester, test_trussed_responder) = interchange
+            .claim()
+            .expect("could not setup TEST TrussedInterchange");
+        let mut trussed: crate::Service<'_, $platform, (), 1> =
+            crate::service::Service::new(platform, &interchange);
 
-        unsafe {
-            TrussedInterchange::reset_claims();
-        }
-        let (test_trussed_requester, test_trussed_responder) =
-            TrussedInterchange::claim().expect("could not setup TEST TrussedInterchange");
         let test_client_id = "TEST";
 
         assert!(trussed
@@ -201,14 +195,7 @@ macro_rules! setup {
             .is_ok());
 
         trussed.set_seed_if_uninitialized(&$seed);
-        let mut $client = {
-            pub type TestClient<'a> = crate::ClientImplementation<
-                (),
-                TrussedInterchange,
-                &'a mut crate::Service<$platform, ()>,
-            >;
-            TestClient::new(test_trussed_requester, &mut trussed)
-        };
+        let mut $client = ClientImplementation::new(test_trussed_requester, &mut trussed);
     };
 }
 

@@ -4,7 +4,6 @@ use trussed::{
     api::{reply::ReadFile, Reply, Request},
     client::{FilesystemClient as _, PollClient as _},
     error::Error,
-    pipe::CLIENT_COUNT,
     platform,
     service::{Service, ServiceResources},
     types::{self, ClientContext, Location, Message, PathBuf, ServiceBackend, ServiceBackends},
@@ -12,15 +11,15 @@ use trussed::{
     ClientImplementation,
 };
 
-type Platform = virt::Platform<Ram, Interchange, Backend>;
-type Client = ClientImplementation<Backend, Interchange, Service<Platform, Backends>>;
+type Platform = virt::Platform<Ram, Backend>;
+type Client<'a> = ClientImplementation<'a, Backend, Service<'a, Platform, Backends, 1>>;
 
 const BACKENDS_TEST: &[ServiceBackends<Backend>] = &[
     ServiceBackends::Custom(Backend::Test),
     ServiceBackends::Software,
 ];
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Debug, PartialEq)]
 pub enum Backend {
     Test,
 }
@@ -59,11 +58,7 @@ impl<P: platform::Platform> ServiceBackend<P> for TestBackend {
     }
 }
 
-interchange::interchange! {
-    Interchange: (Request<Backend>, Result<Reply, Error>, CLIENT_COUNT)
-}
-
-fn run<F: FnOnce(&mut Client)>(f: F) {
+fn run<F: FnOnce(&mut Client<'_>)>(f: F) {
     Platform::new(Ram::default())
         .run_client("test", Backends::default(), |mut client| f(&mut client))
 }

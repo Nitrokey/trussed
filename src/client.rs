@@ -77,11 +77,9 @@
 //!
 use core::marker::PhantomData;
 
-use interchange::{Interchange, Requester};
-
 use crate::api::*;
 use crate::error::*;
-use crate::pipe::TrussedInterchange;
+use crate::pipe::Requester;
 use crate::types::*;
 
 pub use crate::platform::Syscall;
@@ -106,7 +104,7 @@ pub trait Client:
 {
 }
 
-impl<B: 'static, I: TrussedInterchange<B>, S: Syscall> Client for ClientImplementation<B, I, S> {}
+impl<B: 'static, S: Syscall> Client for ClientImplementation<'_, B, S> {}
 
 /// Lowest level interface, use one of the higher level ones.
 pub trait PollClient {
@@ -154,15 +152,14 @@ where
 }
 
 /// The client implementation client applications actually receive.
-pub struct ClientImplementation<B, I: Interchange + 'static, S> {
+pub struct ClientImplementation<'a, B: 'static, S> {
     // raw: RawClient<Client<S>>,
     syscall: S,
 
     // RawClient:
-    pub(crate) interchange: Requester<I>,
+    pub(crate) interchange: Requester<'a, B>,
     // pending: Option<Discriminant<Request>>,
     pending: Option<u8>,
-    _marker: PhantomData<B>,
 }
 
 // impl<S> From<(RawClient, S)> for Client<S>
@@ -173,25 +170,23 @@ pub struct ClientImplementation<B, I: Interchange + 'static, S> {
 //     }
 // }
 
-impl<B, I, S> ClientImplementation<B, I, S>
+impl<'a, B, S> ClientImplementation<'a, B, S>
 where
-    I: Interchange + 'static,
+    B: 'static,
     S: Syscall,
 {
-    pub fn new(interchange: Requester<I>, syscall: S) -> Self {
+    pub fn new(interchange: Requester<'a, B>, syscall: S) -> Self {
         Self {
             interchange,
             pending: None,
             syscall,
-            _marker: Default::default(),
         }
     }
 }
 
-impl<B, I, S> PollClient for ClientImplementation<B, I, S>
+impl<B, S> PollClient for ClientImplementation<'_, B, S>
 where
     B: 'static,
-    I: TrussedInterchange<B>,
     S: Syscall,
 {
     type Backend = B;
@@ -243,7 +238,7 @@ where
         // in particular, can unwrap
         let request = req.into();
         self.pending = Some(u8::from(&request));
-        self.interchange.request(&request).map_err(drop).unwrap();
+        self.interchange.request(request).map_err(drop).unwrap();
         Ok(FutureResult::new(self))
     }
 
@@ -261,32 +256,17 @@ where
     }
 }
 
-impl<B: 'static, I: TrussedInterchange<B>, S: Syscall> CertificateClient
-    for ClientImplementation<B, I, S>
-{
-}
+impl<B: 'static, S: Syscall> CertificateClient for ClientImplementation<'_, B, S> {}
 
-impl<B: 'static, I: TrussedInterchange<B>, S: Syscall> CryptoClient
-    for ClientImplementation<B, I, S>
-{
-}
+impl<B: 'static, S: Syscall> CryptoClient for ClientImplementation<'_, B, S> {}
 
-impl<B: 'static, I: TrussedInterchange<B>, S: Syscall> CounterClient
-    for ClientImplementation<B, I, S>
-{
-}
+impl<B: 'static, S: Syscall> CounterClient for ClientImplementation<'_, B, S> {}
 
-impl<B: 'static, I: TrussedInterchange<B>, S: Syscall> FilesystemClient
-    for ClientImplementation<B, I, S>
-{
-}
+impl<B: 'static, S: Syscall> FilesystemClient for ClientImplementation<'_, B, S> {}
 
-impl<B: 'static, I: TrussedInterchange<B>, S: Syscall> ManagementClient
-    for ClientImplementation<B, I, S>
-{
-}
+impl<B: 'static, S: Syscall> ManagementClient for ClientImplementation<'_, B, S> {}
 
-impl<B: 'static, I: TrussedInterchange<B>, S: Syscall> UiClient for ClientImplementation<B, I, S> {}
+impl<B: 'static, S: Syscall> UiClient for ClientImplementation<'_, B, S> {}
 
 /// Read/Write + Delete certificates
 pub trait CertificateClient: PollClient {
