@@ -5,7 +5,7 @@ use std::{
     path::PathBuf,
 };
 
-use generic_array::typenum::{U16, U512};
+use generic_array::typenum::{U8, U16, U512};
 use littlefs2::{const_ram_storage, driver::Storage, fs::Allocation};
 
 use crate::{
@@ -53,7 +53,7 @@ impl Storage for FilesystemStorage {
     const BLOCK_CYCLES: isize = -1;
 
     type CACHE_SIZE = U512;
-    type LOOKAHEADWORDS_SIZE = U16;
+    type LOOKAHEAD_SIZE = U8;
     // TODO: This can't actually be changed currently
     // type FILENAME_MAX_PLUS_ONE = U256;
     // type PATH_MAX_PLUS_ONE = U256;
