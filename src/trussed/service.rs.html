@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/service.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>service.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../trussed/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../trussed/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../trussed/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/service.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>service.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../trussed/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -841,6 +841,41 @@
 <span id="841">841</span>
 <span id="842">842</span>
 <span id="843">843</span>
+<span id="844">844</span>
+<span id="845">845</span>
+<span id="846">846</span>
+<span id="847">847</span>
+<span id="848">848</span>
+<span id="849">849</span>
+<span id="850">850</span>
+<span id="851">851</span>
+<span id="852">852</span>
+<span id="853">853</span>
+<span id="854">854</span>
+<span id="855">855</span>
+<span id="856">856</span>
+<span id="857">857</span>
+<span id="858">858</span>
+<span id="859">859</span>
+<span id="860">860</span>
+<span id="861">861</span>
+<span id="862">862</span>
+<span id="863">863</span>
+<span id="864">864</span>
+<span id="865">865</span>
+<span id="866">866</span>
+<span id="867">867</span>
+<span id="868">868</span>
+<span id="869">869</span>
+<span id="870">870</span>
+<span id="871">871</span>
+<span id="872">872</span>
+<span id="873">873</span>
+<span id="874">874</span>
+<span id="875">875</span>
+<span id="876">876</span>
+<span id="877">877</span>
+<span id="878">878</span>
 </pre><pre class="rust"><code><span class="kw">use </span>heapless_bytes::Unsigned;
 <span class="kw">use </span>interchange::Responder;
 <span class="kw">use </span>littlefs2::path::PathBuf;
@@ -848,8 +883,10 @@
 <span class="kw">pub use </span>rand_core::{RngCore, SeedableRng};
 
 <span class="kw">use </span><span class="kw">crate</span>::api::<span class="kw-2">*</span>;
+<span class="kw">use </span><span class="kw">crate</span>::backend::{BackendId, CoreOnly, Dispatch};
+<span class="kw">use </span><span class="kw">crate</span>::client::{ClientBuilder, ClientImplementation};
 <span class="kw">use </span><span class="kw">crate</span>::config::<span class="kw-2">*</span>;
-<span class="kw">use </span><span class="kw">crate</span>::error::Error;
+<span class="kw">use </span><span class="kw">crate</span>::error::{Error, <span class="prelude-ty">Result</span>};
 <span class="kw">pub use </span><span class="kw">crate</span>::key;
 <span class="kw">use </span><span class="kw">crate</span>::mechanisms;
 <span class="kw">pub use </span><span class="kw">crate</span>::pipe::ServiceEndpoint;
@@ -873,7 +910,7 @@
 
     <span class="kw">pub trait </span><span class="macro-nonterminal">$Name </span>{
         <span class="kw">fn </span><span class="macro-nonterminal">$name</span>(_keystore: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>Keystore, _request: <span class="kw-2">&amp;</span>request::<span class="macro-nonterminal">$Name</span>)
-        -&gt; <span class="prelude-ty">Result</span>&lt;reply::<span class="macro-nonterminal">$Name</span>, Error&gt; { <span class="prelude-val">Err</span>(Error::MechanismNotAvailable) }
+        -&gt; <span class="prelude-ty">Result</span>&lt;reply::<span class="macro-nonterminal">$Name</span>&gt; { <span class="prelude-val">Err</span>(Error::MechanismNotAvailable) }
     }
 )* } }
 
@@ -899,12 +936,7 @@
 <span class="kw">where
     </span>P: Platform,
 {
-    <span class="kw">pub</span>(<span class="kw">crate</span>) platform: P,
-    <span class="comment">// // Option?
-    // currently_serving: ClientId,
-    // TODO: how/when to clear
-    </span>read_dir_files_state: <span class="prelude-ty">Option</span>&lt;ReadDirFilesState&gt;,
-    read_dir_state: <span class="prelude-ty">Option</span>&lt;ReadDirState&gt;,
+    platform: P,
     rng_state: <span class="prelude-ty">Option</span>&lt;ChaCha8Rng&gt;,
 }
 
@@ -912,60 +944,83 @@
     <span class="kw">pub fn </span>new(platform: P) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             platform,
-            <span class="comment">// currently_serving: PathBuf::new(),
-            </span>read_dir_files_state: <span class="prelude-val">None</span>,
-            read_dir_state: <span class="prelude-val">None</span>,
             rng_state: <span class="prelude-val">None</span>,
         }
     }
+
+    <span class="kw">pub fn </span>platform(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>P {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.platform
+    }
+
+    <span class="kw">pub fn </span>platform_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span>P {
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>.platform
+    }
 }
 
-<span class="kw">pub struct </span>Service&lt;P&gt;
+<span class="kw">pub struct </span>Service&lt;P, D = CoreOnly&gt;
 <span class="kw">where
     </span>P: Platform,
+    D: Dispatch,
 {
-    eps: Vec&lt;ServiceEndpoint, { MAX_SERVICE_CLIENTS::USIZE }&gt;,
+    eps: Vec&lt;ServiceEndpoint&lt;D::BackendId, D::Context&gt;, { MAX_SERVICE_CLIENTS::USIZE }&gt;,
     resources: ServiceResources&lt;P&gt;,
+    dispatch: D,
 }
 
 <span class="comment">// need to be able to send crypto service to an interrupt handler
-</span><span class="kw">unsafe impl</span>&lt;P: Platform&gt; Send <span class="kw">for </span>Service&lt;P&gt; {}
+</span><span class="kw">unsafe impl</span>&lt;P: Platform, D: Dispatch&gt; Send <span class="kw">for </span>Service&lt;P, D&gt; {}
 
 <span class="kw">impl</span>&lt;P: Platform&gt; ServiceResources&lt;P&gt; {
+    <span class="kw">pub fn </span>certstore(<span class="kw-2">&amp;mut </span><span class="self">self</span>, ctx: <span class="kw-2">&amp;</span>CoreContext) -&gt; <span class="prelude-ty">Result</span>&lt;ClientCertstore&lt;P::S&gt;&gt; {
+        <span class="self">self</span>.rng()
+            .map(|rng| ClientCertstore::new(ctx.path.clone(), rng, <span class="self">self</span>.platform.store()))
+            .map_err(|<span class="kw">_</span>| Error::EntropyMalfunction)
+    }
+
+    <span class="kw">pub fn </span>counterstore(<span class="kw-2">&amp;mut </span><span class="self">self</span>, ctx: <span class="kw-2">&amp;</span>CoreContext) -&gt; <span class="prelude-ty">Result</span>&lt;ClientCounterstore&lt;P::S&gt;&gt; {
+        <span class="self">self</span>.rng()
+            .map(|rng| ClientCounterstore::new(ctx.path.clone(), rng, <span class="self">self</span>.platform.store()))
+            .map_err(|<span class="kw">_</span>| Error::EntropyMalfunction)
+    }
+
+    <span class="kw">pub fn </span>filestore(<span class="kw-2">&amp;mut </span><span class="self">self</span>, ctx: <span class="kw-2">&amp;</span>CoreContext) -&gt; ClientFilestore&lt;P::S&gt; {
+        ClientFilestore::new(ctx.path.clone(), <span class="self">self</span>.platform.store())
+    }
+
+    <span class="kw">pub fn </span>trussed_filestore(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; ClientFilestore&lt;P::S&gt; {
+        ClientFilestore::new(PathBuf::from(<span class="string">&quot;trussed&quot;</span>), <span class="self">self</span>.platform.store())
+    }
+
+    <span class="kw">pub fn </span>keystore(<span class="kw-2">&amp;mut </span><span class="self">self</span>, ctx: <span class="kw-2">&amp;</span>CoreContext) -&gt; <span class="prelude-ty">Result</span>&lt;ClientKeystore&lt;P::S&gt;&gt; {
+        <span class="self">self</span>.rng()
+            .map(|rng| ClientKeystore::new(ctx.path.clone(), rng, <span class="self">self</span>.platform.store()))
+            .map_err(|<span class="kw">_</span>| Error::EntropyMalfunction)
+    }
+
+    <span class="kw">pub fn </span>dispatch&lt;D: Dispatch&gt;(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        dispatch: <span class="kw-2">&amp;mut </span>D,
+        backend: <span class="kw-2">&amp;</span>BackendId&lt;D::BackendId&gt;,
+        ctx: <span class="kw-2">&amp;mut </span>Context&lt;D::Context&gt;,
+        request: <span class="kw-2">&amp;</span>Request,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Reply, Error&gt; {
+        <span class="kw">match </span>backend {
+            BackendId::Core =&gt; <span class="self">self</span>.reply_to(<span class="kw-2">&amp;mut </span>ctx.core, request),
+            BackendId::Custom(backend) =&gt; dispatch.request(backend, ctx, request, <span class="self">self</span>),
+        }
+    }
+
     <span class="attribute">#[inline(never)]
-    </span><span class="kw">pub fn </span>reply_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, client_id: PathBuf, request: <span class="kw-2">&amp;</span>Request) -&gt; <span class="prelude-ty">Result</span>&lt;Reply, Error&gt; {
+    </span><span class="kw">pub fn </span>reply_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, ctx: <span class="kw-2">&amp;mut </span>CoreContext, request: <span class="kw-2">&amp;</span>Request) -&gt; <span class="prelude-ty">Result</span>&lt;Reply&gt; {
         <span class="comment">// TODO: what we want to do here is map an enum to a generic type
         // Is there a nicer way to do this?
 
         </span><span class="kw">let </span>full_store = <span class="self">self</span>.platform.store();
 
-        <span class="comment">// prepare keystore, bound to client_id, for cryptographic calls
-        </span><span class="kw">let </span><span class="kw-2">mut </span>keystore: ClientKeystore&lt;P::S&gt; = ClientKeystore::new(
-            client_id.clone(),
-            <span class="self">self</span>.rng().map_err(|<span class="kw">_</span>| Error::EntropyMalfunction)<span class="question-mark">?</span>,
-            full_store,
-        );
-        <span class="kw">let </span>keystore = <span class="kw-2">&amp;mut </span>keystore;
-
-        <span class="comment">// prepare certstore, bound to client_id, for cert calls
-        </span><span class="kw">let </span><span class="kw-2">mut </span>certstore: ClientCertstore&lt;P::S&gt; = ClientCertstore::new(
-            client_id.clone(),
-            <span class="self">self</span>.rng().map_err(|<span class="kw">_</span>| Error::EntropyMalfunction)<span class="question-mark">?</span>,
-            full_store,
-        );
-        <span class="kw">let </span>certstore = <span class="kw-2">&amp;mut </span>certstore;
-
-        <span class="comment">// prepare counterstore, bound to client_id, for counter calls
-        </span><span class="kw">let </span><span class="kw-2">mut </span>counterstore: ClientCounterstore&lt;P::S&gt; = ClientCounterstore::new(
-            client_id.clone(),
-            <span class="self">self</span>.rng().map_err(|<span class="kw">_</span>| Error::EntropyMalfunction)<span class="question-mark">?</span>,
-            full_store,
-        );
-        <span class="kw">let </span>counterstore = <span class="kw-2">&amp;mut </span>counterstore;
-
-        <span class="comment">// prepare filestore, bound to client_id, for storage calls
-        </span><span class="kw">let </span><span class="kw-2">mut </span>filestore: ClientFilestore&lt;P::S&gt; = ClientFilestore::new(client_id, full_store);
-        <span class="kw">let </span>filestore = <span class="kw-2">&amp;mut </span>filestore;
+        <span class="kw">let </span>keystore = <span class="kw-2">&amp;mut </span><span class="self">self</span>.keystore(ctx)<span class="question-mark">?</span>;
+        <span class="kw">let </span>certstore = <span class="kw-2">&amp;mut </span><span class="self">self</span>.certstore(ctx)<span class="question-mark">?</span>;
+        <span class="kw">let </span>counterstore = <span class="kw-2">&amp;mut </span><span class="self">self</span>.counterstore(ctx)<span class="question-mark">?</span>;
+        <span class="kw">let </span>filestore = <span class="kw-2">&amp;mut </span><span class="self">self</span>.filestore(ctx);
 
         <span class="macro">debug_now!</span>(<span class="string">&quot;TRUSSED {:?}&quot;</span>, request);
         <span class="kw">match </span>request {
@@ -1178,11 +1233,11 @@
             Request::ReadDirFirst(request) =&gt; {
                 <span class="kw">let </span>maybe_entry = <span class="kw">match </span>filestore.read_dir_first(<span class="kw-2">&amp;</span>request.dir, request.location, request.not_before_filename.as_ref())<span class="question-mark">? </span>{
                     <span class="prelude-val">Some</span>((entry, read_dir_state)) =&gt; {
-                        <span class="self">self</span>.read_dir_state = <span class="prelude-val">Some</span>(read_dir_state);
+                        ctx.read_dir_state = <span class="prelude-val">Some</span>(read_dir_state);
                         <span class="prelude-val">Some</span>(entry)
                     }
                     <span class="prelude-val">None </span>=&gt; {
-                        <span class="self">self</span>.read_dir_state = <span class="prelude-val">None</span>;
+                        ctx.read_dir_state = <span class="prelude-val">None</span>;
                         <span class="prelude-val">None
 
                     </span>}
@@ -1192,18 +1247,18 @@
 
             Request::ReadDirNext(_request) =&gt; {
                 <span class="comment">// ensure next call has nothing to work with, unless we store state again
-                </span><span class="kw">let </span>read_dir_state = <span class="self">self</span>.read_dir_state.take();
+                </span><span class="kw">let </span>read_dir_state = ctx.read_dir_state.take();
 
                 <span class="kw">let </span>maybe_entry = <span class="kw">match </span>read_dir_state {
                     <span class="prelude-val">None </span>=&gt; <span class="prelude-val">None</span>,
                     <span class="prelude-val">Some</span>(state) =&gt; {
                         <span class="kw">match </span>filestore.read_dir_next(state)<span class="question-mark">? </span>{
                             <span class="prelude-val">Some</span>((entry, read_dir_state)) =&gt; {
-                                <span class="self">self</span>.read_dir_state = <span class="prelude-val">Some</span>(read_dir_state);
+                                ctx.read_dir_state = <span class="prelude-val">Some</span>(read_dir_state);
                                 <span class="prelude-val">Some</span>(entry)
                             }
                             <span class="prelude-val">None </span>=&gt; {
-                                <span class="self">self</span>.read_dir_state = <span class="prelude-val">None</span>;
+                                ctx.read_dir_state = <span class="prelude-val">None</span>;
                                 <span class="prelude-val">None
                             </span>}
                         }
@@ -1216,11 +1271,11 @@
             Request::ReadDirFilesFirst(request) =&gt; {
                 <span class="kw">let </span>maybe_data = <span class="kw">match </span>filestore.read_dir_files_first(<span class="kw-2">&amp;</span>request.dir, request.location, request.user_attribute.clone())<span class="question-mark">? </span>{
                     <span class="prelude-val">Some</span>((data, state)) =&gt; {
-                        <span class="self">self</span>.read_dir_files_state = <span class="prelude-val">Some</span>(state);
+                        ctx.read_dir_files_state = <span class="prelude-val">Some</span>(state);
                         data
                     }
                     <span class="prelude-val">None </span>=&gt; {
-                        <span class="self">self</span>.read_dir_files_state = <span class="prelude-val">None</span>;
+                        ctx.read_dir_files_state = <span class="prelude-val">None</span>;
                         <span class="prelude-val">None
                     </span>}
                 };
@@ -1228,18 +1283,18 @@
             }
 
             Request::ReadDirFilesNext(_request) =&gt; {
-                <span class="kw">let </span>read_dir_files_state = <span class="self">self</span>.read_dir_files_state.take();
+                <span class="kw">let </span>read_dir_files_state = ctx.read_dir_files_state.take();
 
                 <span class="kw">let </span>maybe_data = <span class="kw">match </span>read_dir_files_state {
                     <span class="prelude-val">None </span>=&gt; <span class="prelude-val">None</span>,
                     <span class="prelude-val">Some</span>(state) =&gt; {
                         <span class="kw">match </span>filestore.read_dir_files_next(state)<span class="question-mark">? </span>{
                             <span class="prelude-val">Some</span>((data, state)) =&gt; {
-                                <span class="self">self</span>.read_dir_files_state = <span class="prelude-val">Some</span>(state);
+                                ctx.read_dir_files_state = <span class="prelude-val">Some</span>(state);
                                 data
                             }
                             <span class="prelude-val">None </span>=&gt; {
-                                <span class="self">self</span>.read_dir_files_state = <span class="prelude-val">None</span>;
+                                ctx.read_dir_files_state = <span class="prelude-val">None</span>;
                                 <span class="prelude-val">None
                             </span>}
                         }
@@ -1436,6 +1491,10 @@
                     .map(|id| Reply::WriteCertificate(reply::WriteCertificate { id } ))
             }
 
+            Request::SerdeExtension(<span class="kw">_</span>) =&gt; {
+                <span class="prelude-val">Err</span>(Error::RequestNotAvailable)
+            }
+
             <span class="comment">// _ =&gt; {
             //     // #[cfg(test)]
             //     // println!(&quot;todo: {:?} request!&quot;, &amp;request);
@@ -1451,8 +1510,7 @@
         </span><span class="kw">let </span><span class="kw-2">mut </span>rng = <span class="kw">match </span><span class="self">self</span>.rng_state.take() {
             <span class="prelude-val">Some</span>(rng) =&gt; rng,
             <span class="prelude-val">None </span>=&gt; {
-                <span class="kw">let </span><span class="kw-2">mut </span>filestore: ClientFilestore&lt;P::S&gt; =
-                    ClientFilestore::new(PathBuf::from(<span class="string">&quot;trussed&quot;</span>), <span class="self">self</span>.platform.store());
+                <span class="kw">let </span><span class="kw-2">mut </span>filestore = <span class="self">self</span>.trussed_filestore();
 
                 <span class="kw">let </span>path = PathBuf::from(<span class="string">&quot;rng-state.bin&quot;</span>);
 
@@ -1524,82 +1582,80 @@
 
 <span class="kw">impl</span>&lt;P: Platform&gt; Service&lt;P&gt; {
     <span class="kw">pub fn </span>new(platform: P) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::with_dispatch(platform, Default::default())
+    }
+}
+
+<span class="kw">impl</span>&lt;P: Platform, D: Dispatch&gt; Service&lt;P, D&gt; {
+    <span class="kw">pub fn </span>with_dispatch(platform: P, dispatch: D) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>resources = ServiceResources::new(platform);
         <span class="self">Self </span>{
             eps: Vec::new(),
             resources,
+            dispatch,
         }
     }
+}
 
+<span class="kw">impl</span>&lt;P: Platform&gt; Service&lt;P&gt; {
     <span class="doccomment">/// Add a new client, claiming one of the statically configured
     /// interchange pairs.
-    </span><span class="attribute">#[allow(clippy::result_unit_err)]
-    </span><span class="kw">pub fn </span>try_new_client&lt;S: <span class="kw">crate</span>::platform::Syscall&gt;(
+    </span><span class="kw">pub fn </span>try_new_client&lt;S: Syscall&gt;(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         client_id: <span class="kw-2">&amp;</span>str,
         syscall: S,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw">crate</span>::client::ClientImplementation&lt;S&gt;, ()&gt; {
-        <span class="kw">use </span>interchange::Interchange;
-        <span class="kw">let </span>(requester, responder) = TrussedInterchange::claim().ok_or(())<span class="question-mark">?</span>;
-        <span class="kw">let </span>client_id = ClientId::from(client_id.as_bytes());
-        <span class="self">self</span>.add_endpoint(responder, client_id)
-            .map_err(|_service_endpoint| ())<span class="question-mark">?</span>;
-
-        <span class="prelude-val">Ok</span>(<span class="kw">crate</span>::client::ClientImplementation::new(requester, syscall))
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;ClientImplementation&lt;S&gt;, Error&gt; {
+        ClientBuilder::new(client_id)
+            .prepare(<span class="self">self</span>)
+            .map(|p| p.build(syscall))
     }
 
     <span class="doccomment">/// Specialization of `try_new_client`, using `self`&#39;s implementation of `Syscall`
     /// (directly call self for processing). This method is only useful for single-threaded
     /// single-app runners.
-    </span><span class="attribute">#[allow(clippy::result_unit_err)]
     </span><span class="kw">pub fn </span>try_as_new_client(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         client_id: <span class="kw-2">&amp;</span>str,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw">crate</span>::client::ClientImplementation&lt;<span class="kw-2">&amp;mut </span>Service&lt;P&gt;&gt;, ()&gt; {
-        <span class="kw">use </span>interchange::Interchange;
-        <span class="kw">let </span>(requester, responder) = TrussedInterchange::claim().ok_or(())<span class="question-mark">?</span>;
-        <span class="kw">let </span>client_id = ClientId::from(client_id.as_bytes());
-        <span class="self">self</span>.add_endpoint(responder, client_id)
-            .map_err(|_service_endpoint| ())<span class="question-mark">?</span>;
-
-        <span class="prelude-val">Ok</span>(<span class="kw">crate</span>::client::ClientImplementation::new(requester, <span class="self">self</span>))
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;ClientImplementation&lt;<span class="kw-2">&amp;mut </span><span class="self">Self</span>&gt;, Error&gt; {
+        ClientBuilder::new(client_id)
+            .prepare(<span class="self">self</span>)
+            .map(|p| p.build(<span class="self">self</span>))
     }
 
     <span class="doccomment">/// Similar to [try_as_new_client][Service::try_as_new_client] except that the returning client owns the
     /// Service and is therefore `&#39;static`
-    </span><span class="attribute">#[allow(clippy::result_unit_err)]
     </span><span class="kw">pub fn </span>try_into_new_client(
         <span class="kw-2">mut </span><span class="self">self</span>,
         client_id: <span class="kw-2">&amp;</span>str,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw">crate</span>::client::ClientImplementation&lt;Service&lt;P&gt;&gt;, ()&gt; {
-        <span class="kw">use </span>interchange::Interchange;
-        <span class="kw">let </span>(requester, responder) = TrussedInterchange::claim().ok_or(())<span class="question-mark">?</span>;
-        <span class="kw">let </span>client_id = ClientId::from(client_id.as_bytes());
-        <span class="self">self</span>.add_endpoint(responder, client_id)
-            .map_err(|_service_endpoint| ())<span class="question-mark">?</span>;
-
-        <span class="prelude-val">Ok</span>(<span class="kw">crate</span>::client::ClientImplementation::new(requester, <span class="self">self</span>))
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;ClientImplementation&lt;<span class="self">Self</span>&gt;, Error&gt; {
+        ClientBuilder::new(client_id)
+            .prepare(<span class="kw-2">&amp;mut </span><span class="self">self</span>)
+            .map(|p| p.build(<span class="self">self</span>))
     }
+}
 
+<span class="kw">impl</span>&lt;P: Platform, D: Dispatch&gt; Service&lt;P, D&gt; {
     <span class="kw">pub fn </span>add_endpoint(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         interchange: Responder&lt;TrussedInterchange&gt;,
-        client_id: ClientId,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), ServiceEndpoint&gt; {
-        <span class="kw">if </span>client_id == PathBuf::from(<span class="string">&quot;trussed&quot;</span>) {
+        core_ctx: <span class="kw">impl </span>Into&lt;CoreContext&gt;,
+        backends: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>[BackendId&lt;D::BackendId&gt;],
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+        <span class="kw">let </span>core_ctx = core_ctx.into();
+        <span class="kw">if </span>core_ctx.path == PathBuf::from(<span class="string">&quot;trussed&quot;</span>) {
             <span class="macro">panic!</span>(<span class="string">&quot;trussed is a reserved client ID&quot;</span>);
         }
-        <span class="self">self</span>.eps.push(ServiceEndpoint {
-            interchange,
-            client_id,
-        })
+        <span class="self">self</span>.eps
+            .push(ServiceEndpoint {
+                interchange,
+                ctx: core_ctx.into(),
+                backends,
+            })
+            .map_err(|<span class="kw">_</span>| Error::ClientCountExceeded)
     }
 
     <span class="kw">pub fn </span>set_seed_if_uninitialized(<span class="kw-2">&amp;mut </span><span class="self">self</span>, seed: <span class="kw-2">&amp;</span>[u8; <span class="number">32</span>]) {
-        <span class="kw">let </span><span class="kw-2">mut </span>filestore: ClientFilestore&lt;P::S&gt; =
-            ClientFilestore::new(PathBuf::from(<span class="string">&quot;trussed&quot;</span>), <span class="self">self</span>.resources.platform.store());
-        <span class="kw">let </span>filestore = <span class="kw-2">&amp;mut </span>filestore;
-
+        <span class="kw">let </span><span class="kw-2">mut </span>filestore = <span class="self">self</span>.resources.trussed_filestore();
         <span class="kw">let </span>path = PathBuf::from(<span class="string">&quot;rng-state.bin&quot;</span>);
         <span class="kw">if </span>!filestore.exists(<span class="kw-2">&amp;</span>path, Location::Internal) {
             filestore
@@ -1634,7 +1690,19 @@
                 <span class="comment">// #[cfg(test)] println!(&quot;service got request: {:?}&quot;, &amp;request);
 
                 // resources.currently_serving = ep.client_id.clone();
-                </span><span class="kw">let </span>reply_result = resources.reply_to(ep.client_id.clone(), <span class="kw-2">&amp;</span>request);
+                </span><span class="kw">let </span>reply_result = <span class="kw">if </span>ep.backends.is_empty() {
+                    resources.reply_to(<span class="kw-2">&amp;mut </span>ep.ctx.core, <span class="kw-2">&amp;</span>request)
+                } <span class="kw">else </span>{
+                    <span class="kw">let </span><span class="kw-2">mut </span>reply_result = <span class="prelude-val">Err</span>(Error::RequestNotAvailable);
+                    <span class="kw">for </span>backend <span class="kw">in </span>ep.backends {
+                        reply_result =
+                            resources.dispatch(<span class="kw-2">&amp;mut </span><span class="self">self</span>.dispatch, backend, <span class="kw-2">&amp;mut </span>ep.ctx, <span class="kw-2">&amp;</span>request);
+                        <span class="kw">if </span>reply_result != <span class="prelude-val">Err</span>(Error::RequestNotAvailable) {
+                            <span class="kw">break</span>;
+                        }
+                    }
+                    reply_result
+                };
 
                 resources
                     .platform
@@ -1667,22 +1735,24 @@
     }
 }
 
-<span class="kw">impl</span>&lt;P&gt; <span class="kw">crate</span>::client::Syscall <span class="kw">for </span><span class="kw-2">&amp;mut </span>Service&lt;P&gt;
+<span class="kw">impl</span>&lt;P, D&gt; <span class="kw">crate</span>::client::Syscall <span class="kw">for </span><span class="kw-2">&amp;mut </span>Service&lt;P, D&gt;
 <span class="kw">where
     </span>P: Platform,
+    D: Dispatch,
 {
     <span class="kw">fn </span>syscall(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="self">self</span>.process();
     }
 }
 
-<span class="kw">impl</span>&lt;P&gt; <span class="kw">crate</span>::client::Syscall <span class="kw">for </span>Service&lt;P&gt;
+<span class="kw">impl</span>&lt;P, D&gt; <span class="kw">crate</span>::client::Syscall <span class="kw">for </span>Service&lt;P, D&gt;
 <span class="kw">where
     </span>P: Platform,
+    D: Dispatch,
 {
     <span class="kw">fn </span>syscall(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="self">self</span>.process();
     }
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="trussed" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0 (897e37553 2022-11-02)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="trussed" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>

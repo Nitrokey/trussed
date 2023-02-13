@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":[["BackendId","The ID of a backend."],["NoId","An empty ID type."]],"struct":[["CoreOnly","Always dispatches to the Trussed core backend."]],"trait":[["Backend","A custom backend that can override the core request implementations."],["Dispatch","Dispatches requests to custom backends."]]};
