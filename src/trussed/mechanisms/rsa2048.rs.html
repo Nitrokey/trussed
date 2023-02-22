@@ -433,6 +433,9 @@
 <span id="433">433</span>
 <span id="434">434</span>
 <span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
 </pre><pre class="rust"><code><span class="attribute">#[cfg(feature = <span class="string">&quot;rsa2048&quot;</span>)]
 </span><span class="kw">mod </span>implementation {
     <span class="kw">use </span><span class="kw">super</span>::<span class="kw">super</span>::Rsa2048Pkcs;
@@ -660,7 +663,10 @@
             </span><span class="kw">use </span>rsa::padding::PaddingScheme;
             <span class="kw">let </span>native_signature = priv_key
                 .sign(PaddingScheme::new_pkcs1v15_sign(<span class="prelude-val">None</span>), <span class="kw-2">&amp;</span>request.message)
-                .unwrap();
+                .map_err(|_err| {
+                    <span class="macro">error!</span>(<span class="string">&quot;Failed to sign: {:?}&quot;</span>, _err);
+                    Error::SignDataTooLarge
+                })<span class="question-mark">?</span>;
             <span class="kw">let </span>our_signature = Signature::from_slice(<span class="kw-2">&amp;</span>native_signature).unwrap();
 
             <span class="comment">// std::println!(&quot;Rsa2048-PKCS_v1.5 signature:&quot;);
