@@ -874,11 +874,7 @@
 <span id="874">874</span>
 <span id="875">875</span>
 <span id="876">876</span>
-<span id="877">877</span>
-<span id="878">878</span>
-</pre><pre class="rust"><code><span class="kw">use </span>heapless_bytes::Unsigned;
-<span class="kw">use </span>interchange::Responder;
-<span class="kw">use </span>littlefs2::path::PathBuf;
+</pre><pre class="rust"><code><span class="kw">use </span>littlefs2::path::PathBuf;
 <span class="kw">use </span>rand_chacha::ChaCha8Rng;
 <span class="kw">pub use </span>rand_core::{RngCore, SeedableRng};
 
@@ -890,7 +886,7 @@
 <span class="kw">pub use </span><span class="kw">crate</span>::key;
 <span class="kw">use </span><span class="kw">crate</span>::mechanisms;
 <span class="kw">pub use </span><span class="kw">crate</span>::pipe::ServiceEndpoint;
-<span class="kw">use </span><span class="kw">crate</span>::pipe::TrussedInterchange;
+<span class="kw">use </span><span class="kw">crate</span>::pipe::TrussedResponder;
 <span class="kw">use </span><span class="kw">crate</span>::platform::<span class="kw-2">*</span>;
 <span class="kw">pub use </span><span class="kw">crate</span>::store::{
     certstore::{Certstore <span class="kw">as _</span>, ClientCertstore},
@@ -962,7 +958,7 @@
     </span>P: Platform,
     D: Dispatch,
 {
-    eps: Vec&lt;ServiceEndpoint&lt;D::BackendId, D::Context&gt;, { MAX_SERVICE_CLIENTS::USIZE }&gt;,
+    eps: Vec&lt;ServiceEndpoint&lt;D::BackendId, D::Context&gt;, { MAX_SERVICE_CLIENTS }&gt;,
     resources: ServiceResources&lt;P&gt;,
     dispatch: D,
 }
@@ -1637,7 +1633,7 @@
 <span class="kw">impl</span>&lt;P: Platform, D: Dispatch&gt; Service&lt;P, D&gt; {
     <span class="kw">pub fn </span>add_endpoint(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
-        interchange: Responder&lt;TrussedInterchange&gt;,
+        interchange: TrussedResponder,
         core_ctx: <span class="kw">impl </span>Into&lt;CoreContext&gt;,
         backends: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>[BackendId&lt;D::BackendId&gt;],
     ) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
@@ -1708,7 +1704,7 @@
                     .platform
                     .user_interface()
                     .set_status(ui::Status::Idle);
-                ep.interchange.respond(<span class="kw-2">&amp;</span>reply_result).ok();
+                ep.interchange.respond(reply_result).ok();
             }
         }
         <span class="macro">debug_now!</span>(
