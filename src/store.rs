@@ -538,8 +538,16 @@ pub fn write(
         Location::Volatile => store.vfs().write(path, contents),
     }
     .map_err(|err| {
-        info!("av space: {:?}", store.vfs().available_space());
-        info!("av blocks: {:?}", store.vfs().available_blocks());
+        info!("available space IEV: {:?}/{:?}/{:?}",
+            store.ifs().available_space(),
+            store.efs().available_space(),
+            store.vfs().available_space(),
+        );
+        info!("available blocks IEV: {:?}/{:?}/{:?}",
+            store.ifs().available_blocks(),
+            store.efs().available_blocks(),
+            store.vfs().available_blocks(),
+        );
              error!("write error: {:?}", err);
              Error::FilesystemWriteFailure
     })
