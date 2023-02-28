@@ -537,7 +537,12 @@ pub fn write(
         Location::External => store.efs().write(path, contents),
         Location::Volatile => store.vfs().write(path, contents),
     }
-    .map_err(|_| Error::FilesystemWriteFailure)
+    .map_err(|err| {
+        info!("av space: {:?}", store.vfs().available_space());
+        info!("av blocks: {:?}", store.vfs().available_blocks());
+             error!("write error: {:?}", err);
+             Error::FilesystemWriteFailure
+    })
 }
 
 /// Creates parent directory if necessary, then writes.
@@ -548,13 +553,17 @@ pub fn store(
     path: &Path,
     contents: &[u8],
 ) -> Result<(), Error> {
-    debug_now!("storing {}", &path);
+    debug!("storing {}", &path);
     match location {
         Location::Internal => create_directories(store.ifs(), path)?,
         Location::External => create_directories(store.efs(), path)?,
         Location::Volatile => create_directories(store.vfs(), path)?,
     }
     write(store, location, path, contents)
+        .map_err(|err| {
+            debug!("store error: {:?}", err);
+            err
+        })
 }
 
 #[inline(never)]
