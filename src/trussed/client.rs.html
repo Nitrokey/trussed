@@ -829,6 +829,78 @@
 <span id="829">829</span>
 <span id="830">830</span>
 <span id="831">831</span>
+<span id="832">832</span>
+<span id="833">833</span>
+<span id="834">834</span>
+<span id="835">835</span>
+<span id="836">836</span>
+<span id="837">837</span>
+<span id="838">838</span>
+<span id="839">839</span>
+<span id="840">840</span>
+<span id="841">841</span>
+<span id="842">842</span>
+<span id="843">843</span>
+<span id="844">844</span>
+<span id="845">845</span>
+<span id="846">846</span>
+<span id="847">847</span>
+<span id="848">848</span>
+<span id="849">849</span>
+<span id="850">850</span>
+<span id="851">851</span>
+<span id="852">852</span>
+<span id="853">853</span>
+<span id="854">854</span>
+<span id="855">855</span>
+<span id="856">856</span>
+<span id="857">857</span>
+<span id="858">858</span>
+<span id="859">859</span>
+<span id="860">860</span>
+<span id="861">861</span>
+<span id="862">862</span>
+<span id="863">863</span>
+<span id="864">864</span>
+<span id="865">865</span>
+<span id="866">866</span>
+<span id="867">867</span>
+<span id="868">868</span>
+<span id="869">869</span>
+<span id="870">870</span>
+<span id="871">871</span>
+<span id="872">872</span>
+<span id="873">873</span>
+<span id="874">874</span>
+<span id="875">875</span>
+<span id="876">876</span>
+<span id="877">877</span>
+<span id="878">878</span>
+<span id="879">879</span>
+<span id="880">880</span>
+<span id="881">881</span>
+<span id="882">882</span>
+<span id="883">883</span>
+<span id="884">884</span>
+<span id="885">885</span>
+<span id="886">886</span>
+<span id="887">887</span>
+<span id="888">888</span>
+<span id="889">889</span>
+<span id="890">890</span>
+<span id="891">891</span>
+<span id="892">892</span>
+<span id="893">893</span>
+<span id="894">894</span>
+<span id="895">895</span>
+<span id="896">896</span>
+<span id="897">897</span>
+<span id="898">898</span>
+<span id="899">899</span>
+<span id="900">900</span>
+<span id="901">901</span>
+<span id="902">902</span>
+<span id="903">903</span>
 </pre><pre class="rust"><code><span class="doccomment">//! # Client interface for applications.
 //!
 //! The API methods (such as `GenerateKey`, `Sign`, `Verify`,...) are implemented by a variety
@@ -1453,6 +1525,20 @@
         <span class="self">self</span>.request(request::ReadFile { location, path })
     }
 
+    <span class="comment">// Read part of a file, up to 1KiB starting at `pos`
+    </span><span class="kw">fn </span>read_file_chunk(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        location: Location,
+        path: PathBuf,
+        pos: OpenSeekFrom,
+    ) -&gt; ClientResult&lt;<span class="lifetime">&#39;_</span>, reply::ReadChunk, <span class="self">Self</span>&gt; {
+        <span class="self">self</span>.request(request::ReadChunk {
+            location,
+            path,
+            pos,
+        })
+    }
+
     <span class="doccomment">/// Fetch the Metadata for a file or directory
     ///
     /// If the file doesn&#39;t exists, return None
@@ -1490,6 +1576,64 @@
             data,
             user_attribute,
         })
+    }
+
+    <span class="doccomment">/// Begin writing a file that can be larger than 1KiB
+    ///
+    /// More chunks can be written with [`write_file_chunk`](FilesystemClient::write_file_chunk).
+    /// Before the data becomes readable, it needs to be flushed with [`flush_chunks`](FilesystemClient::flush_chunks), or aborted with [`abort_chunked_write`](FilesystemClient::abort_chunked_write)
+    ///
+    /// Chunked writes are buffered in memory. Failing to abort or flush a chunked write will lead to a memory leak, that can be solved by a power cycle.
+    </span><span class="kw">fn </span>start_chunked_write(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        location: Location,
+        path: PathBuf,
+        data: Message,
+        user_attribute: <span class="prelude-ty">Option</span>&lt;UserAttribute&gt;,
+    ) -&gt; ClientResult&lt;<span class="lifetime">&#39;_</span>, reply::StartChunkedWrite, <span class="self">Self</span>&gt; {
+        <span class="self">self</span>.request(request::StartChunkedWrite {
+            location,
+            path,
+            data,
+            user_attribute,
+        })
+    }
+
+    <span class="doccomment">/// Write part of a file
+    ///
+    /// See [`start_chunked_write`](FilesystemClient::start_chunked_write).
+    </span><span class="kw">fn </span>write_file_chunk(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        location: Location,
+        path: PathBuf,
+        data: Message,
+        pos: OpenSeekFrom,
+    ) -&gt; ClientResult&lt;<span class="lifetime">&#39;_</span>, reply::WriteChunk, <span class="self">Self</span>&gt; {
+        <span class="self">self</span>.request(request::WriteChunk {
+            location,
+            path,
+            data,
+            pos,
+        })
+    }
+
+    <span class="doccomment">/// Flush a file opened with [`start_chunked_write`](FilesystemClient::start_chunked_write).
+    /// Only after this will the content of the file be readable
+    </span><span class="kw">fn </span>flush_chunks(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        location: Location,
+        path: PathBuf,
+    ) -&gt; ClientResult&lt;<span class="lifetime">&#39;_</span>, reply::FlushChunks, <span class="self">Self</span>&gt; {
+        <span class="self">self</span>.request(request::FlushChunks { location, path })
+    }
+
+    <span class="doccomment">/// Abort writes to a file opened with [`start_chunked_write`](FilesystemClient::start_chunked_write).
+    </span><span class="kw">fn </span>abort_chunked_write(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        location: Location,
+        path: PathBuf,
+    ) -&gt; ClientResult&lt;<span class="lifetime">&#39;_</span>, reply::AbortChunkedWrite, <span class="self">Self</span>&gt; {
+        <span class="self">self</span>.request(request::AbortChunkedWrite { location, path })
     }
 }
 

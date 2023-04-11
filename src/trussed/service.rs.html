@@ -874,6 +874,30 @@
 <span id="874">874</span>
 <span id="875">875</span>
 <span id="876">876</span>
+<span id="877">877</span>
+<span id="878">878</span>
+<span id="879">879</span>
+<span id="880">880</span>
+<span id="881">881</span>
+<span id="882">882</span>
+<span id="883">883</span>
+<span id="884">884</span>
+<span id="885">885</span>
+<span id="886">886</span>
+<span id="887">887</span>
+<span id="888">888</span>
+<span id="889">889</span>
+<span id="890">890</span>
+<span id="891">891</span>
+<span id="892">892</span>
+<span id="893">893</span>
+<span id="894">894</span>
+<span id="895">895</span>
+<span id="896">896</span>
+<span id="897">897</span>
+<span id="898">898</span>
+<span id="899">899</span>
+<span id="900">900</span>
 </pre><pre class="rust"><code><span class="kw">use </span>littlefs2::path::PathBuf;
 <span class="kw">use </span>rand_chacha::ChaCha8Rng;
 <span class="kw">pub use </span>rand_core::{RngCore, SeedableRng};
@@ -1320,6 +1344,14 @@
                 </span>}))
             }
 
+            Request::ReadChunk(request) =&gt; {
+                <span class="kw">let </span>(data,len) = filestore.read_chunk(<span class="kw-2">&amp;</span>request.path,request.location,request.pos)<span class="question-mark">?</span>;
+                <span class="prelude-val">Ok</span>(Reply::ReadChunk(reply::ReadChunk {
+                    data,
+                    len,
+                }))
+            }
+
             Request::Metadata(request) =&gt; {
                 <span class="prelude-val">Ok</span>(Reply::Metadata(reply::Metadata{
                     metadata: filestore.metadata(<span class="kw-2">&amp;</span>request.path, request.location)<span class="question-mark">?
@@ -1372,6 +1404,22 @@
             Request::WriteFile(request) =&gt; {
                 filestore.write(<span class="kw-2">&amp;</span>request.path, request.location, <span class="kw-2">&amp;</span>request.data)<span class="question-mark">?</span>;
                 <span class="prelude-val">Ok</span>(Reply::WriteFile(reply::WriteFile {} ))
+            }
+            Request::StartChunkedWrite(request) =&gt; {
+                filestore.start_chunked_write(<span class="kw-2">&amp;</span>request.path, request.location, <span class="kw-2">&amp;</span>request.data)<span class="question-mark">?</span>;
+                <span class="prelude-val">Ok</span>(Reply::StartChunkedWrite(reply::StartChunkedWrite {} ))
+            }
+            Request::WriteChunk(request) =&gt; {
+                 filestore.write_chunk(<span class="kw-2">&amp;</span>request.path, request.location, <span class="kw-2">&amp;</span>request.data,request.pos)<span class="question-mark">?</span>;
+                <span class="prelude-val">Ok</span>(Reply::WriteChunk(reply::WriteChunk {} ))
+            }
+            Request::FlushChunks(request) =&gt; {
+                filestore.flush_chunks(<span class="kw-2">&amp;</span>request.path, request.location)<span class="question-mark">?</span>;
+                <span class="prelude-val">Ok</span>(Reply::FlushChunks(reply::FlushChunks {} ))
+            }
+            Request::AbortChunkedWrite(request) =&gt; {
+                <span class="kw">let </span>aborted = filestore.abort_chunked_write(<span class="kw-2">&amp;</span>request.path, request.location);
+                <span class="prelude-val">Ok</span>(Reply::AbortChunkedWrite(reply::AbortChunkedWrite {aborted} ))
             }
 
             Request::UnwrapKey(request) =&gt; {

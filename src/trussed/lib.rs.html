@@ -69,6 +69,7 @@
 <span id="69">69</span>
 <span id="70">70</span>
 <span id="71">71</span>
+<span id="72">72</span>
 </pre><pre class="rust"><code><span class="attribute">#![cfg_attr(not(any(feature = <span class="string">&quot;std&quot;</span>, test)), no_std)]
 #![cfg_attr(docsrs, feature(doc_cfg))]
 </span><span class="doccomment">//! # Trussed
@@ -111,6 +112,7 @@
 <span class="kw">pub mod </span>service;
 <span class="kw">pub mod </span>store;
 <span class="kw">pub mod </span>types;
+<span class="kw">pub mod </span>utils;
 
 <span class="attribute">#[cfg(feature = <span class="string">&quot;virt&quot;</span>)]
 #[cfg_attr(docsrs, doc(cfg(feature = <span class="string">&quot;virt&quot;</span>)))]

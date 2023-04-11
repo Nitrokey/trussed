@@ -53,7 +53,7 @@ var sourcesIndex = JSON.parse('{\
 "postcard":["",[["de",[],["deserializer.rs","mod.rs"]],["ser",[],["flavors.rs","mod.rs","serializer.rs"]]],["accumulator.rs","error.rs","lib.rs","varint.rs"]],\
 "postcard_cobs":["",[],["dec.rs","enc.rs","lib.rs"]],\
 "ppv_lite86":["",[["x86_64",[],["mod.rs","sse2.rs"]]],["lib.rs","soft.rs","types.rs"]],\
-"proc_macro2":["",[],["detection.rs","fallback.rs","lib.rs","marker.rs","parse.rs","rcvec.rs","wrapper.rs"]],\
+"proc_macro2":["",[],["detection.rs","extra.rs","fallback.rs","lib.rs","marker.rs","parse.rs","rcvec.rs","wrapper.rs"]],\
 "quote":["",[],["ext.rs","format.rs","ident_fragment.rs","lib.rs","runtime.rs","spanned.rs","to_tokens.rs"]],\
 "rand_chacha":["",[],["chacha.rs","guts.rs","lib.rs"]],\
 "rand_core":["",[],["block.rs","error.rs","impls.rs","le.rs","lib.rs"]],\
@@ -70,9 +70,8 @@ var sourcesIndex = JSON.parse('{\
 "spin":["",[["mutex",[],["spin.rs"]]],["barrier.rs","lazy.rs","lib.rs","mutex.rs","once.rs","relax.rs","rwlock.rs"]],\
 "stable_deref_trait":["",[],["lib.rs"]],\
 "subtle":["",[],["lib.rs"]],\
-"syn":["",[["gen",[],["clone.rs","debug.rs","eq.rs","gen_helper.rs","hash.rs","visit.rs"]]],["attr.rs","await.rs","bigint.rs","buffer.rs","custom_keyword.rs","custom_punctuation.rs","data.rs","derive.rs","discouraged.rs","drops.rs","error.rs","export.rs","expr.rs","ext.rs","generics.rs","group.rs","ident.rs","lib.rs","lifetime.rs","lit.rs","lookahead.rs","mac.rs","macros.rs","op.rs","parse.rs","parse_macro_input.rs","parse_quote.rs","path.rs","print.rs","punctuated.rs","sealed.rs","span.rs","spanned.rs","thread.rs","token.rs","tt.rs","ty.rs","verbatim.rs"]],\
 "synstructure":["",[],["lib.rs","macros.rs"]],\
-"trussed":["",[["api",[],["macros.rs"]],["client",[],["mechanisms.rs"]],["mechanisms",[],["aes256cbc.rs","chacha8poly1305.rs","ed255.rs","hmacsha1.rs","hmacsha256.rs","p256.rs","rsa2048.rs","rsa4096.rs","sha256.rs","shared_secret.rs","tdes.rs","totp.rs","trng.rs","x255.rs"]],["service",[],["attest.rs"]],["store",[],["certstore.rs","counterstore.rs","filestore.rs","keystore.rs"]]],["api.rs","backend.rs","client.rs","config.rs","error.rs","key.rs","lib.rs","mechanisms.rs","pipe.rs","platform.rs","service.rs","store.rs","types.rs"]],\
+"trussed":["",[["api",[],["macros.rs"]],["client",[],["mechanisms.rs"]],["mechanisms",[],["aes256cbc.rs","chacha8poly1305.rs","ed255.rs","hmacsha1.rs","hmacsha256.rs","p256.rs","rsa2048.rs","rsa4096.rs","sha256.rs","shared_secret.rs","tdes.rs","totp.rs","trng.rs","x255.rs"]],["service",[],["attest.rs"]],["store",[],["certstore.rs","counterstore.rs","filestore.rs","keystore.rs"]]],["api.rs","backend.rs","client.rs","config.rs","error.rs","key.rs","lib.rs","mechanisms.rs","pipe.rs","platform.rs","service.rs","store.rs","types.rs","utils.rs"]],\
 "typenum":["",[],["array.rs","bit.rs","int.rs","lib.rs","marker_traits.rs","operator_aliases.rs","private.rs","type_operators.rs","uint.rs"]],\
 "unicode_ident":["",[],["lib.rs","tables.rs"]],\
 "unicode_xid":["",[],["lib.rs","tables.rs"]],\

@@ -507,11 +507,100 @@
 <span id="507">507</span>
 <span id="508">508</span>
 <span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
+<span id="520">520</span>
+<span id="521">521</span>
+<span id="522">522</span>
+<span id="523">523</span>
+<span id="524">524</span>
+<span id="525">525</span>
+<span id="526">526</span>
+<span id="527">527</span>
+<span id="528">528</span>
+<span id="529">529</span>
+<span id="530">530</span>
+<span id="531">531</span>
+<span id="532">532</span>
+<span id="533">533</span>
+<span id="534">534</span>
+<span id="535">535</span>
+<span id="536">536</span>
+<span id="537">537</span>
+<span id="538">538</span>
+<span id="539">539</span>
+<span id="540">540</span>
+<span id="541">541</span>
+<span id="542">542</span>
+<span id="543">543</span>
+<span id="544">544</span>
+<span id="545">545</span>
+<span id="546">546</span>
+<span id="547">547</span>
+<span id="548">548</span>
+<span id="549">549</span>
+<span id="550">550</span>
+<span id="551">551</span>
+<span id="552">552</span>
+<span id="553">553</span>
+<span id="554">554</span>
+<span id="555">555</span>
+<span id="556">556</span>
+<span id="557">557</span>
+<span id="558">558</span>
+<span id="559">559</span>
+<span id="560">560</span>
+<span id="561">561</span>
+<span id="562">562</span>
+<span id="563">563</span>
+<span id="564">564</span>
+<span id="565">565</span>
+<span id="566">566</span>
+<span id="567">567</span>
+<span id="568">568</span>
+<span id="569">569</span>
+<span id="570">570</span>
+<span id="571">571</span>
+<span id="572">572</span>
+<span id="573">573</span>
+<span id="574">574</span>
+<span id="575">575</span>
+<span id="576">576</span>
+<span id="577">577</span>
+<span id="578">578</span>
+<span id="579">579</span>
+<span id="580">580</span>
+<span id="581">581</span>
+<span id="582">582</span>
+<span id="583">583</span>
+<span id="584">584</span>
+<span id="585">585</span>
+<span id="586">586</span>
+<span id="587">587</span>
+<span id="588">588</span>
+<span id="589">589</span>
+<span id="590">590</span>
+<span id="591">591</span>
+<span id="592">592</span>
+<span id="593">593</span>
+<span id="594">594</span>
+<span id="595">595</span>
+<span id="596">596</span>
+<span id="597">597</span>
+<span id="598">598</span>
 </pre><pre class="rust"><code><span class="kw">use crate</span>::{
     error::{Error, <span class="prelude-ty">Result</span>},
     <span class="comment">// service::ReadDirState,
     </span>store::{<span class="self">self</span>, Store},
-    types::{LfsStorage, Location, Message, UserAttribute},
+    types::{LfsStorage, Location, Message, OpenSeekFrom, UserAttribute},
     Bytes,
 };
 
@@ -565,6 +654,24 @@
         <span class="prelude-val">Ok</span>(path)
     }
 
+    <span class="doccomment">/// Partially written client files are store below `/&lt;client_id&gt;/part/`.
+    </span><span class="kw">pub fn </span>chunks_path(<span class="kw-2">&amp;</span><span class="self">self</span>, client_path: <span class="kw-2">&amp;</span>PathBuf, location: Location) -&gt; <span class="prelude-ty">Result</span>&lt;PathBuf&gt; {
+        <span class="comment">// Clients must not escape their namespace
+        </span><span class="kw">if </span>client_path.as_ref().contains(<span class="string">&quot;..&quot;</span>) {
+            <span class="kw">return </span><span class="prelude-val">Err</span>(Error::InvalidPath);
+        }
+
+        <span class="kw">let </span><span class="kw-2">mut </span>path = PathBuf::new();
+        path.push(<span class="kw-2">&amp;</span><span class="self">self</span>.client_id);
+        <span class="kw">match </span>location {
+            Location::Volatile =&gt; path.push(<span class="kw-2">&amp;</span>PathBuf::from(<span class="string">&quot;vfs-part&quot;</span>)),
+            Location::External =&gt; path.push(<span class="kw-2">&amp;</span>PathBuf::from(<span class="string">&quot;efs-part&quot;</span>)),
+            Location::Internal =&gt; path.push(<span class="kw-2">&amp;</span>PathBuf::from(<span class="string">&quot;ifs-part&quot;</span>)),
+        }
+        path.push(client_path);
+        <span class="prelude-val">Ok</span>(path)
+    }
+
     <span class="comment">// TODO: this is waaay too fiddly, need an approach
     // that totally excludes off-by-N type errors.
     </span><span class="kw">pub fn </span>client_path(<span class="kw-2">&amp;</span><span class="self">self</span>, actual_path: <span class="kw-2">&amp;</span>Path) -&gt; PathBuf {
@@ -585,7 +692,28 @@
 
 <span class="kw">pub trait </span>Filestore {
     <span class="kw">fn </span>read&lt;<span class="kw">const </span>N: usize&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>PathBuf, location: Location) -&gt; <span class="prelude-ty">Result</span>&lt;Bytes&lt;N&gt;&gt;;
+    <span class="kw">fn </span>read_chunk&lt;<span class="kw">const </span>N: usize&gt;(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        path: <span class="kw-2">&amp;</span>PathBuf,
+        location: Location,
+        pos: OpenSeekFrom,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(Bytes&lt;N&gt;, usize)&gt;;
     <span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>PathBuf, location: Location, data: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt;;
+    <span class="kw">fn </span>start_chunked_write(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        path: <span class="kw-2">&amp;</span>PathBuf,
+        location: Location,
+        data: <span class="kw-2">&amp;</span>[u8],
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt;;
+    <span class="kw">fn </span>write_chunk(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        path: <span class="kw-2">&amp;</span>PathBuf,
+        location: Location,
+        data: <span class="kw-2">&amp;</span>[u8],
+        pos: OpenSeekFrom,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt;;
+    <span class="kw">fn </span>flush_chunks(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>PathBuf, location: Location) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt;;
+    <span class="kw">fn </span>abort_chunked_write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>PathBuf, location: Location) -&gt; bool;
     <span class="kw">fn </span>exists(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>PathBuf, location: Location) -&gt; bool;
     <span class="kw">fn </span>metadata(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>PathBuf, location: Location) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;Metadata&gt;&gt;;
     <span class="kw">fn </span>remove_file(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>PathBuf, location: Location) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt;;
@@ -860,10 +988,60 @@
 
         store::read(<span class="self">self</span>.store, location, <span class="kw-2">&amp;</span>path)
     }
+    <span class="kw">fn </span>read_chunk&lt;<span class="kw">const </span>N: usize&gt;(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        path: <span class="kw-2">&amp;</span>PathBuf,
+        location: Location,
+        pos: OpenSeekFrom,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(Bytes&lt;N&gt;, usize)&gt; {
+        <span class="kw">let </span>path = <span class="self">self</span>.actual_path(path)<span class="question-mark">?</span>;
+
+        store::read_chunk(<span class="self">self</span>.store, location, <span class="kw-2">&amp;</span>path, pos)
+    }
 
     <span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>PathBuf, location: Location, data: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="kw">let </span>path = <span class="self">self</span>.actual_path(path)<span class="question-mark">?</span>;
         store::store(<span class="self">self</span>.store, location, <span class="kw-2">&amp;</span>path, data)
+    }
+
+    <span class="kw">fn </span>start_chunked_write(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        path: <span class="kw-2">&amp;</span>PathBuf,
+        location: Location,
+        data: <span class="kw-2">&amp;</span>[u8],
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        <span class="kw">let </span>path = <span class="self">self</span>.chunks_path(path, location)<span class="question-mark">?</span>;
+        store::store(<span class="self">self</span>.store, Location::Volatile, <span class="kw-2">&amp;</span>path, data)
+    }
+
+    <span class="kw">fn </span>write_chunk(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        path: <span class="kw-2">&amp;</span>PathBuf,
+        location: Location,
+        data: <span class="kw-2">&amp;</span>[u8],
+        pos: OpenSeekFrom,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        <span class="kw">let </span>path = <span class="self">self</span>.chunks_path(path, location)<span class="question-mark">?</span>;
+        store::write_chunk(<span class="self">self</span>.store, Location::Volatile, <span class="kw-2">&amp;</span>path, data, pos)
+    }
+
+    <span class="kw">fn </span>abort_chunked_write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>PathBuf, location: Location) -&gt; bool {
+        <span class="kw">let </span><span class="prelude-val">Ok</span>(path) = <span class="self">self</span>.chunks_path(path, location) <span class="kw">else </span>{
+            <span class="kw">return </span><span class="bool-val">false</span>;
+        };
+        store::delete(<span class="self">self</span>.store, Location::Volatile, <span class="kw-2">&amp;</span>path)
+    }
+
+    <span class="kw">fn </span>flush_chunks(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>PathBuf, location: Location) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        <span class="kw">let </span>chunk_path = <span class="self">self</span>.chunks_path(path, location)<span class="question-mark">?</span>;
+        <span class="kw">let </span>client_path = <span class="self">self</span>.actual_path(path)<span class="question-mark">?</span>;
+        store::move_file(
+            <span class="self">self</span>.store,
+            Location::Volatile,
+            <span class="kw-2">&amp;</span>chunk_path,
+            location,
+            <span class="kw-2">&amp;</span>client_path,
+        )
     }
 
     <span class="kw">fn </span>exists(<span class="kw-2">&amp;mut </span><span class="self">self</span>, path: <span class="kw-2">&amp;</span>PathBuf, location: Location) -&gt; bool {

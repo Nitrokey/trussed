@@ -641,12 +641,32 @@
 <span id="641">641</span>
 <span id="642">642</span>
 <span id="643">643</span>
+<span id="644">644</span>
+<span id="645">645</span>
+<span id="646">646</span>
+<span id="647">647</span>
+<span id="648">648</span>
+<span id="649">649</span>
+<span id="650">650</span>
+<span id="651">651</span>
+<span id="652">652</span>
+<span id="653">653</span>
+<span id="654">654</span>
+<span id="655">655</span>
+<span id="656">656</span>
+<span id="657">657</span>
+<span id="658">658</span>
+<span id="659">659</span>
+<span id="660">660</span>
+<span id="661">661</span>
+<span id="662">662</span>
 </pre><pre class="rust"><code><span class="kw">use </span>core::marker::PhantomData;
 <span class="kw">use </span>core::ops::Deref;
 
 <span class="kw">pub use </span>generic_array::GenericArray;
 
 <span class="kw">pub use </span>heapless::{String, Vec};
+<span class="kw">use </span>littlefs2::io::SeekFrom;
 
 <span class="kw">pub use </span><span class="kw">crate</span>::Bytes;
 
@@ -1283,6 +1303,24 @@
     <span class="kw">pub </span>qinv: <span class="kw-2">&amp;</span><span class="lifetime">&#39;d </span>[u8],
     <span class="kw">pub </span>dp: <span class="kw-2">&amp;</span><span class="lifetime">&#39;d </span>[u8],
     <span class="kw">pub </span>dq: <span class="kw-2">&amp;</span><span class="lifetime">&#39;d </span>[u8],
+}
+
+<span class="doccomment">/// Enumeration of possible methods to seek within an file that was just opened
+/// Used in the [`read_chunk`](crate::store::read_chunk) and [`write_chunk`](crate::store::write_chunk) calls,
+/// Where [`SeekFrom::Current`](littlefs2::io::SeekFrom::Current) would not make sense.
+</span><span class="attribute">#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+</span><span class="kw">pub enum </span>OpenSeekFrom {
+    Start(u32),
+    End(i32),
+}
+
+<span class="kw">impl </span>From&lt;OpenSeekFrom&gt; <span class="kw">for </span>SeekFrom {
+    <span class="kw">fn </span>from(value: OpenSeekFrom) -&gt; <span class="self">Self </span>{
+        <span class="kw">match </span>value {
+            OpenSeekFrom::Start(o) =&gt; <span class="self">Self</span>::Start(o),
+            OpenSeekFrom::End(o) =&gt; <span class="self">Self</span>::End(o),
+        }
+    }
 }
 </code></pre></div>
 </section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="trussed" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.1 (90743e729 2023-01-10)" ></div></body></html>
