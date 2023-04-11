@@ -901,6 +901,10 @@
 <span id="901">901</span>
 <span id="902">902</span>
 <span id="903">903</span>
+<span id="904">904</span>
+<span id="905">905</span>
+<span id="906">906</span>
+<span id="907">907</span>
 </pre><pre class="rust"><code><span class="doccomment">//! # Client interface for applications.
 //!
 //! The API methods (such as `GenerateKey`, `Sign`, `Verify`,...) are implemented by a variety
@@ -1662,6 +1666,10 @@
 
     <span class="kw">fn </span>wink(<span class="kw-2">&amp;mut </span><span class="self">self</span>, duration: core::time::Duration) -&gt; ClientResult&lt;<span class="lifetime">&#39;_</span>, reply::Wink, <span class="self">Self</span>&gt; {
         <span class="self">self</span>.request(request::Wink { duration })
+    }
+
+    <span class="kw">fn </span>set_custom_status(<span class="kw-2">&amp;mut </span><span class="self">self</span>, status: u8) -&gt; ClientResult&lt;<span class="lifetime">&#39;_</span>, reply::SetCustomStatus, <span class="self">Self</span>&gt; {
+        <span class="self">self</span>.request(request::SetCustomStatus { status })
     }
 }
 

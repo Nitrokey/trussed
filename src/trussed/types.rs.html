@@ -660,6 +660,7 @@
 <span id="660">660</span>
 <span id="661">661</span>
 <span id="662">662</span>
+<span id="663">663</span>
 </pre><pre class="rust"><code><span class="kw">use </span>core::marker::PhantomData;
 <span class="kw">use </span>core::ops::Deref;
 
@@ -838,6 +839,7 @@
         WaitingForUserPresence,
         Processing,
         Error,
+        Custom(u8),
     }
 }
 

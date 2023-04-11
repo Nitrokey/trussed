@@ -534,6 +534,12 @@
 <span id="534">534</span>
 <span id="535">535</span>
 <span id="536">536</span>
+<span id="537">537</span>
+<span id="538">538</span>
+<span id="539">539</span>
+<span id="540">540</span>
+<span id="541">541</span>
+<span id="542">542</span>
 </pre><pre class="rust"><code><span class="doccomment">//! This (incomplete!) API loosely follows [PKCS#11 v3][pkcs11-v3].
 //!
 //! For constants see [their headers][pkcs11-headers].
@@ -623,6 +629,7 @@
     </span>Reboot: <span class="number">42
     </span>Uptime: <span class="number">43
     </span>Wink: <span class="number">44
+    </span>SetCustomStatus: <span class="number">45
 
     </span><span class="comment">//////////////
     // Counters //
@@ -888,6 +895,9 @@
         Wink:
           - duration: core::time::Duration
 
+        SetCustomStatus:
+          - status: u8
+
         CreateCounter:
           - location: Location
 
@@ -1051,6 +1061,8 @@
           - uptime: Duration
 
         Wink:
+
+        SetCustomStatus:
 
         CreateCounter:
           - id: CounterId
