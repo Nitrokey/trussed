@@ -637,30 +637,6 @@
 <span id="637">637</span>
 <span id="638">638</span>
 <span id="639">639</span>
-<span id="640">640</span>
-<span id="641">641</span>
-<span id="642">642</span>
-<span id="643">643</span>
-<span id="644">644</span>
-<span id="645">645</span>
-<span id="646">646</span>
-<span id="647">647</span>
-<span id="648">648</span>
-<span id="649">649</span>
-<span id="650">650</span>
-<span id="651">651</span>
-<span id="652">652</span>
-<span id="653">653</span>
-<span id="654">654</span>
-<span id="655">655</span>
-<span id="656">656</span>
-<span id="657">657</span>
-<span id="658">658</span>
-<span id="659">659</span>
-<span id="660">660</span>
-<span id="661">661</span>
-<span id="662">662</span>
-<span id="663">663</span>
 </pre><pre class="rust"><code><span class="kw">use </span>core::marker::PhantomData;
 <span class="kw">use </span>core::ops::Deref;
 
@@ -1246,11 +1222,6 @@
     Rsa2048Pkcs1v15,
     Rsa3072Pkcs1v15,
     Rsa4096Pkcs1v15,
-
-    <span class="comment">// TODO: drop the following once we drop the RSA mechanisms in core
-    </span>Rsa2048Pkcs,
-    Rsa3072Pkcs,
-    Rsa4096Pkcs,
 }
 
 <span class="kw">pub type </span>LongData = Bytes&lt;MAX_LONG_DATA_LENGTH&gt;;
@@ -1274,11 +1245,6 @@
     /// [`UnsafeInjectKey`](crate::api::Request::UnsafeInjectKey) have only transfer one byte array, the RSA key is serialized with postcard
     </span>RsaParts,
     Pkcs8Der,
-
-    <span class="comment">// TODO: drop the following once we drop the RSA mechanisms in core
-    </span>RsaCrt,
-    RsaN,
-    RsaE,
 }
 
 <span class="kw">pub type </span>Signature = Bytes&lt;MAX_SIGNATURE_LENGTH&gt;;
@@ -1292,20 +1258,6 @@
 </span>}
 
 <span class="kw">pub type </span>UserAttribute = Bytes&lt;MAX_USER_ATTRIBUTE_LENGTH&gt;;
-
-<span class="doccomment">/// Data format for RSA Private key serialization in [KeySerialization::Raw](crate::types::KeySerialization::Raw)
-/// format in [unsafe_inject_key](crate::client::CryptoClient::unsafe_inject_key)
-///
-/// Serialized using [postcard_serialize_bytes](crate::postcard_serialize_bytes). All data are big endian large integers
-</span><span class="attribute">#[derive(Debug, Deserialize, Serialize)]
-</span><span class="kw">pub struct </span>RsaCrtImportFormat&lt;<span class="lifetime">&#39;d</span>&gt; {
-    <span class="kw">pub </span>e: <span class="kw-2">&amp;</span><span class="lifetime">&#39;d </span>[u8],
-    <span class="kw">pub </span>p: <span class="kw-2">&amp;</span><span class="lifetime">&#39;d </span>[u8],
-    <span class="kw">pub </span>q: <span class="kw-2">&amp;</span><span class="lifetime">&#39;d </span>[u8],
-    <span class="kw">pub </span>qinv: <span class="kw-2">&amp;</span><span class="lifetime">&#39;d </span>[u8],
-    <span class="kw">pub </span>dp: <span class="kw-2">&amp;</span><span class="lifetime">&#39;d </span>[u8],
-    <span class="kw">pub </span>dq: <span class="kw-2">&amp;</span><span class="lifetime">&#39;d </span>[u8],
-}
 
 <span class="doccomment">/// Enumeration of possible methods to seek within an file that was just opened
 /// Used in the [`read_chunk`](crate::store::read_chunk) and [`write_chunk`](crate::store::write_chunk) calls,
