@@ -540,6 +540,31 @@
 <span id="540">540</span>
 <span id="541">541</span>
 <span id="542">542</span>
+<span id="543">543</span>
+<span id="544">544</span>
+<span id="545">545</span>
+<span id="546">546</span>
+<span id="547">547</span>
+<span id="548">548</span>
+<span id="549">549</span>
+<span id="550">550</span>
+<span id="551">551</span>
+<span id="552">552</span>
+<span id="553">553</span>
+<span id="554">554</span>
+<span id="555">555</span>
+<span id="556">556</span>
+<span id="557">557</span>
+<span id="558">558</span>
+<span id="559">559</span>
+<span id="560">560</span>
+<span id="561">561</span>
+<span id="562">562</span>
+<span id="563">563</span>
+<span id="564">564</span>
+<span id="565">565</span>
+<span id="566">566</span>
+<span id="567">567</span>
 </pre><pre class="rust"><code><span class="doccomment">//! This (incomplete!) API loosely follows [PKCS#11 v3][pkcs11-v3].
 //!
 //! For constants see [their headers][pkcs11-headers].
@@ -599,8 +624,10 @@
     </span>UnsafeInjectKey: <span class="number">20
     </span>UnsafeInjectSharedKey: <span class="number">21
     </span>UnwrapKey: <span class="number">22
+    </span>UnwrapKeyFromFile: <span class="number">70
     </span>Verify: <span class="number">23
     </span>WrapKey: <span class="number">24
+    </span>WrapKeyToFile: <span class="number">71
 
     </span>Attest: <span class="number">0xFF
 
@@ -883,6 +910,23 @@
           - key: KeyId
           - associated_data: ShortData
 
+        <span class="comment">// this should always be an AEAD algorithm
+        </span>WrapKeyToFile:
+          - mechanism: Mechanism
+          - wrapping_key: KeyId
+          - key: KeyId
+          - path: PathBuf
+          - location: Location
+          - associated_data: Message
+
+        UnwrapKeyFromFile:
+          - mechanism: Mechanism
+          - key: KeyId
+          - path: PathBuf
+          - file_location: Location
+          - key_location: Location
+          - associated_data: Message
+
         RequestUserConsent:
           - level: consent::Level
           - timeout_milliseconds: u32
@@ -1048,8 +1092,14 @@
         UnwrapKey:
             - key: <span class="prelude-ty">Option</span>&lt;KeyId&gt;
 
+        UnwrapKeyFromFile:
+          - key: <span class="prelude-ty">Option</span>&lt;KeyId&gt;
+
         WrapKey:
             - wrapped_key: Message
+
+        <span class="comment">// this should always be an AEAD algorithm
+        </span>WrapKeyToFile:
 
         <span class="comment">// UI
         </span>RequestUserConsent:
