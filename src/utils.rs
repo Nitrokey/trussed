@@ -2,7 +2,7 @@ use littlefs2::path::PathBuf;
 
 use crate::{
     syscall, try_syscall,
-    types::{Location, Message, OpenSeekFrom, UserAttribute},
+    types::{Location, Message, UserAttribute},
     Client, Error,
 };
 
@@ -33,12 +33,11 @@ fn write_chunked(
     user_attribute: Option<UserAttribute>,
 ) -> Result<(), Error> {
     let res = write_chunked_inner(client, location, path.clone(), data, user_attribute);
-    if res.is_ok() {
-        try_syscall!(client.flush_chunks(location, path)).map(drop)
-    } else {
-        syscall!(client.abort_chunked_write(location, path));
-        res
+    if res.is_err() {
+        syscall!(client.abort_chunked_write());
+        return res;
     }
+    Ok(())
 }
 
 fn write_chunked_inner(
@@ -60,14 +59,12 @@ fn write_chunked_inner(
     let mut written = msg.len();
     try_syscall!(client.start_chunked_write(location, path.clone(), msg, user_attribute))?;
     for chunk in chunks {
-        let off = written;
         written += chunk.len();
-        try_syscall!(client.write_file_chunk(
-            location,
-            path.clone(),
-            chunk,
-            OpenSeekFrom::Start(off as u32)
-        ))?;
+        try_syscall!(client.write_file_chunk(chunk))?;
+    }
+
+    if { written % chunk_size } == 0 {
+        try_syscall!(client.write_file_chunk(Message::new()))?;
     }
     Ok(())
 }

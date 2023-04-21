@@ -107,13 +107,7 @@ pub trait Filestore {
         location: Location,
         data: &[u8],
     ) -> Result<()>;
-    fn write_chunk(
-        &mut self,
-        path: &PathBuf,
-        location: Location,
-        data: &[u8],
-        pos: OpenSeekFrom,
-    ) -> Result<()>;
+    fn write_chunk(&mut self, path: &PathBuf, location: Location, data: &[u8]) -> Result<()>;
     fn flush_chunks(&mut self, path: &PathBuf, location: Location) -> Result<()>;
     fn abort_chunked_write(&mut self, path: &PathBuf, location: Location) -> bool;
     fn exists(&mut self, path: &PathBuf, location: Location) -> bool;
@@ -416,15 +410,15 @@ impl<S: Store> Filestore for ClientFilestore<S> {
         store::store(self.store, Location::Volatile, &path, data)
     }
 
-    fn write_chunk(
-        &mut self,
-        path: &PathBuf,
-        location: Location,
-        data: &[u8],
-        pos: OpenSeekFrom,
-    ) -> Result<()> {
+    fn write_chunk(&mut self, path: &PathBuf, location: Location, data: &[u8]) -> Result<()> {
         let path = self.chunks_path(path, location)?;
-        store::write_chunk(self.store, Location::Volatile, &path, data, pos)
+        store::write_chunk(
+            self.store,
+            Location::Volatile,
+            &path,
+            data,
+            OpenSeekFrom::End(0),
+        )
     }
 
     fn abort_chunked_write(&mut self, path: &PathBuf, location: Location) -> bool {

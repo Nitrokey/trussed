@@ -2,6 +2,7 @@ use littlefs2::path::PathBuf;
 use rand_chacha::ChaCha8Rng;
 pub use rand_core::{RngCore, SeedableRng};
 
+use crate::api::reply::StartChunkedRead;
 use crate::api::*;
 use crate::backend::{BackendId, CoreOnly, Dispatch};
 use crate::client::{ClientBuilder, ClientImplementation};
@@ -433,8 +434,18 @@ impl<P: Platform> ServiceResources<P> {
                 }))
             }
 
-            Request::ReadChunk(request) => {
-                let (data,len) = filestore.read_chunk(&request.path,request.location,request.pos)?;
+            Request::ReadChunk(_) => {
+                let Some(ChunkedIoState::Read(read_state)) = &mut ctx.chunked_io_state else {
+                    return Err(Error::MechanismNotAvailable);
+                };
+
+                let (data,len) = filestore.read_chunk(
+                    &read_state.path,
+                    read_state.location,
+                    OpenSeekFrom::Start(read_state.offset as u32)
+                )?;
+                read_state.offset += data.len();
+
                 Ok(Reply::ReadChunk(reply::ReadChunk {
                     data,
                     len,
@@ -491,20 +502,41 @@ impl<P: Platform> ServiceResources<P> {
                 Ok(Reply::WriteFile(reply::WriteFile {} ))
             }
             Request::StartChunkedWrite(request) => {
+                ctx.chunked_io_state = Some(ChunkedIoState::Write(ChunkedWriteState {
+                    path: request.path.clone(),
+                    location: request.location,
+                }));
                 filestore.start_chunked_write(&request.path, request.location, &request.data)?;
                 Ok(Reply::StartChunkedWrite(reply::StartChunkedWrite {} ))
             }
+            Request::StartChunkedRead(request) => {
+                clear_chunked_state(ctx, filestore)?;
+                let (data, len) = filestore.read_chunk(&request.path,request.location, OpenSeekFrom::Start(0))?;
+                ctx.chunked_io_state = Some(ChunkedIoState::Read(ChunkedReadState {
+                    path: request.path.clone(),
+                    location: request.location,
+                    offset: data.len()
+                }));
+                Ok(StartChunkedRead { data, len }.into())
+            }
             Request::WriteChunk(request) => {
-                 filestore.write_chunk(&request.path, request.location, &request.data,request.pos)?;
+                let Some(ChunkedIoState::Write(ref write_state)) = ctx.chunked_io_state else {
+                    return Ok(Reply::AbortChunkedWrite(reply::AbortChunkedWrite { aborted: false } ));
+                };
+
+                filestore.write_chunk(&write_state.path, write_state.location, &request.data)?;
+                if request.data.len() != MAX_MESSAGE_LENGTH {
+                    filestore.flush_chunks(&write_state.path, write_state.location)?;
+                    ctx.chunked_io_state = None;
+                }
                 Ok(Reply::WriteChunk(reply::WriteChunk {} ))
             }
-            Request::FlushChunks(request) => {
-                filestore.flush_chunks(&request.path, request.location)?;
-                Ok(Reply::FlushChunks(reply::FlushChunks {} ))
-            }
-            Request::AbortChunkedWrite(request) => {
-                let aborted = filestore.abort_chunked_write(&request.path, request.location);
-                Ok(Reply::AbortChunkedWrite(reply::AbortChunkedWrite {aborted} ))
+            Request::AbortChunkedWrite(_request) => {
+                let Some(ChunkedIoState::Write(ref write_state)) = ctx.chunked_io_state else {
+                    return Ok(Reply::AbortChunkedWrite(reply::AbortChunkedWrite { aborted: false } ));
+                };
+                let aborted = filestore.abort_chunked_write(&write_state.path, write_state.location);
+                Ok(Reply::AbortChunkedWrite(reply::AbortChunkedWrite { aborted } ))
             }
 
             Request::UnwrapKey(request) => {
@@ -881,6 +913,17 @@ impl<P: Platform, D: Dispatch> Service<P, D> {
                 .unwrap(),
         );
     }
+}
+
+fn clear_chunked_state(ctx: &mut CoreContext, filestore: &mut impl Filestore) -> Result<(), Error> {
+    match ctx.chunked_io_state.take() {
+        Some(ChunkedIoState::Read(_)) | None => {}
+        Some(ChunkedIoState::Write(write_state)) => {
+            info!("Automatically cancelling write");
+            filestore.abort_chunked_write(&write_state.path, write_state.location);
+        }
+    }
+    Ok(())
 }
 
 impl<P, D> crate::client::Syscall for &mut Service<P, D>

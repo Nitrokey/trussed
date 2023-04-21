@@ -657,87 +657,55 @@ fn filesystem() {
     assert_eq!(data, recv_data);
 
     // ======== CHUNKED READS ========
-    let partial_data = block!(client
-        .read_file_chunk(
-            Location::Internal,
-            PathBuf::from("test_file"),
-            OpenSeekFrom::Start(data.len() as u32)
-        )
+    let first_data = block!(client
+        .start_chunked_read(Location::Internal, PathBuf::from("test_file"),)
         .unwrap())
     .unwrap();
-    assert_eq!(&partial_data.data, &[]);
-    assert_eq!(partial_data.len, data.len());
+    assert_eq!(&first_data.data, &data);
+    assert_eq!(first_data.len, data.len());
 
-    let partial_data = block!(client
-        .read_file_chunk(
-            Location::Internal,
-            PathBuf::from("test_file"),
-            OpenSeekFrom::Start(3)
-        )
-        .unwrap())
-    .unwrap();
-    assert_eq!(&partial_data.data, &data[3..]);
-    assert_eq!(partial_data.len, data.len());
+    let empty_data = block!(client.read_file_chunk().unwrap()).unwrap();
+    println!("empty_data: {:02x?}", &**empty_data.data);
+    assert!(empty_data.data.is_empty());
+    assert_eq!(empty_data.len, data.len());
 
-    let partial_data = block!(client
-        .read_file_chunk(
-            Location::Internal,
-            PathBuf::from("test_file"),
-            OpenSeekFrom::Start(data.len() as u32)
-        )
-        .unwrap())
-    .unwrap();
-    assert_eq!(&partial_data.data, &[]);
-    assert_eq!(partial_data.len, data.len());
-
+    let large_data = Bytes::from_slice(&[0; 1024]).unwrap();
+    let large_data2 = Bytes::from_slice(&[1; 1024]).unwrap();
+    let more_data = Bytes::from_slice(&[2; 42]).unwrap();
     // ======== CHUNKED WRITES ========
     block!(client
         .start_chunked_write(
             Location::Internal,
             PathBuf::from("test_file"),
-            data.clone(),
+            large_data.clone(),
             None
         )
         .unwrap())
     .unwrap();
 
-    let large_data = Bytes::from_slice(&[0; 1024]).unwrap();
-    let more_data = Bytes::from_slice(&[1; 42]).unwrap();
-    block!(client
-        .write_file_chunk(
-            Location::Internal,
-            PathBuf::from("test_file"),
-            large_data.clone(),
-            OpenSeekFrom::Start(data.len() as u32)
-        )
+    block!(client.write_file_chunk(large_data2.clone()).unwrap()).unwrap();
+    block!(client.write_file_chunk(more_data.clone()).unwrap()).unwrap();
+
+    // ======== CHUNKED READS ========
+    let full_len = large_data.len() + large_data2.len() + more_data.len();
+    let first_data = block!(client
+        .start_chunked_read(Location::Internal, PathBuf::from("test_file"),)
         .unwrap())
     .unwrap();
-    block!(client
-        .write_file_chunk(
-            Location::Internal,
-            PathBuf::from("test_file"),
-            more_data.clone(),
-            OpenSeekFrom::Start((data.len() + large_data.len()) as u32)
-        )
-        .unwrap())
-    .unwrap();
-    block!(client
-        .flush_chunks(Location::Internal, PathBuf::from("test_file"),)
-        .unwrap())
-    .unwrap();
-    let partial_data = block!(client
-        .read_file_chunk(
-            Location::Internal,
-            PathBuf::from("test_file"),
-            OpenSeekFrom::Start(data.len() as u32)
-        )
-        .unwrap())
-    .unwrap();
-    assert_eq!(&partial_data.data, &large_data);
-    assert_eq!(
-        partial_data.len,
-        data.len() + large_data.len() + more_data.len()
-    );
+    assert_eq!(&first_data.data, &large_data);
+    assert_eq!(first_data.len, full_len);
+
+    let second_data = block!(client.read_file_chunk().unwrap()).unwrap();
+    assert_eq!(&second_data.data, &large_data2);
+    assert_eq!(second_data.len, full_len);
+
+    let third_data = block!(client.read_file_chunk().unwrap()).unwrap();
+    assert_eq!(&third_data.data, &more_data);
+    assert_eq!(third_data.len, full_len);
+
+    let empty_data = block!(client.read_file_chunk().unwrap()).unwrap();
+    assert!(empty_data.data.is_empty());
+    assert_eq!(empty_data.len, full_len);
 
     let metadata = block!(client
         .entry_metadata(Location::Internal, PathBuf::from("test_file"))
@@ -752,41 +720,22 @@ fn filesystem() {
         .start_chunked_write(
             Location::Internal,
             PathBuf::from("test_file"),
-            data.clone(),
+            large_data.clone(),
             None
         )
         .unwrap())
     .unwrap();
 
-    let some_more_data = Bytes::from_slice(b"This should not be stored").unwrap();
-    block!(client
-        .write_file_chunk(
-            Location::Internal,
-            PathBuf::from("test_file"),
-            some_more_data,
-            OpenSeekFrom::Start(data.len() as u32)
-        )
-        .unwrap())
-    .unwrap();
-    block!(client
-        .abort_chunked_write(Location::Internal, PathBuf::from("test_file"),)
-        .unwrap())
-    .unwrap();
+    block!(client.write_file_chunk(large_data2.clone()).unwrap()).unwrap();
+    block!(client.abort_chunked_write().unwrap()).unwrap();
 
     //  Old data is still there after abort
     let partial_data = block!(client
-        .read_file_chunk(
-            Location::Internal,
-            PathBuf::from("test_file"),
-            OpenSeekFrom::Start(data.len() as u32)
-        )
+        .start_chunked_read(Location::Internal, PathBuf::from("test_file"))
         .unwrap())
     .unwrap();
     assert_eq!(&partial_data.data, &large_data);
-    assert_eq!(
-        partial_data.len,
-        data.len() + large_data.len() + more_data.len()
-    );
+    assert_eq!(partial_data.len, full_len);
 
     // This returns an error because the name doesn't exist
     block!(client

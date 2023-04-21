@@ -258,6 +258,22 @@ impl<B: Default> From<CoreContext> for Context<B> {
     }
 }
 
+pub struct ChunkedReadState {
+    pub path: PathBuf,
+    pub location: Location,
+    pub offset: usize,
+}
+
+pub struct ChunkedWriteState {
+    pub path: PathBuf,
+    pub location: Location,
+}
+
+pub enum ChunkedIoState {
+    Read(ChunkedReadState),
+    Write(ChunkedWriteState),
+}
+
 // The "CoreContext" struct is the closest equivalent to a PCB that Trussed
 // currently has. Trussed currently uses it to choose the client-specific
 // subtree in the filesystem (see docs in src/store.rs) and to maintain
@@ -266,6 +282,7 @@ pub struct CoreContext {
     pub path: PathBuf,
     pub read_dir_state: Option<ReadDirState>,
     pub read_dir_files_state: Option<ReadDirFilesState>,
+    pub chunked_io_state: Option<ChunkedIoState>,
 }
 
 impl CoreContext {
@@ -274,6 +291,7 @@ impl CoreContext {
             path,
             read_dir_state: None,
             read_dir_files_state: None,
+            chunked_io_state: None,
         }
     }
 }

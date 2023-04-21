@@ -51,8 +51,8 @@ generate_enums! {
     Sign: 18
     WriteFile: 19
     StartChunkedWrite: 66
+    StartChunkedRead: 72
     WriteChunk: 67
-    FlushChunks: 68
     AbortChunkedWrite: 69
     UnsafeInjectKey: 20
     UnsafeInjectSharedKey: 21
@@ -250,9 +250,6 @@ pub mod request {
           - location: Location
           - path: PathBuf
         ReadChunk:
-          - location: Location
-          - pos: OpenSeekFrom
-          - path: PathBuf
 
         Metadata:
           - location: Location
@@ -300,17 +297,14 @@ pub mod request {
           - data: Message
           - user_attribute: Option<UserAttribute>
 
+        StartChunkedRead:
+          - location: Location
+          - path: PathBuf
+
         WriteChunk:
-          - location: Location
-          - pos: OpenSeekFrom
-          - path: PathBuf
           - data: Message
-        FlushChunks:
-          - location: Location
-          - path: PathBuf
+
         AbortChunkedWrite:
-          - location: Location
-          - path: PathBuf
 
         UnsafeInjectKey:
           - mechanism: Mechanism        // -> implies key type
@@ -508,8 +502,11 @@ pub mod reply {
 
         WriteFile:
         StartChunkedWrite:
+        StartChunkedRead:
+          - data: Message
+          - len: usize
+
         WriteChunk:
-        FlushChunks:
         AbortChunkedWrite:
             - aborted: bool
 

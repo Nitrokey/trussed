@@ -4,7 +4,7 @@ use trussed::{
     client::{CryptoClient, FilesystemClient},
     error::Error,
     syscall, try_syscall,
-    types::{Bytes, Location, Mechanism, OpenSeekFrom, PathBuf, StorageAttributes},
+    types::{Bytes, Location, Mechanism, PathBuf, StorageAttributes},
     utils,
 };
 
@@ -104,10 +104,9 @@ fn test_write_all(location: Location) {
         let path = PathBuf::from("foo");
         utils::write_all(client, location, path.clone(), &[48; 1234], None).unwrap();
 
-        let data =
-            syscall!(client.read_file_chunk(location, path.clone(), OpenSeekFrom::Start(0))).data;
+        let data = syscall!(client.start_chunked_read(location, path.clone())).data;
         assert_eq!(&data, &[48; 1024]);
-        let data = syscall!(client.read_file_chunk(location, path, OpenSeekFrom::Start(1024))).data;
+        let data = syscall!(client.read_file_chunk()).data;
         assert_eq!(&data, &[48; 1234 - 1024]);
     });
 }
@@ -117,7 +116,7 @@ fn test_write_all_small(location: Location) {
         let path = PathBuf::from("foo2");
         utils::write_all(client, location, path.clone(), &[48; 1023], None).unwrap();
 
-        let data = syscall!(client.read_file_chunk(location, path, OpenSeekFrom::Start(0))).data;
+        let data = syscall!(client.start_chunked_read(location, path)).data;
         assert_eq!(&data, &[48; 1023]);
     });
 }

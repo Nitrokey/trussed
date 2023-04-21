@@ -671,17 +671,8 @@ pub trait FilesystemClient: PollClient {
     }
 
     // Read part of a file, up to 1KiB starting at `pos`
-    fn read_file_chunk(
-        &mut self,
-        location: Location,
-        path: PathBuf,
-        pos: OpenSeekFrom,
-    ) -> ClientResult<'_, reply::ReadChunk, Self> {
-        self.request(request::ReadChunk {
-            location,
-            path,
-            pos,
-        })
+    fn read_file_chunk(&mut self) -> ClientResult<'_, reply::ReadChunk, Self> {
+        self.request(request::ReadChunk {})
     }
 
     /// Fetch the Metadata for a file or directory
@@ -744,41 +735,24 @@ pub trait FilesystemClient: PollClient {
         })
     }
 
+    fn start_chunked_read(
+        &mut self,
+        location: Location,
+        path: PathBuf,
+    ) -> ClientResult<'_, reply::StartChunkedRead, Self> {
+        self.request(request::StartChunkedRead { location, path })
+    }
+
     /// Write part of a file
     ///
     /// See [`start_chunked_write`](FilesystemClient::start_chunked_write).
-    fn write_file_chunk(
-        &mut self,
-        location: Location,
-        path: PathBuf,
-        data: Message,
-        pos: OpenSeekFrom,
-    ) -> ClientResult<'_, reply::WriteChunk, Self> {
-        self.request(request::WriteChunk {
-            location,
-            path,
-            data,
-            pos,
-        })
-    }
-
-    /// Flush a file opened with [`start_chunked_write`](FilesystemClient::start_chunked_write).
-    /// Only after this will the content of the file be readable
-    fn flush_chunks(
-        &mut self,
-        location: Location,
-        path: PathBuf,
-    ) -> ClientResult<'_, reply::FlushChunks, Self> {
-        self.request(request::FlushChunks { location, path })
+    fn write_file_chunk(&mut self, data: Message) -> ClientResult<'_, reply::WriteChunk, Self> {
+        self.request(request::WriteChunk { data })
     }
 
     /// Abort writes to a file opened with [`start_chunked_write`](FilesystemClient::start_chunked_write).
-    fn abort_chunked_write(
-        &mut self,
-        location: Location,
-        path: PathBuf,
-    ) -> ClientResult<'_, reply::AbortChunkedWrite, Self> {
-        self.request(request::AbortChunkedWrite { location, path })
+    fn abort_chunked_write(&mut self) -> ClientResult<'_, reply::AbortChunkedWrite, Self> {
+        self.request(request::AbortChunkedWrite {})
     }
 }
 
