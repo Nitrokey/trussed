@@ -104,7 +104,7 @@ fn test_write_all(location: Location) {
         let path = PathBuf::from("foo");
         utils::write_all(client, location, path.clone(), &[48; 1234], None).unwrap();
 
-        let data = syscall!(client.start_chunked_read(location, path.clone())).data;
+        let data = syscall!(client.start_chunked_read(location, path)).data;
         assert_eq!(&data, &[48; 1024]);
         let data = syscall!(client.read_file_chunk()).data;
         assert_eq!(&data, &[48; 1234 - 1024]);

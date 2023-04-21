@@ -51,7 +51,9 @@ generate_enums! {
     Sign: 18
     WriteFile: 19
     StartChunkedWrite: 66
+    StartEncryptedChunkedWrite: 73
     StartChunkedRead: 72
+    StartEncryptedChunkedRead: 74
     WriteChunk: 67
     AbortChunkedWrite: 69
     UnsafeInjectKey: 20
@@ -294,8 +296,19 @@ pub mod request {
         StartChunkedWrite:
           - location: Location
           - path: PathBuf
-          - data: Message
           - user_attribute: Option<UserAttribute>
+
+        StartEncryptedChunkedWrite:
+          - location: Location
+          - path: PathBuf
+          - user_attribute: Option<UserAttribute>
+          - key: KeyId
+          - nonce: ShortData
+
+        StartEncryptedChunkedRead:
+          - location: Location
+          - path: PathBuf
+          - key: KeyId
 
         StartChunkedRead:
           - location: Location
@@ -502,9 +515,11 @@ pub mod reply {
 
         WriteFile:
         StartChunkedWrite:
+        StartEncryptedChunkedWrite:
         StartChunkedRead:
           - data: Message
           - len: usize
+        StartEncryptedChunkedRead:
 
         WriteChunk:
         AbortChunkedWrite:

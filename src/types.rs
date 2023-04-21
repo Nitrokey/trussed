@@ -25,6 +25,12 @@ use crate::store::filestore::{ReadDirFilesState, ReadDirState};
 pub use crate::client::FutureResult;
 pub use crate::platform::Platform;
 
+#[cfg(feature = "chacha8-poly1305")]
+use chacha20poly1305::{
+    aead::stream::{DecryptorLE31, EncryptorLE31},
+    ChaCha8Poly1305,
+};
+
 /// An empty struct not storing any data.
 #[derive(Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct NoData;
@@ -269,9 +275,29 @@ pub struct ChunkedWriteState {
     pub location: Location,
 }
 
+#[cfg(feature = "chacha8-poly1305")]
+pub struct EncryptedChunkedReadState {
+    pub path: PathBuf,
+    pub location: Location,
+    pub offset: usize,
+    pub decryptor: DecryptorLE31<ChaCha8Poly1305>,
+}
+
+#[cfg(feature = "chacha8-poly1305")]
+pub struct EncryptedChunkedWriteState {
+    pub path: PathBuf,
+    pub location: Location,
+    pub encryptor: EncryptorLE31<ChaCha8Poly1305>,
+}
+
+#[non_exhaustive]
 pub enum ChunkedIoState {
     Read(ChunkedReadState),
     Write(ChunkedWriteState),
+    #[cfg(feature = "chacha8-poly1305")]
+    EncryptedRead(EncryptedChunkedReadState),
+    #[cfg(feature = "chacha8-poly1305")]
+    EncryptedWrite(EncryptedChunkedWriteState),
 }
 
 // The "CoreContext" struct is the closest equivalent to a PCB that Trussed

@@ -32,7 +32,7 @@ fn write_chunked(
     data: &[u8],
     user_attribute: Option<UserAttribute>,
 ) -> Result<(), Error> {
-    let res = write_chunked_inner(client, location, path.clone(), data, user_attribute);
+    let res = write_chunked_inner(client, location, path, data, user_attribute);
     if res.is_err() {
         syscall!(client.abort_chunked_write());
         return res;
@@ -47,17 +47,16 @@ fn write_chunked_inner(
     data: &[u8],
     user_attribute: Option<UserAttribute>,
 ) -> Result<(), Error> {
-    let mut msg = Message::new();
+    let msg = Message::new();
     let chunk_size = msg.capacity();
-    let mut chunks = data.chunks(chunk_size).map(|chunk| {
+    let chunks = data.chunks(chunk_size).map(|chunk| {
         Message::from(
             heapless::Vec::try_from(chunk)
                 .expect("Iteration over chunks yields maximum of chunk_size"),
         )
     });
-    msg = chunks.next().unwrap_or_default();
-    let mut written = msg.len();
-    try_syscall!(client.start_chunked_write(location, path.clone(), msg, user_attribute))?;
+    try_syscall!(client.start_chunked_write(location, path, user_attribute))?;
+    let mut written = 0;
     for chunk in chunks {
         written += chunk.len();
         try_syscall!(client.write_file_chunk(chunk))?;

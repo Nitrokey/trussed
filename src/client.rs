@@ -724,14 +724,42 @@ pub trait FilesystemClient: PollClient {
         &mut self,
         location: Location,
         path: PathBuf,
-        data: Message,
         user_attribute: Option<UserAttribute>,
     ) -> ClientResult<'_, reply::StartChunkedWrite, Self> {
         self.request(request::StartChunkedWrite {
             location,
             path,
-            data,
             user_attribute,
+        })
+    }
+
+    fn start_encrypted_chunked_write(
+        &mut self,
+        location: Location,
+        path: PathBuf,
+        key: KeyId,
+        nonce: ShortData,
+        user_attribute: Option<UserAttribute>,
+    ) -> ClientResult<'_, reply::StartEncryptedChunkedWrite, Self> {
+        self.request(request::StartEncryptedChunkedWrite {
+            location,
+            path,
+            key,
+            user_attribute,
+            nonce,
+        })
+    }
+
+    fn start_encrypted_chunked_read(
+        &mut self,
+        location: Location,
+        path: PathBuf,
+        key: KeyId,
+    ) -> ClientResult<'_, reply::StartEncryptedChunkedRead, Self> {
+        self.request(request::StartEncryptedChunkedRead {
+            location,
+            path,
+            key,
         })
     }
 
@@ -742,7 +770,6 @@ pub trait FilesystemClient: PollClient {
     ) -> ClientResult<'_, reply::StartChunkedRead, Self> {
         self.request(request::StartChunkedRead { location, path })
     }
-
     /// Write part of a file
     ///
     /// See [`start_chunked_write`](FilesystemClient::start_chunked_write).

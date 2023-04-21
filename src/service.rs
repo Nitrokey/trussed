@@ -1,8 +1,13 @@
+#[cfg(feature = "chacha8-poly1305")]
+use chacha20poly1305::{
+    aead::stream::{DecryptorLE31, EncryptorLE31, Nonce as StreamNonce, StreamLE31},
+    ChaCha8Poly1305, KeyInit,
+};
 use littlefs2::path::PathBuf;
 use rand_chacha::ChaCha8Rng;
 pub use rand_core::{RngCore, SeedableRng};
 
-use crate::api::reply::StartChunkedRead;
+use crate::api::reply::{StartChunkedRead, StartEncryptedChunkedRead, StartEncryptedChunkedWrite};
 use crate::api::*;
 use crate::backend::{BackendId, CoreOnly, Dispatch};
 use crate::client::{ClientBuilder, ClientImplementation};
@@ -435,8 +440,11 @@ impl<P: Platform> ServiceResources<P> {
             }
 
             Request::ReadChunk(_) => {
-                let Some(ChunkedIoState::Read(read_state)) = &mut ctx.chunked_io_state else {
-                    return Err(Error::MechanismNotAvailable);
+                let read_state = match &mut ctx.chunked_io_state {
+                    Some(ChunkedIoState::Read(read_state)) => read_state,
+                    #[cfg(feature = "chacha8-poly1305")]
+                    Some(ChunkedIoState::EncryptedRead(_)) => return read_encrypted_chunk(ctx, filestore),
+                    _ => return Err(Error::MechanismNotAvailable)
                 };
 
                 let (data,len) = filestore.read_chunk(
@@ -506,8 +514,36 @@ impl<P: Platform> ServiceResources<P> {
                     path: request.path.clone(),
                     location: request.location,
                 }));
-                filestore.start_chunked_write(&request.path, request.location, &request.data)?;
+                filestore.start_chunked_write(&request.path, request.location, &[])?;
                 Ok(Reply::StartChunkedWrite(reply::StartChunkedWrite {} ))
+            }
+            #[cfg(not(feature = "chacha8-poly1305"))]
+            Request::StartEncryptedChunkedWrite(request) => Err(Error::MechanismNotAvailable),
+            #[cfg(feature = "chacha8-poly1305")]
+            Request::StartEncryptedChunkedWrite(request) => {
+                clear_chunked_state(ctx, filestore)?;
+                let key = keystore.load_key(key::Secrecy::Secret, Some(key::Kind::Symmetric(CHACHA8_KEY_LEN)), &request.key)?;
+                let nonce: &StreamNonce::<ChaCha8Poly1305,StreamLE31<ChaCha8Poly1305>>
+                    = (&**request.nonce).try_into().map_err(|_| Error::WrongMessageLength)?;
+                let aead = ChaCha8Poly1305::new((&*key.material).into());
+                let encryptor = EncryptorLE31::<ChaCha8Poly1305>::from_aead(aead,nonce);
+                filestore.start_chunked_write(&request.path, request.location, nonce)?;
+                ctx.chunked_io_state = Some(ChunkedIoState::EncryptedWrite(EncryptedChunkedWriteState { path: request.path.clone(), location: request.location, encryptor  }));
+                Ok(StartEncryptedChunkedWrite{}.into())
+            }
+            #[cfg(not(feature = "chacha8-poly1305"))]
+            Request::StartEncryptedChunkedRead(request) => Err(Error::MechanismNotAvailable),
+            #[cfg(feature = "chacha8-poly1305")]
+            Request::StartEncryptedChunkedRead(request) => {
+                clear_chunked_state(ctx, filestore)?;
+                let key = keystore.load_key(key::Secrecy::Secret, Some(key::Kind::Symmetric(CHACHA8_KEY_LEN)), &request.key)?;
+                let nonce: Bytes<CHACHA8_STREAM_NONCE_LEN> = filestore.read(&request.path,request.location)?;
+                let nonce: &StreamNonce::<ChaCha8Poly1305,StreamLE31<ChaCha8Poly1305>>
+                    = (&**nonce).try_into().map_err(|_| Error::WrongMessageLength)?;
+                let aead = ChaCha8Poly1305::new((&*key.material).into());
+                let decryptor = DecryptorLE31::<ChaCha8Poly1305>::from_aead(aead,nonce);
+                ctx.chunked_io_state = Some(ChunkedIoState::EncryptedRead(EncryptedChunkedReadState { path: request.path.clone(), location: request.location, decryptor, offset: CHACHA8_STREAM_NONCE_LEN  }));
+               Ok(StartEncryptedChunkedRead{}.into())
             }
             Request::StartChunkedRead(request) => {
                 clear_chunked_state(ctx, filestore)?;
@@ -520,14 +556,11 @@ impl<P: Platform> ServiceResources<P> {
                 Ok(StartChunkedRead { data, len }.into())
             }
             Request::WriteChunk(request) => {
-                let Some(ChunkedIoState::Write(ref write_state)) = ctx.chunked_io_state else {
-                    return Ok(Reply::AbortChunkedWrite(reply::AbortChunkedWrite { aborted: false } ));
-                };
-
-                filestore.write_chunk(&write_state.path, write_state.location, &request.data)?;
-                if request.data.len() != MAX_MESSAGE_LENGTH {
-                    filestore.flush_chunks(&write_state.path, write_state.location)?;
-                    ctx.chunked_io_state = None;
+                let is_last = !request.data.is_full();
+                if is_last {
+                    write_last_chunk(ctx, filestore, &request.data)?;
+                } else {
+                    write_chunk(ctx, filestore, &request.data)?;
                 }
                 Ok(Reply::WriteChunk(reply::WriteChunk {} ))
             }
@@ -922,8 +955,147 @@ fn clear_chunked_state(ctx: &mut CoreContext, filestore: &mut impl Filestore) ->
             info!("Automatically cancelling write");
             filestore.abort_chunked_write(&write_state.path, write_state.location);
         }
+        #[cfg(feature = "chacha8-poly1305")]
+        Some(ChunkedIoState::EncryptedRead(_)) => {}
+        #[cfg(feature = "chacha8-poly1305")]
+        Some(ChunkedIoState::EncryptedWrite(write_state)) => {
+            info!("Automatically cancelling encrypted write");
+            filestore.abort_chunked_write(&write_state.path, write_state.location);
+        }
     }
     Ok(())
+}
+
+const POLY1305_TAG_LEN: usize = 16;
+const CHACHA8_KEY_LEN: usize = 32;
+const CHACHA8_STREAM_NONCE_LEN: usize = 8;
+fn write_chunk(
+    ctx: &mut CoreContext,
+    filestore: &mut impl Filestore,
+    data: &Message,
+) -> Result<(), Error> {
+    match ctx.chunked_io_state {
+        Some(ChunkedIoState::Write(ref write_state)) => {
+            filestore.write_chunk(&write_state.path, write_state.location, data)?;
+        }
+        #[cfg(feature = "chacha8-poly1305")]
+        Some(ChunkedIoState::EncryptedWrite(ref mut write_state)) => {
+            let mut data =
+                Bytes::<{ MAX_MESSAGE_LENGTH + POLY1305_TAG_LEN }>::from_slice(data).unwrap();
+            write_state
+                .encryptor
+                .encrypt_next_in_place(write_state.path.as_ref().as_bytes(), &mut *data)
+                .map_err(|_err| {
+                    error!("Failed to encrypt {:?}", _err);
+                    Error::AeadError
+                })?;
+            filestore.write_chunk(&write_state.path, write_state.location, &data)?;
+        }
+        _ => return Err(Error::MechanismNotAvailable),
+    }
+    Ok(())
+}
+
+fn write_last_chunk(
+    ctx: &mut CoreContext,
+    filestore: &mut impl Filestore,
+    data: &Message,
+) -> Result<(), Error> {
+    match ctx.chunked_io_state.take() {
+        Some(ChunkedIoState::Write(write_state)) => {
+            filestore.write_chunk(&write_state.path, write_state.location, data)?;
+            filestore.flush_chunks(&write_state.path, write_state.location)?;
+        }
+        #[cfg(feature = "chacha8-poly1305")]
+        Some(ChunkedIoState::EncryptedWrite(write_state)) => {
+            let mut data =
+                Bytes::<{ MAX_MESSAGE_LENGTH + POLY1305_TAG_LEN }>::from_slice(data).unwrap();
+            write_state
+                .encryptor
+                .encrypt_last_in_place(&[write_state.location as u8], &mut *data)
+                .map_err(|_err| {
+                    error!("Failed to encrypt {:?}", _err);
+                    Error::AeadError
+                })?;
+            filestore.write_chunk(&write_state.path, write_state.location, &data)?;
+            filestore.flush_chunks(&write_state.path, write_state.location)?;
+        }
+        _ => return Err(Error::MechanismNotAvailable),
+    }
+
+    Ok(())
+}
+
+#[cfg(feature = "chacha8-poly1305")]
+fn read_encrypted_chunk(
+    ctx: &mut CoreContext,
+    filestore: &mut impl Filestore,
+) -> Result<Reply, Error> {
+    use crate::api::reply::ReadChunk;
+
+    let Some(ChunkedIoState::EncryptedRead(ref mut read_state)) = ctx.chunked_io_state else {
+        unreachable!("Read encrypted chunk can only be called in the context encrypted chunk reads");
+    };
+    let (mut data, len): (Bytes<{ MAX_MESSAGE_LENGTH + POLY1305_TAG_LEN }>, usize) = filestore
+        .read_chunk(
+            &read_state.path,
+            read_state.location,
+            OpenSeekFrom::Start(read_state.offset as _),
+        )?;
+    read_state.offset += data.len();
+
+    let is_last = !data.is_full();
+    if is_last {
+        let Some(ChunkedIoState::EncryptedRead(read_state)) = ctx.chunked_io_state.take() else {
+            unreachable!();
+        };
+
+        read_state
+            .decryptor
+            .decrypt_last_in_place(&[read_state.location as u8], &mut *data)
+            .map_err(|_err| {
+                error!("Failed to decrypt {:?}", _err);
+                Error::AeadError
+            })?;
+        let data = Bytes::from_slice(&data).expect("decryptor removes the tag");
+        Ok(ReadChunk {
+            data,
+            len: chunked_decrypted_len(len)?,
+        }
+        .into())
+    } else {
+        read_state
+            .decryptor
+            .decrypt_next_in_place(read_state.path.as_ref().as_bytes(), &mut *data)
+            .map_err(|_err| {
+                error!("Failed to decrypt {:?}", _err);
+                Error::AeadError
+            })?;
+        let data = Bytes::from_slice(&data).expect("decryptor removes the tag");
+        Ok(ReadChunk {
+            data,
+            len: chunked_decrypted_len(len)?,
+        }
+        .into())
+    }
+}
+
+/// Calculate the decrypted length of a chunked encrypted file
+fn chunked_decrypted_len(len: usize) -> Result<usize, Error> {
+    let len = len.checked_sub(CHACHA8_STREAM_NONCE_LEN).ok_or_else(|| {
+        error!("File too small");
+        Error::FilesystemReadFailure
+    })?;
+    const CHUNK_LEN: usize = POLY1305_TAG_LEN + MAX_MESSAGE_LENGTH;
+    let chunk_count = len / CHUNK_LEN;
+    let last_chunk_len = (len % CHUNK_LEN)
+        .checked_sub(POLY1305_TAG_LEN)
+        .ok_or_else(|| {
+            error!("Incorrect last chunk length");
+            Error::FilesystemReadFailure
+        })?;
+
+    Ok(chunk_count * MAX_MESSAGE_LENGTH + last_chunk_len)
 }
 
 impl<P, D> crate::client::Syscall for &mut Service<P, D>

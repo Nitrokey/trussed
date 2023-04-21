@@ -665,7 +665,6 @@ fn filesystem() {
     assert_eq!(first_data.len, data.len());
 
     let empty_data = block!(client.read_file_chunk().unwrap()).unwrap();
-    println!("empty_data: {:02x?}", &**empty_data.data);
     assert!(empty_data.data.is_empty());
     assert_eq!(empty_data.len, data.len());
 
@@ -674,15 +673,11 @@ fn filesystem() {
     let more_data = Bytes::from_slice(&[2; 42]).unwrap();
     // ======== CHUNKED WRITES ========
     block!(client
-        .start_chunked_write(
-            Location::Internal,
-            PathBuf::from("test_file"),
-            large_data.clone(),
-            None
-        )
+        .start_chunked_write(Location::Internal, PathBuf::from("test_file"), None)
         .unwrap())
     .unwrap();
 
+    block!(client.write_file_chunk(large_data.clone()).unwrap()).unwrap();
     block!(client.write_file_chunk(large_data2.clone()).unwrap()).unwrap();
     block!(client.write_file_chunk(more_data.clone()).unwrap()).unwrap();
 
@@ -717,16 +712,12 @@ fn filesystem() {
 
     // ======== ABORTED CHUNKED WRITES ========
     block!(client
-        .start_chunked_write(
-            Location::Internal,
-            PathBuf::from("test_file"),
-            large_data.clone(),
-            None
-        )
+        .start_chunked_write(Location::Internal, PathBuf::from("test_file"), None)
         .unwrap())
     .unwrap();
 
-    block!(client.write_file_chunk(large_data2.clone()).unwrap()).unwrap();
+    block!(client.write_file_chunk(large_data.clone()).unwrap()).unwrap();
+    block!(client.write_file_chunk(large_data2).unwrap()).unwrap();
     block!(client.abort_chunked_write().unwrap()).unwrap();
 
     //  Old data is still there after abort
@@ -736,6 +727,135 @@ fn filesystem() {
     .unwrap();
     assert_eq!(&partial_data.data, &large_data);
     assert_eq!(partial_data.len, full_len);
+
+    // This returns an error because the name doesn't exist
+    block!(client
+        .remove_file(Location::Internal, PathBuf::from("bad_name"))
+        .expect("no client error"))
+    .ok();
+    let metadata = block!(client
+        .entry_metadata(Location::Internal, PathBuf::from("test_file"))
+        .expect("no client error"))
+    .expect("no errors")
+    .metadata
+    .unwrap();
+    assert!(metadata.is_file());
+
+    block!(client
+        .remove_file(Location::Internal, PathBuf::from("test_file"))
+        .expect("no client error"))
+    .expect("no errors");
+    assert!(block!(client
+        .entry_metadata(Location::Internal, PathBuf::from("test_file"))
+        .expect("no client error"))
+    .expect("no errors")
+    .metadata
+    .is_none(),);
+}
+
+#[test]
+#[serial]
+fn encrypted_filesystem() {
+    setup!(client);
+
+    let key = block!(client.generate_secret_key(32, Location::Volatile).unwrap())
+        .unwrap()
+        .key;
+
+    assert!(block!(client
+        .entry_metadata(Location::Internal, PathBuf::from("test_file"))
+        .expect("no client error"))
+    .expect("no errors")
+    .metadata
+    .is_none(),);
+
+    let large_data = Bytes::from_slice(&[0; 1024]).unwrap();
+    let large_data2 = Bytes::from_slice(&[1; 1024]).unwrap();
+    let more_data = Bytes::from_slice(&[2; 42]).unwrap();
+    // ======== CHUNKED WRITES ========
+    block!(client
+        .start_encrypted_chunked_write(
+            Location::Internal,
+            PathBuf::from("test_file"),
+            key,
+            Bytes::from_slice(&[0; 8]).unwrap(),
+            None
+        )
+        .unwrap())
+    .unwrap();
+
+    block!(client.write_file_chunk(large_data.clone()).unwrap()).unwrap();
+    block!(client.write_file_chunk(large_data2.clone()).unwrap()).unwrap();
+    block!(client.write_file_chunk(more_data.clone()).unwrap()).unwrap();
+
+    // ======== CHUNKED READS ========
+    let full_len = large_data.len() + large_data2.len() + more_data.len();
+    block!(client
+        .start_encrypted_chunked_read(Location::Internal, PathBuf::from("test_file"), key)
+        .unwrap())
+    .unwrap();
+    let first_data = block!(client.read_file_chunk().unwrap()).unwrap();
+    assert_eq!(&first_data.data, &large_data);
+    assert_eq!(first_data.len, full_len);
+
+    let second_data = block!(client.read_file_chunk().unwrap()).unwrap();
+    assert_eq!(&second_data.data, &large_data2);
+    assert_eq!(second_data.len, full_len);
+
+    let third_data = block!(client.read_file_chunk().unwrap()).unwrap();
+    assert_eq!(&third_data.data, &more_data);
+    assert_eq!(third_data.len, full_len);
+
+    assert_eq!(
+        block!(client.read_file_chunk().unwrap()),
+        Err(Error::MechanismNotAvailable)
+    );
+
+    let metadata = block!(client
+        .entry_metadata(Location::Internal, PathBuf::from("test_file"))
+        .expect("no client error"))
+    .expect("no errors")
+    .metadata
+    .unwrap();
+    assert!(metadata.is_file());
+
+    // ======== ABORTED CHUNKED WRITES ========
+    block!(client
+        .start_encrypted_chunked_write(
+            Location::Internal,
+            PathBuf::from("test_file"),
+            key,
+            Bytes::from_slice(&[1; 8]).unwrap(),
+            None
+        )
+        .unwrap())
+    .unwrap();
+
+    block!(client.write_file_chunk(large_data.clone()).unwrap()).unwrap();
+    block!(client.write_file_chunk(large_data2.clone()).unwrap()).unwrap();
+    block!(client.abort_chunked_write().unwrap()).unwrap();
+
+    //  Old data is still there after abort
+    block!(client
+        .start_encrypted_chunked_read(Location::Internal, PathBuf::from("test_file"), key)
+        .unwrap())
+    .unwrap();
+    let first_data = block!(client.read_file_chunk().unwrap()).unwrap();
+    assert_eq!(&first_data.data, &large_data);
+    assert_eq!(first_data.len, full_len);
+
+    let second_data = block!(client.read_file_chunk().unwrap()).unwrap();
+    assert_eq!(&second_data.data, &large_data2);
+    assert_eq!(second_data.len, full_len);
+
+    let third_data = block!(client.read_file_chunk().unwrap()).unwrap();
+    assert_eq!(&third_data.data, &more_data);
+    assert_eq!(third_data.len, full_len);
+
+    assert_eq!(
+        block!(client.read_file_chunk().unwrap()),
+        Err(Error::MechanismNotAvailable)
+    );
 
     // This returns an error because the name doesn't exist
     block!(client
