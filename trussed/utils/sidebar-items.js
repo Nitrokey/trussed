@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["write_all","Write a large file (can be larger than 1KiB)"]]};
+window.SIDEBAR_ITEMS = {"fn":["write_all"]};
