@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["create_directories","delete","exists","fs_read_chunk","fs_write_chunk","metadata","move_file","read","read_chunk","remove_dir","remove_dir_all_where","rename","store","write","write_chunk"],"mod":["certstore","counterstore","filestore","keystore"],"struct":["Fs"],"trait":["Store"]};
+window.SIDEBAR_ITEMS = {"fn":["create_directories","delete","exists","metadata","read","remove_dir","remove_dir_all_where","store","write"],"mod":["certstore","counterstore","filestore","keystore"],"struct":["Fs"],"trait":["Store"]};
