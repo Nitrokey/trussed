@@ -240,8 +240,6 @@
 <a href="#240" id="240">240</a>
 <a href="#241" id="241">241</a>
 <a href="#242" id="242">242</a>
-<a href="#243" id="243">243</a>
-<a href="#244" id="244">244</a>
 </pre><pre class="rust"><code><span class="kw">use </span>core::convert::{TryFrom, TryInto};
 
 <span class="kw">use </span><span class="kw">crate</span>::api::<span class="kw-2">*</span>;
@@ -479,12 +477,10 @@
 <span class="attr">#[cfg(not(feature = <span class="string">&quot;x255&quot;</span>))]
 </span><span class="kw">impl </span>Exists <span class="kw">for </span><span class="kw">super</span>::X255 {}
 <span class="attr">#[cfg(not(feature = <span class="string">&quot;x255&quot;</span>))]
-</span><span class="kw">impl </span>Derive <span class="kw">for </span><span class="kw">super</span>::X255 {}
+</span><span class="kw">impl </span>DeriveKey <span class="kw">for </span><span class="kw">super</span>::X255 {}
 <span class="attr">#[cfg(not(feature = <span class="string">&quot;x255&quot;</span>))]
 </span><span class="kw">impl </span>SerializeKey <span class="kw">for </span><span class="kw">super</span>::X255 {}
 <span class="attr">#[cfg(not(feature = <span class="string">&quot;x255&quot;</span>))]
 </span><span class="kw">impl </span>DeserializeKey <span class="kw">for </span><span class="kw">super</span>::X255 {}
-<span class="attr">#[cfg(not(feature = <span class="string">&quot;x255&quot;</span>))]
-</span><span class="kw">impl </span>UnsafeInjectKey <span class="kw">for </span><span class="kw">super</span>::X255 {}
 </code></pre></div>
 </section></main><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="trussed" data-themes="" data-resource-suffix="" data-rustdoc-version="1.69.0 (84c898d65 2023-04-16)" data-search-js="search-8a59a8356673ec1f.js" data-settings-js="settings-f0c5c39777a9a2f6.js" data-settings-css="settings-0bcba95ff279c1db.css" ></div></body></html>

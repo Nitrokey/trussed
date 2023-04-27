@@ -35,7 +35,7 @@ var sourcesIndex = JSON.parse('{\
 "hash32":["",[],["fnv.rs","lib.rs","murmur3.rs"]],\
 "heapless":["",[["pool",[["singleton",[],["arc.rs"]]],["cas.rs","mod.rs","singleton.rs"]]],["binary_heap.rs","de.rs","deque.rs","histbuf.rs","indexmap.rs","indexset.rs","lib.rs","linear_map.rs","mpmc.rs","sealed.rs","ser.rs","sorted_linked_list.rs","spsc.rs","string.rs","vec.rs"]],\
 "heapless_bytes":["",[],["lib.rs"]],\
-"hex_literal":["",[],["comments.rs","lib.rs"]],\
+"hex_literal":["",[],["lib.rs"]],\
 "hmac":["",[],["lib.rs","optim.rs","simple.rs"]],\
 "inout":["",[],["errors.rs","inout.rs","inout_buf.rs","lib.rs","reserved.rs"]],\
 "interchange":["",[],["lib.rs"]],\

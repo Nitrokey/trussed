@@ -109,6 +109,13 @@
 <a href="#109" id="109">109</a>
 <a href="#110" id="110">110</a>
 <a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
 </pre><pre class="rust"><code><span class="doccomment">//! This is so nasty!
 //!
 //! We need to support 3DES to provide compatibility with Yubico&#39;s braindead
@@ -117,6 +124,7 @@
 </span><span class="comment">// use cortex_m_semihosting::{dbg, hprintln};
 
 // needed to even get ::new() from des...
+</span><span class="attr">#[cfg(feature = <span class="string">&quot;tdes&quot;</span>)]
 </span><span class="kw">use </span>des::cipher::{BlockDecrypt, BlockEncrypt, KeyInit};
 
 <span class="kw">use </span><span class="kw">crate</span>::api::<span class="kw-2">*</span>;
@@ -220,5 +228,11 @@
         <span class="prelude-val">Ok</span>(reply::UnsafeInjectKey { key: key_id })
     }
 }
+
+<span class="attr">#[cfg(not(feature = <span class="string">&quot;tdes&quot;</span>))]
+</span><span class="kw">impl </span>Encrypt <span class="kw">for </span><span class="kw">super</span>::Tdes {}
+
+<span class="attr">#[cfg(not(feature = <span class="string">&quot;tdes&quot;</span>))]
+</span><span class="kw">impl </span>Decrypt <span class="kw">for </span><span class="kw">super</span>::Tdes {}
 </code></pre></div>
 </section></main><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="trussed" data-themes="" data-resource-suffix="" data-rustdoc-version="1.69.0 (84c898d65 2023-04-16)" data-search-js="search-8a59a8356673ec1f.js" data-settings-js="settings-f0c5c39777a9a2f6.js" data-settings-css="settings-0bcba95ff279c1db.css" ></div></body></html>

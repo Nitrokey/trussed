@@ -62,6 +62,8 @@
 <a href="#62" id="62">62</a>
 <a href="#63" id="63">63</a>
 <a href="#64" id="64">64</a>
+<a href="#65" id="65">65</a>
+<a href="#66" id="66">66</a>
 </pre><pre class="rust"><code><span class="attr">#![allow(non_camel_case_types)]
 #![allow(clippy::upper_case_acronyms)]
 
@@ -104,6 +106,8 @@
         <span class="kw">pub const </span>MAX_SERVICE_CLIENTS: usize = <span class="number">2</span>;
     } <span class="kw">else if </span><span class="attr">#[cfg(feature = <span class="string">&quot;clients-1&quot;</span>)] </span>{
         <span class="kw">pub const </span>MAX_SERVICE_CLIENTS: usize = <span class="number">1</span>;
+    } <span class="kw">else </span>{
+        <span class="kw">pub const </span>MAX_SERVICE_CLIENTS: usize = <span class="number">0</span>;
     }
 }
 <span class="kw">pub const </span>MAX_SHORT_DATA_LENGTH: usize = <span class="number">128</span>;
