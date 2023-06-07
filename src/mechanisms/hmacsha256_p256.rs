@@ -1,21 +1,6 @@
-#[cfg(feature = "hmac-sha256-p256")]
 use crate::api::*;
-#[cfg(feature = "hmac-sha256-p256")]
 use crate::error::Error;
 use crate::service::*;
-#[cfg(feature = "hmac-sha256-p256")]
-use hmac::crypto_mac::InvalidKeyLength;
-
-#[cfg(feature = "hmac-sha256-p256")]
-use hmac::{Hmac, Mac, NewMac};
-#[cfg(feature = "hmac-sha256-p256")]
-type HmacSha256 = Hmac<sha2::Sha256>;
-
-#[cfg(feature = "hmac-sha256-p256")]
-fn get_hmac(key: &[u8]) -> Result<HmacSha256, InvalidKeyLength> {
-    let mac = HmacSha256::new_from_slice(&key.as_ref())?;
-    Ok(mac)
-}
 
 #[cfg(feature = "hmac-sha256-p256")]
 impl DeriveKey for super::HmacSha256P256 {
@@ -24,23 +9,34 @@ impl DeriveKey for super::HmacSha256P256 {
         keystore: &mut impl Keystore,
         request: &request::DeriveKey,
     ) -> Result<reply::DeriveKey, Error> {
-        //TODO: identical as HmacSha256 implementation, but stores key as Kind::P256
+        //TODO: this is identical as the HmacSha256 implementation, but stores the resulting key as Kind::P256
+        use hmac::{Hmac, Mac};
+        type HmacSha256P256 = Hmac<sha2::Sha256>;
+
         let key_id = request.base_key;
-        let material_raw = keystore
-            .load_key(key::Secrecy::Secret, None, &key_id)?
-            .material;
-        let shared_secret = material_raw.as_slice();
-        let mut mac = get_hmac(&shared_secret[..32]).map_err(|_| Error::InternalError)?;
+        let key = keystore.load_key(key::Secrecy::Secret, None, &key_id)?;
+        if !matches!(key.kind, key::Kind::Symmetric(..) | key::Kind::Shared(..)) {
+            // We have to disable this check for compatibility with fido-authenticator, see:
+            // https://github.com/solokeys/fido-authenticator/issues/21
+            warn!(
+                "\
+                qderive_key for HmacSha256P256 called with invalid key kind ({:?})",
+                key.kind
+            );
+        }
+        let shared_secret = key.material;
+
+        let mut mac =
+            HmacSha256P256::new_from_slice(shared_secret.as_ref()).map_err(|_| Error::InternalError)?;
 
         if let Some(additional_data) = &request.additional_data {
-            mac.update(&additional_data);
+            mac.update(additional_data);
         }
         let derived_key: [u8; 32] = mac
             .finalize()
             .into_bytes()
             .try_into()
             .map_err(|_| Error::InternalError)?;
-
         let key_id = keystore.store_key(
             request.attributes.persistence,
             key::Secrecy::Secret,
@@ -51,6 +47,12 @@ impl DeriveKey for super::HmacSha256P256 {
         Ok(reply::DeriveKey { key: key_id })
     }
 }
+
+
+#[cfg(not(feature = "hmac-sha256-p256"))]
+impl DeriveKey for super::HmacSha256P256 {}
+#[cfg(not(feature = "hmac-sha256-p256"))]
+impl Sign for super::HmacSha256P256 {}
 
 #[cfg(not(feature = "hmac-sha256-p256"))]
 impl DeriveKey for super::HmacSha256P256 {}
