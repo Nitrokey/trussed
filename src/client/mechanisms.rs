@@ -197,7 +197,7 @@ pub trait HmacSha256: CryptoClient {
 }
 
 #[cfg(feature = "hmac-sha256-p256")]
-impl<S: Syscall> HmacSha256P256 for ClientImplementation<S> {}
+impl<S: Syscall, E> HmacSha256P256 for ClientImplementation<S, E> {}
 
 pub trait HmacSha256P256: CryptoClient {
     fn hmacsha256p256_derive_key(&mut self, base_key: KeyId, message: &[u8], persistence: Location)
