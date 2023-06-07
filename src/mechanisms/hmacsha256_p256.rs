@@ -19,8 +19,7 @@ impl DeriveKey for super::HmacSha256P256 {
             // We have to disable this check for compatibility with fido-authenticator, see:
             // https://github.com/solokeys/fido-authenticator/issues/21
             warn!(
-                "\
-                qderive_key for HmacSha256P256 called with invalid key kind ({:?})",
+                "derive_key for HmacSha256P256 called with invalid key kind ({:?})",
                 key.kind
             );
         }
@@ -48,11 +47,6 @@ impl DeriveKey for super::HmacSha256P256 {
     }
 }
 
-
-#[cfg(not(feature = "hmac-sha256-p256"))]
-impl DeriveKey for super::HmacSha256P256 {}
-#[cfg(not(feature = "hmac-sha256-p256"))]
-impl Sign for super::HmacSha256P256 {}
 
 #[cfg(not(feature = "hmac-sha256-p256"))]
 impl DeriveKey for super::HmacSha256P256 {}
