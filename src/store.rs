@@ -125,9 +125,9 @@ pub unsafe trait Store: Copy {
     type I: 'static + LfsStorage;
     type E: 'static + LfsStorage;
     type V: 'static + LfsStorage;
-    fn ifs(self) -> &'static Fs<Self::I>;
-    fn efs(self) -> &'static Fs<Self::E>;
-    fn vfs(self) -> &'static Fs<Self::V>;
+    fn ifs(self) -> &'static Filesystem<'static, Self::I>;
+    fn efs(self) -> &'static Filesystem<'static, Self::E>;
+    fn vfs(self) -> &'static Filesystem<'static, Self::V>;
 }
 
 pub struct Fs<S: 'static + LfsStorage> {
@@ -166,13 +166,13 @@ macro_rules! store {
             type E = $Efs;
             type V = $Vfs;
 
-            fn ifs(self) -> &'static $crate::store::Fs<$Ifs> {
+            fn ifs(self) -> &'static $crate::types::Filesystem<'static, $Ifs> {
                 unsafe { &*Self::ifs_ptr() }
             }
-            fn efs(self) -> &'static $crate::store::Fs<$Efs> {
+            fn efs(self) -> &'static $crate::types::Filesystem<'static, $Efs> {
                 unsafe { &*Self::efs_ptr() }
             }
-            fn vfs(self) -> &'static $crate::store::Fs<$Vfs> {
+            fn vfs(self) -> &'static $crate::types::Filesystem<'static, $Vfs> {
                 unsafe { &*Self::vfs_ptr() }
             }
         }

@@ -5,7 +5,7 @@ use crate::{
     types::{LfsStorage, Location, Message, UserAttribute},
     Bytes,
 };
-use littlefs2::path;
+use littlefs2::{fs::Filesystem, path};
 
 #[derive(Clone)]
 pub struct ReadDirState {
@@ -27,7 +27,6 @@ use littlefs2::{
     path::{Path, PathBuf},
 };
 
-use super::Fs;
 pub type ClientId = PathBuf;
 
 pub struct ClientFilestore<S>
@@ -147,7 +146,7 @@ impl<S: Store> ClientFilestore<S> {
         clients_dir: &Path,
         location: Location,
         not_before: Option<&Path>,
-        fs: &'static Fs<F>,
+        fs: &'static Filesystem<'static, F>,
     ) -> Result<Option<(DirEntry, ReadDirState)>> {
         let dir = self.actual_path(clients_dir)?;
 
@@ -200,7 +199,7 @@ impl<S: Store> ClientFilestore<S> {
     fn read_dir_next_impl<F: LfsStorage + 'static>(
         &mut self,
         state: ReadDirState,
-        fs: &'static Fs<F>,
+        fs: &'static Filesystem<'static, F>,
     ) -> Result<Option<(DirEntry, ReadDirState)>> {
         let ReadDirState {
             real_dir,
@@ -239,7 +238,7 @@ impl<S: Store> ClientFilestore<S> {
         clients_dir: &Path,
         location: Location,
         user_attribute: Option<UserAttribute>,
-        fs: &'static Fs<F>,
+        fs: &'static Filesystem<'static, F>,
     ) -> Result<Option<(Option<Message>, ReadDirFilesState)>> {
         let dir = self.actual_path(clients_dir)?;
 
@@ -298,7 +297,7 @@ impl<S: Store> ClientFilestore<S> {
     fn read_dir_files_next_impl<F: LfsStorage + 'static>(
         &mut self,
         state: ReadDirFilesState,
-        fs: &'static Fs<F>,
+        fs: &'static Filesystem<'static, F>,
     ) -> Result<Option<(Option<Message>, ReadDirFilesState)>> {
         let ReadDirFilesState {
             real_dir,
@@ -502,7 +501,7 @@ impl<S: Store> Filestore for ClientFilestore<S> {
         info_now!("base dir {:?}", &dir);
 
         fn recursively_locate<S: 'static + crate::types::LfsStorage>(
-            fs: &'static crate::store::Fs<S>,
+            fs: &'static Filesystem<'static, S>,
             dir: &Path,
             filename: &Path,
         ) -> Option<PathBuf> {

@@ -1,4 +1,5 @@
 use littlefs2::{
+    fs::Filesystem,
     path,
     path::{Path, PathBuf},
 };
@@ -329,7 +330,7 @@ impl<P: Platform> ServiceResources<P> {
                 info_now!(":: VOLATILE");
                 recursively_list(self.platform.store().vfs(), path!("/"));
 
-                fn recursively_list<S: 'static + crate::types::LfsStorage>(fs: &'static crate::store::Fs<S>, path: &Path) {
+                fn recursively_list<S: 'static + crate::types::LfsStorage>(fs: &'static Filesystem<'static, S>, path: &Path) {
                     // let fs = store.vfs();
                     fs.read_dir_and_then(path, |dir| {
                         for (i, entry) in dir.enumerate() {
