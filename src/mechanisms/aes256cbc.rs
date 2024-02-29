@@ -31,8 +31,16 @@ impl Encrypt for super::Aes256Cbc {
             .try_into()
             .map_err(|_| Error::InternalError)?;
 
-        let zero_iv = [0u8; 16];
-        let cipher = Aes256CbcEnc::new_from_slices(&symmetric_key, &zero_iv).unwrap();
+        let iv = if request.associated_data.is_empty() {
+            [0u8; 16]
+        } else {
+            request
+                .associated_data
+                .as_slice()
+                .try_into()
+                .map_err(|_| Error::MechanismParamInvalid)?
+        };
+        let cipher = Aes256CbcEnc::new_from_slices(&symmetric_key, &iv).unwrap();
 
         // buffer must have enough space for message+padding
         let mut buffer = request.message.clone();
@@ -117,8 +125,16 @@ impl Decrypt for super::Aes256Cbc {
             .try_into()
             .map_err(|_| Error::InternalError)?;
 
-        let zero_iv = [0u8; 16];
-        let cipher = Aes256CbcDec::new_from_slices(&symmetric_key, &zero_iv).unwrap();
+        let iv = if request.associated_data.is_empty() {
+            [0u8; 16]
+        } else {
+            request
+                .associated_data
+                .as_slice()
+                .try_into()
+                .map_err(|_| Error::MechanismParamInvalid)?
+        };
+        let cipher = Aes256CbcDec::new_from_slices(&symmetric_key, &iv).unwrap();
 
         // buffer must have enough space for message+padding
         let mut buffer = request.message.clone();

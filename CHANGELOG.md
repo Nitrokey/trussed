@@ -43,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   by default).
 - Change store implementations to use littlefs2’s `DynFilesystem` trait instead
   of being generic over the storage implementation.
+- Use associated data as IV if not empty for `Aes256Cbc`.
 
 ### Fixed
 
