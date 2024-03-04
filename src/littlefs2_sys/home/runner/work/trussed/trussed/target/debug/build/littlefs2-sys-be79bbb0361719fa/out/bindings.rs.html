@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/work/trussed/trussed/target/debug/build/littlefs2-sys-ac68931b8cf6a4d8/out/bindings.rs`."><title>bindings.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../../../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../../../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../../../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../../../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../../../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../../../../../../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../../../../../../../../../static.files/rustdoc-9ee3a5e31a2afa3e.css"><meta name="rustdoc-vars" data-root-path="../../../../../../../../../../../../" data-static-root-path="../../../../../../../../../../../../static.files/" data-current-crate="littlefs2_sys" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0 (82e1608df 2023-12-21)" data-channel="1.75.0" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../../../../../../../../../../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../../../../../../../../../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../../../../../../../../../../src-files.js"></script><script defer src="../../../../../../../../../../../../static.files/main-9dd44ab47b99a0fb.js"></script><noscript><link rel="stylesheet" href="../../../../../../../../../../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../../../../../../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../../../../../../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../../../../../../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../../../../../../../../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../../../../../../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../../../../../../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/work/trussed/trussed/target/debug/build/littlefs2-sys-be79bbb0361719fa/out/bindings.rs`."><title>bindings.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../../../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../../../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../../../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../../../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../../../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../../../../../../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../../../../../../../../../static.files/rustdoc-ac92e1bbe349e143.css"><meta name="rustdoc-vars" data-root-path="../../../../../../../../../../../../" data-static-root-path="../../../../../../../../../../../../static.files/" data-current-crate="littlefs2_sys" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0 (07dca489a 2024-02-04)" data-channel="1.76.0" data-search-js="search-2b6ce74ff89ae146.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../../../../../../../../../../static.files/storage-f2adc0d6ca4d09fb.js"></script><script defer src="../../../../../../../../../../../../static.files/src-script-39ed315d46fb705f.js"></script><script defer src="../../../../../../../../../../../../src-files.js"></script><script defer src="../../../../../../../../../../../../static.files/main-305769736d49e732.js"></script><noscript><link rel="stylesheet" href="../../../../../../../../../../../../static.files/noscript-feafe1bb7466e4bd.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../../../../../../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../../../../../../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../../../../../../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../../../../../../../../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../../../../../../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../../../../../../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -1789,20 +1790,20 @@
     <span class="macro">assert_eq!</span>(
         ::core::mem::size_of::&lt;__fsid_t&gt;(),
         <span class="number">8usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Size of: &quot;</span>, <span class="macro">stringify!</span>(__fsid_t))
+        <span class="macro">concat!</span>(<span class="string">"Size of: "</span>, <span class="macro">stringify!</span>(__fsid_t))
     );
     <span class="macro">assert_eq!</span>(
         ::core::mem::align_of::&lt;__fsid_t&gt;(),
         <span class="number">4usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Alignment of &quot;</span>, <span class="macro">stringify!</span>(__fsid_t))
+        <span class="macro">concat!</span>(<span class="string">"Alignment of "</span>, <span class="macro">stringify!</span>(__fsid_t))
     );
     <span class="macro">assert_eq!</span>(
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;__fsid_t&gt;())).__val <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">0usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(__fsid_t),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(__val)
         )
     );
@@ -1853,7 +1854,7 @@
 <span class="kw">pub type </span>uint_fast64_t = cty::c_ulong;
 <span class="kw">pub type </span>intmax_t = __intmax_t;
 <span class="kw">pub type </span>uintmax_t = __uintmax_t;
-<span class="attr">#[doc = <span class="string">&quot; Definitions ///&quot;</span>]
+<span class="attr">#[doc = <span class="string">" Definitions ///"</span>]
 </span><span class="kw">pub type </span>lfs_size_t = u32;
 <span class="kw">pub type </span>lfs_off_t = u32;
 <span class="kw">pub type </span>lfs_ssize_t = i32;
@@ -1921,7 +1922,7 @@
 </span><span class="kw">pub struct </span>lfs_config {
     <span class="kw">pub </span>context: <span class="kw-2">*mut </span>cty::c_void,
     <span class="kw">pub </span>read: ::core::option::Option&lt;
-        <span class="kw">unsafe extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn</span>(
+        <span class="kw">unsafe extern </span><span class="string">"C" </span><span class="kw">fn</span>(
             c: <span class="kw-2">*const </span>lfs_config,
             block: lfs_block_t,
             off: lfs_off_t,
@@ -1930,7 +1931,7 @@
         ) -&gt; cty::c_int,
     &gt;,
     <span class="kw">pub </span>prog: ::core::option::Option&lt;
-        <span class="kw">unsafe extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn</span>(
+        <span class="kw">unsafe extern </span><span class="string">"C" </span><span class="kw">fn</span>(
             c: <span class="kw-2">*const </span>lfs_config,
             block: lfs_block_t,
             off: lfs_off_t,
@@ -1939,9 +1940,9 @@
         ) -&gt; cty::c_int,
     &gt;,
     <span class="kw">pub </span>erase: ::core::option::Option&lt;
-        <span class="kw">unsafe extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn</span>(c: <span class="kw-2">*const </span>lfs_config, block: lfs_block_t) -&gt; cty::c_int,
+        <span class="kw">unsafe extern </span><span class="string">"C" </span><span class="kw">fn</span>(c: <span class="kw-2">*const </span>lfs_config, block: lfs_block_t) -&gt; cty::c_int,
     &gt;,
-    <span class="kw">pub </span>sync: ::core::option::Option&lt;<span class="kw">unsafe extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn</span>(c: <span class="kw-2">*const </span>lfs_config) -&gt; cty::c_int&gt;,
+    <span class="kw">pub </span>sync: ::core::option::Option&lt;<span class="kw">unsafe extern </span><span class="string">"C" </span><span class="kw">fn</span>(c: <span class="kw-2">*const </span>lfs_config) -&gt; cty::c_int&gt;,
     <span class="kw">pub </span>read_size: lfs_size_t,
     <span class="kw">pub </span>prog_size: lfs_size_t,
     <span class="kw">pub </span>block_size: lfs_size_t,
@@ -1961,20 +1962,20 @@
     <span class="macro">assert_eq!</span>(
         ::core::mem::size_of::&lt;lfs_config&gt;(),
         <span class="number">112usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Size of: &quot;</span>, <span class="macro">stringify!</span>(lfs_config))
+        <span class="macro">concat!</span>(<span class="string">"Size of: "</span>, <span class="macro">stringify!</span>(lfs_config))
     );
     <span class="macro">assert_eq!</span>(
         ::core::mem::align_of::&lt;lfs_config&gt;(),
         <span class="number">8usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Alignment of &quot;</span>, <span class="macro">stringify!</span>(lfs_config))
+        <span class="macro">concat!</span>(<span class="string">"Alignment of "</span>, <span class="macro">stringify!</span>(lfs_config))
     );
     <span class="macro">assert_eq!</span>(
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_config&gt;())).context <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">0usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_config),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(context)
         )
     );
@@ -1982,9 +1983,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_config&gt;())).read <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">8usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_config),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(read)
         )
     );
@@ -1992,9 +1993,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_config&gt;())).prog <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">16usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_config),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(prog)
         )
     );
@@ -2002,9 +2003,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_config&gt;())).erase <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">24usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_config),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(erase)
         )
     );
@@ -2012,9 +2013,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_config&gt;())).sync <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">32usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_config),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(sync)
         )
     );
@@ -2022,9 +2023,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_config&gt;())).read_size <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">40usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_config),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(read_size)
         )
     );
@@ -2032,9 +2033,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_config&gt;())).prog_size <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">44usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_config),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(prog_size)
         )
     );
@@ -2042,9 +2043,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_config&gt;())).block_size <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">48usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_config),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(block_size)
         )
     );
@@ -2052,9 +2053,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_config&gt;())).block_count <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">52usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_config),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(block_count)
         )
     );
@@ -2062,9 +2063,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_config&gt;())).block_cycles <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">56usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_config),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(block_cycles)
         )
     );
@@ -2072,9 +2073,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_config&gt;())).cache_size <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">60usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_config),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(cache_size)
         )
     );
@@ -2082,9 +2083,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_config&gt;())).lookahead_size <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">64usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_config),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(lookahead_size)
         )
     );
@@ -2092,9 +2093,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_config&gt;())).read_buffer <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">72usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_config),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(read_buffer)
         )
     );
@@ -2102,9 +2103,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_config&gt;())).prog_buffer <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">80usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_config),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(prog_buffer)
         )
     );
@@ -2112,9 +2113,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_config&gt;())).lookahead_buffer <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">88usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_config),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(lookahead_buffer)
         )
     );
@@ -2122,9 +2123,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_config&gt;())).name_max <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">96usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_config),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(name_max)
         )
     );
@@ -2132,9 +2133,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_config&gt;())).file_max <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">100usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_config),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(file_max)
         )
     );
@@ -2142,9 +2143,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_config&gt;())).attr_max <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">104usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_config),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(attr_max)
         )
     );
@@ -2161,20 +2162,20 @@
     <span class="macro">assert_eq!</span>(
         ::core::mem::size_of::&lt;lfs_info&gt;(),
         <span class="number">264usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Size of: &quot;</span>, <span class="macro">stringify!</span>(lfs_info))
+        <span class="macro">concat!</span>(<span class="string">"Size of: "</span>, <span class="macro">stringify!</span>(lfs_info))
     );
     <span class="macro">assert_eq!</span>(
         ::core::mem::align_of::&lt;lfs_info&gt;(),
         <span class="number">4usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Alignment of &quot;</span>, <span class="macro">stringify!</span>(lfs_info))
+        <span class="macro">concat!</span>(<span class="string">"Alignment of "</span>, <span class="macro">stringify!</span>(lfs_info))
     );
     <span class="macro">assert_eq!</span>(
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_info&gt;())).type_ <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">0usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_info),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(type_)
         )
     );
@@ -2182,9 +2183,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_info&gt;())).size <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">4usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_info),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(size)
         )
     );
@@ -2192,9 +2193,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_info&gt;())).name <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">8usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_info),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(name)
         )
     );
@@ -2211,20 +2212,20 @@
     <span class="macro">assert_eq!</span>(
         ::core::mem::size_of::&lt;lfs_attr&gt;(),
         <span class="number">24usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Size of: &quot;</span>, <span class="macro">stringify!</span>(lfs_attr))
+        <span class="macro">concat!</span>(<span class="string">"Size of: "</span>, <span class="macro">stringify!</span>(lfs_attr))
     );
     <span class="macro">assert_eq!</span>(
         ::core::mem::align_of::&lt;lfs_attr&gt;(),
         <span class="number">8usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Alignment of &quot;</span>, <span class="macro">stringify!</span>(lfs_attr))
+        <span class="macro">concat!</span>(<span class="string">"Alignment of "</span>, <span class="macro">stringify!</span>(lfs_attr))
     );
     <span class="macro">assert_eq!</span>(
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_attr&gt;())).type_ <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">0usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_attr),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(type_)
         )
     );
@@ -2232,9 +2233,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_attr&gt;())).buffer <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">8usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_attr),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(buffer)
         )
     );
@@ -2242,9 +2243,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_attr&gt;())).size <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">16usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_attr),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(size)
         )
     );
@@ -2261,20 +2262,20 @@
     <span class="macro">assert_eq!</span>(
         ::core::mem::size_of::&lt;lfs_file_config&gt;(),
         <span class="number">24usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Size of: &quot;</span>, <span class="macro">stringify!</span>(lfs_file_config))
+        <span class="macro">concat!</span>(<span class="string">"Size of: "</span>, <span class="macro">stringify!</span>(lfs_file_config))
     );
     <span class="macro">assert_eq!</span>(
         ::core::mem::align_of::&lt;lfs_file_config&gt;(),
         <span class="number">8usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Alignment of &quot;</span>, <span class="macro">stringify!</span>(lfs_file_config))
+        <span class="macro">concat!</span>(<span class="string">"Alignment of "</span>, <span class="macro">stringify!</span>(lfs_file_config))
     );
     <span class="macro">assert_eq!</span>(
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_file_config&gt;())).buffer <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">0usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_file_config),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(buffer)
         )
     );
@@ -2282,9 +2283,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_file_config&gt;())).attrs <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">8usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_file_config),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(attrs)
         )
     );
@@ -2292,14 +2293,14 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_file_config&gt;())).attr_count <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">16usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_file_config),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(attr_count)
         )
     );
 }
-<span class="attr">#[doc = <span class="string">&quot; internal littlefs data structures ///&quot;</span>]
+<span class="attr">#[doc = <span class="string">" internal littlefs data structures ///"</span>]
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 </span><span class="kw">pub struct </span>lfs_cache {
@@ -2313,20 +2314,20 @@
     <span class="macro">assert_eq!</span>(
         ::core::mem::size_of::&lt;lfs_cache&gt;(),
         <span class="number">24usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Size of: &quot;</span>, <span class="macro">stringify!</span>(lfs_cache))
+        <span class="macro">concat!</span>(<span class="string">"Size of: "</span>, <span class="macro">stringify!</span>(lfs_cache))
     );
     <span class="macro">assert_eq!</span>(
         ::core::mem::align_of::&lt;lfs_cache&gt;(),
         <span class="number">8usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Alignment of &quot;</span>, <span class="macro">stringify!</span>(lfs_cache))
+        <span class="macro">concat!</span>(<span class="string">"Alignment of "</span>, <span class="macro">stringify!</span>(lfs_cache))
     );
     <span class="macro">assert_eq!</span>(
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_cache&gt;())).block <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">0usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_cache),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(block)
         )
     );
@@ -2334,9 +2335,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_cache&gt;())).off <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">4usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_cache),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(off)
         )
     );
@@ -2344,9 +2345,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_cache&gt;())).size <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">8usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_cache),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(size)
         )
     );
@@ -2354,14 +2355,14 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_cache&gt;())).buffer <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">16usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_cache),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(buffer)
         )
     );
 }
-<span class="attr">#[doc = <span class="string">&quot; internal littlefs data structures ///&quot;</span>]
+<span class="attr">#[doc = <span class="string">" internal littlefs data structures ///"</span>]
 </span><span class="kw">pub type </span>lfs_cache_t = lfs_cache;
 <span class="attr">#[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -2380,20 +2381,20 @@
     <span class="macro">assert_eq!</span>(
         ::core::mem::size_of::&lt;lfs_mdir&gt;(),
         <span class="number">32usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Size of: &quot;</span>, <span class="macro">stringify!</span>(lfs_mdir))
+        <span class="macro">concat!</span>(<span class="string">"Size of: "</span>, <span class="macro">stringify!</span>(lfs_mdir))
     );
     <span class="macro">assert_eq!</span>(
         ::core::mem::align_of::&lt;lfs_mdir&gt;(),
         <span class="number">4usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Alignment of &quot;</span>, <span class="macro">stringify!</span>(lfs_mdir))
+        <span class="macro">concat!</span>(<span class="string">"Alignment of "</span>, <span class="macro">stringify!</span>(lfs_mdir))
     );
     <span class="macro">assert_eq!</span>(
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_mdir&gt;())).pair <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">0usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_mdir),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(pair)
         )
     );
@@ -2401,9 +2402,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_mdir&gt;())).rev <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">8usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_mdir),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(rev)
         )
     );
@@ -2411,9 +2412,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_mdir&gt;())).off <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">12usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_mdir),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(off)
         )
     );
@@ -2421,9 +2422,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_mdir&gt;())).etag <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">16usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_mdir),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(etag)
         )
     );
@@ -2431,9 +2432,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_mdir&gt;())).count <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">20usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_mdir),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(count)
         )
     );
@@ -2441,9 +2442,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_mdir&gt;())).erased <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">22usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_mdir),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(erased)
         )
     );
@@ -2451,9 +2452,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_mdir&gt;())).split <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">23usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_mdir),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(split)
         )
     );
@@ -2461,9 +2462,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_mdir&gt;())).tail <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">24usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_mdir),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(tail)
         )
     );
@@ -2484,20 +2485,20 @@
     <span class="macro">assert_eq!</span>(
         ::core::mem::size_of::&lt;lfs_dir&gt;(),
         <span class="number">56usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Size of: &quot;</span>, <span class="macro">stringify!</span>(lfs_dir))
+        <span class="macro">concat!</span>(<span class="string">"Size of: "</span>, <span class="macro">stringify!</span>(lfs_dir))
     );
     <span class="macro">assert_eq!</span>(
         ::core::mem::align_of::&lt;lfs_dir&gt;(),
         <span class="number">8usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Alignment of &quot;</span>, <span class="macro">stringify!</span>(lfs_dir))
+        <span class="macro">concat!</span>(<span class="string">"Alignment of "</span>, <span class="macro">stringify!</span>(lfs_dir))
     );
     <span class="macro">assert_eq!</span>(
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_dir&gt;())).next <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">0usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_dir),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(next)
         )
     );
@@ -2505,9 +2506,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_dir&gt;())).id <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">8usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_dir),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(id)
         )
     );
@@ -2515,9 +2516,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_dir&gt;())).type_ <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">10usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_dir),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(type_)
         )
     );
@@ -2525,9 +2526,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_dir&gt;())).m <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">12usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_dir),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(m)
         )
     );
@@ -2535,9 +2536,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_dir&gt;())).pos <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">44usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_dir),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(pos)
         )
     );
@@ -2545,9 +2546,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_dir&gt;())).head <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">48usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_dir),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(head)
         )
     );
@@ -2579,20 +2580,20 @@
     <span class="macro">assert_eq!</span>(
         ::core::mem::size_of::&lt;lfs_file_lfs_ctz&gt;(),
         <span class="number">8usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Size of: &quot;</span>, <span class="macro">stringify!</span>(lfs_file_lfs_ctz))
+        <span class="macro">concat!</span>(<span class="string">"Size of: "</span>, <span class="macro">stringify!</span>(lfs_file_lfs_ctz))
     );
     <span class="macro">assert_eq!</span>(
         ::core::mem::align_of::&lt;lfs_file_lfs_ctz&gt;(),
         <span class="number">4usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Alignment of &quot;</span>, <span class="macro">stringify!</span>(lfs_file_lfs_ctz))
+        <span class="macro">concat!</span>(<span class="string">"Alignment of "</span>, <span class="macro">stringify!</span>(lfs_file_lfs_ctz))
     );
     <span class="macro">assert_eq!</span>(
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_file_lfs_ctz&gt;())).head <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">0usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_file_lfs_ctz),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(head)
         )
     );
@@ -2600,9 +2601,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_file_lfs_ctz&gt;())).size <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">4usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_file_lfs_ctz),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(size)
         )
     );
@@ -2612,20 +2613,20 @@
     <span class="macro">assert_eq!</span>(
         ::core::mem::size_of::&lt;lfs_file&gt;(),
         <span class="number">104usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Size of: &quot;</span>, <span class="macro">stringify!</span>(lfs_file))
+        <span class="macro">concat!</span>(<span class="string">"Size of: "</span>, <span class="macro">stringify!</span>(lfs_file))
     );
     <span class="macro">assert_eq!</span>(
         ::core::mem::align_of::&lt;lfs_file&gt;(),
         <span class="number">8usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Alignment of &quot;</span>, <span class="macro">stringify!</span>(lfs_file))
+        <span class="macro">concat!</span>(<span class="string">"Alignment of "</span>, <span class="macro">stringify!</span>(lfs_file))
     );
     <span class="macro">assert_eq!</span>(
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_file&gt;())).next <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">0usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_file),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(next)
         )
     );
@@ -2633,9 +2634,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_file&gt;())).id <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">8usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_file),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(id)
         )
     );
@@ -2643,9 +2644,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_file&gt;())).type_ <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">10usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_file),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(type_)
         )
     );
@@ -2653,9 +2654,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_file&gt;())).m <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">12usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_file),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(m)
         )
     );
@@ -2663,9 +2664,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_file&gt;())).ctz <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">44usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_file),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(ctz)
         )
     );
@@ -2673,9 +2674,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_file&gt;())).flags <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">52usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_file),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(flags)
         )
     );
@@ -2683,9 +2684,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_file&gt;())).pos <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">56usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_file),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(pos)
         )
     );
@@ -2693,9 +2694,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_file&gt;())).block <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">60usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_file),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(block)
         )
     );
@@ -2703,9 +2704,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_file&gt;())).off <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">64usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_file),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(off)
         )
     );
@@ -2713,9 +2714,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_file&gt;())).cache <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">72usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_file),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(cache)
         )
     );
@@ -2723,9 +2724,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_file&gt;())).cfg <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">96usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_file),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(cfg)
         )
     );
@@ -2746,20 +2747,20 @@
     <span class="macro">assert_eq!</span>(
         ::core::mem::size_of::&lt;lfs_superblock&gt;(),
         <span class="number">24usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Size of: &quot;</span>, <span class="macro">stringify!</span>(lfs_superblock))
+        <span class="macro">concat!</span>(<span class="string">"Size of: "</span>, <span class="macro">stringify!</span>(lfs_superblock))
     );
     <span class="macro">assert_eq!</span>(
         ::core::mem::align_of::&lt;lfs_superblock&gt;(),
         <span class="number">4usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Alignment of &quot;</span>, <span class="macro">stringify!</span>(lfs_superblock))
+        <span class="macro">concat!</span>(<span class="string">"Alignment of "</span>, <span class="macro">stringify!</span>(lfs_superblock))
     );
     <span class="macro">assert_eq!</span>(
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_superblock&gt;())).version <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">0usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_superblock),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(version)
         )
     );
@@ -2767,9 +2768,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_superblock&gt;())).block_size <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">4usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_superblock),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(block_size)
         )
     );
@@ -2777,9 +2778,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_superblock&gt;())).block_count <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">8usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_superblock),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(block_count)
         )
     );
@@ -2787,9 +2788,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_superblock&gt;())).name_max <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">12usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_superblock),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(name_max)
         )
     );
@@ -2797,9 +2798,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_superblock&gt;())).file_max <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">16usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_superblock),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(file_max)
         )
     );
@@ -2807,9 +2808,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_superblock&gt;())).attr_max <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">20usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_superblock),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(attr_max)
         )
     );
@@ -2826,20 +2827,20 @@
     <span class="macro">assert_eq!</span>(
         ::core::mem::size_of::&lt;lfs_gstate&gt;(),
         <span class="number">12usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Size of: &quot;</span>, <span class="macro">stringify!</span>(lfs_gstate))
+        <span class="macro">concat!</span>(<span class="string">"Size of: "</span>, <span class="macro">stringify!</span>(lfs_gstate))
     );
     <span class="macro">assert_eq!</span>(
         ::core::mem::align_of::&lt;lfs_gstate&gt;(),
         <span class="number">4usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Alignment of &quot;</span>, <span class="macro">stringify!</span>(lfs_gstate))
+        <span class="macro">concat!</span>(<span class="string">"Alignment of "</span>, <span class="macro">stringify!</span>(lfs_gstate))
     );
     <span class="macro">assert_eq!</span>(
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_gstate&gt;())).tag <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">0usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_gstate),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(tag)
         )
     );
@@ -2847,9 +2848,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_gstate&gt;())).pair <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">4usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_gstate),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(pair)
         )
     );
@@ -2885,20 +2886,20 @@
     <span class="macro">assert_eq!</span>(
         ::core::mem::size_of::&lt;lfs_lfs_mlist&gt;(),
         <span class="number">48usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Size of: &quot;</span>, <span class="macro">stringify!</span>(lfs_lfs_mlist))
+        <span class="macro">concat!</span>(<span class="string">"Size of: "</span>, <span class="macro">stringify!</span>(lfs_lfs_mlist))
     );
     <span class="macro">assert_eq!</span>(
         ::core::mem::align_of::&lt;lfs_lfs_mlist&gt;(),
         <span class="number">8usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Alignment of &quot;</span>, <span class="macro">stringify!</span>(lfs_lfs_mlist))
+        <span class="macro">concat!</span>(<span class="string">"Alignment of "</span>, <span class="macro">stringify!</span>(lfs_lfs_mlist))
     );
     <span class="macro">assert_eq!</span>(
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_lfs_mlist&gt;())).next <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">0usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_lfs_mlist),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(next)
         )
     );
@@ -2906,9 +2907,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_lfs_mlist&gt;())).id <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">8usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_lfs_mlist),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(id)
         )
     );
@@ -2916,9 +2917,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_lfs_mlist&gt;())).type_ <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">10usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_lfs_mlist),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(type_)
         )
     );
@@ -2926,9 +2927,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_lfs_mlist&gt;())).m <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">12usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_lfs_mlist),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(m)
         )
     );
@@ -2947,20 +2948,20 @@
     <span class="macro">assert_eq!</span>(
         ::core::mem::size_of::&lt;lfs_lfs_free&gt;(),
         <span class="number">24usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Size of: &quot;</span>, <span class="macro">stringify!</span>(lfs_lfs_free))
+        <span class="macro">concat!</span>(<span class="string">"Size of: "</span>, <span class="macro">stringify!</span>(lfs_lfs_free))
     );
     <span class="macro">assert_eq!</span>(
         ::core::mem::align_of::&lt;lfs_lfs_free&gt;(),
         <span class="number">8usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Alignment of &quot;</span>, <span class="macro">stringify!</span>(lfs_lfs_free))
+        <span class="macro">concat!</span>(<span class="string">"Alignment of "</span>, <span class="macro">stringify!</span>(lfs_lfs_free))
     );
     <span class="macro">assert_eq!</span>(
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_lfs_free&gt;())).off <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">0usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_lfs_free),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(off)
         )
     );
@@ -2968,9 +2969,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_lfs_free&gt;())).size <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">4usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_lfs_free),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(size)
         )
     );
@@ -2978,9 +2979,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_lfs_free&gt;())).i <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">8usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_lfs_free),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(i)
         )
     );
@@ -2988,9 +2989,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_lfs_free&gt;())).ack <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">12usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_lfs_free),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(ack)
         )
     );
@@ -2998,9 +2999,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs_lfs_free&gt;())).buffer <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">16usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs_lfs_free),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(buffer)
         )
     );
@@ -3010,20 +3011,20 @@
     <span class="macro">assert_eq!</span>(
         ::core::mem::size_of::&lt;lfs&gt;(),
         <span class="number">152usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Size of: &quot;</span>, <span class="macro">stringify!</span>(lfs))
+        <span class="macro">concat!</span>(<span class="string">"Size of: "</span>, <span class="macro">stringify!</span>(lfs))
     );
     <span class="macro">assert_eq!</span>(
         ::core::mem::align_of::&lt;lfs&gt;(),
         <span class="number">8usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Alignment of &quot;</span>, <span class="macro">stringify!</span>(lfs))
+        <span class="macro">concat!</span>(<span class="string">"Alignment of "</span>, <span class="macro">stringify!</span>(lfs))
     );
     <span class="macro">assert_eq!</span>(
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs&gt;())).rcache <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">0usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(rcache)
         )
     );
@@ -3031,39 +3032,39 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs&gt;())).pcache <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">24usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(pcache)
         )
     );
     <span class="macro">assert_eq!</span>(
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs&gt;())).root <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">48usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Offset of field: &quot;</span>, <span class="macro">stringify!</span>(lfs), <span class="string">&quot;::&quot;</span>, <span class="macro">stringify!</span>(root))
+        <span class="macro">concat!</span>(<span class="string">"Offset of field: "</span>, <span class="macro">stringify!</span>(lfs), <span class="string">"::"</span>, <span class="macro">stringify!</span>(root))
     );
     <span class="macro">assert_eq!</span>(
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs&gt;())).mlist <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">56usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(mlist)
         )
     );
     <span class="macro">assert_eq!</span>(
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs&gt;())).seed <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">64usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Offset of field: &quot;</span>, <span class="macro">stringify!</span>(lfs), <span class="string">&quot;::&quot;</span>, <span class="macro">stringify!</span>(seed))
+        <span class="macro">concat!</span>(<span class="string">"Offset of field: "</span>, <span class="macro">stringify!</span>(lfs), <span class="string">"::"</span>, <span class="macro">stringify!</span>(seed))
     );
     <span class="macro">assert_eq!</span>(
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs&gt;())).gstate <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">68usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(gstate)
         )
     );
@@ -3071,9 +3072,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs&gt;())).gdisk <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">80usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(gdisk)
         )
     );
@@ -3081,29 +3082,29 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs&gt;())).gdelta <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">92usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(gdelta)
         )
     );
     <span class="macro">assert_eq!</span>(
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs&gt;())).free <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">104usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Offset of field: &quot;</span>, <span class="macro">stringify!</span>(lfs), <span class="string">&quot;::&quot;</span>, <span class="macro">stringify!</span>(free))
+        <span class="macro">concat!</span>(<span class="string">"Offset of field: "</span>, <span class="macro">stringify!</span>(lfs), <span class="string">"::"</span>, <span class="macro">stringify!</span>(free))
     );
     <span class="macro">assert_eq!</span>(
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs&gt;())).cfg <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">128usize</span>,
-        <span class="macro">concat!</span>(<span class="string">&quot;Offset of field: &quot;</span>, <span class="macro">stringify!</span>(lfs), <span class="string">&quot;::&quot;</span>, <span class="macro">stringify!</span>(cfg))
+        <span class="macro">concat!</span>(<span class="string">"Offset of field: "</span>, <span class="macro">stringify!</span>(lfs), <span class="string">"::"</span>, <span class="macro">stringify!</span>(cfg))
     );
     <span class="macro">assert_eq!</span>(
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs&gt;())).name_max <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">136usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(name_max)
         )
     );
@@ -3111,9 +3112,9 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs&gt;())).file_max <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">140usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(file_max)
         )
     );
@@ -3121,39 +3122,39 @@
         <span class="kw">unsafe </span>{ <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::core::ptr::null::&lt;lfs&gt;())).attr_max <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_ as </span>usize },
         <span class="number">144usize</span>,
         <span class="macro">concat!</span>(
-            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="string">"Offset of field: "</span>,
             <span class="macro">stringify!</span>(lfs),
-            <span class="string">&quot;::&quot;</span>,
+            <span class="string">"::"</span>,
             <span class="macro">stringify!</span>(attr_max)
         )
     );
 }
 <span class="kw">pub type </span>lfs_t = lfs;
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
-    <span class="attr">#[doc = <span class="string">&quot; Filesystem functions ///&quot;</span>]
+<span class="kw">extern </span><span class="string">"C" </span>{
+    <span class="attr">#[doc = <span class="string">" Filesystem functions ///"</span>]
     </span><span class="kw">pub fn </span>lfs_format(lfs: <span class="kw-2">*mut </span>lfs_t, config: <span class="kw-2">*const </span>lfs_config) -&gt; cty::c_int;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
+<span class="kw">extern </span><span class="string">"C" </span>{
     <span class="kw">pub fn </span>lfs_mount(lfs: <span class="kw-2">*mut </span>lfs_t, config: <span class="kw-2">*const </span>lfs_config) -&gt; cty::c_int;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
+<span class="kw">extern </span><span class="string">"C" </span>{
     <span class="kw">pub fn </span>lfs_unmount(lfs: <span class="kw-2">*mut </span>lfs_t) -&gt; cty::c_int;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
-    <span class="attr">#[doc = <span class="string">&quot; General operations ///&quot;</span>]
+<span class="kw">extern </span><span class="string">"C" </span>{
+    <span class="attr">#[doc = <span class="string">" General operations ///"</span>]
     </span><span class="kw">pub fn </span>lfs_remove(lfs: <span class="kw-2">*mut </span>lfs_t, path: <span class="kw-2">*const </span>cty::c_char) -&gt; cty::c_int;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
+<span class="kw">extern </span><span class="string">"C" </span>{
     <span class="kw">pub fn </span>lfs_rename(
         lfs: <span class="kw-2">*mut </span>lfs_t,
         oldpath: <span class="kw-2">*const </span>cty::c_char,
         newpath: <span class="kw-2">*const </span>cty::c_char,
     ) -&gt; cty::c_int;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
+<span class="kw">extern </span><span class="string">"C" </span>{
     <span class="kw">pub fn </span>lfs_stat(lfs: <span class="kw-2">*mut </span>lfs_t, path: <span class="kw-2">*const </span>cty::c_char, info: <span class="kw-2">*mut </span>lfs_info) -&gt; cty::c_int;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
+<span class="kw">extern </span><span class="string">"C" </span>{
     <span class="kw">pub fn </span>lfs_getattr(
         lfs: <span class="kw-2">*mut </span>lfs_t,
         path: <span class="kw-2">*const </span>cty::c_char,
@@ -3162,7 +3163,7 @@
         size: lfs_size_t,
     ) -&gt; lfs_ssize_t;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
+<span class="kw">extern </span><span class="string">"C" </span>{
     <span class="kw">pub fn </span>lfs_setattr(
         lfs: <span class="kw-2">*mut </span>lfs_t,
         path: <span class="kw-2">*const </span>cty::c_char,
@@ -3171,11 +3172,11 @@
         size: lfs_size_t,
     ) -&gt; cty::c_int;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
+<span class="kw">extern </span><span class="string">"C" </span>{
     <span class="kw">pub fn </span>lfs_removeattr(lfs: <span class="kw-2">*mut </span>lfs_t, path: <span class="kw-2">*const </span>cty::c_char, type_: u8) -&gt; cty::c_int;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
-    <span class="attr">#[doc = <span class="string">&quot; File operations ///&quot;</span>]
+<span class="kw">extern </span><span class="string">"C" </span>{
+    <span class="attr">#[doc = <span class="string">" File operations ///"</span>]
     </span><span class="kw">pub fn </span>lfs_file_open(
         lfs: <span class="kw-2">*mut </span>lfs_t,
         file: <span class="kw-2">*mut </span>lfs_file_t,
@@ -3183,7 +3184,7 @@
         flags: cty::c_int,
     ) -&gt; cty::c_int;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
+<span class="kw">extern </span><span class="string">"C" </span>{
     <span class="kw">pub fn </span>lfs_file_opencfg(
         lfs: <span class="kw-2">*mut </span>lfs_t,
         file: <span class="kw-2">*mut </span>lfs_file_t,
@@ -3192,13 +3193,13 @@
         config: <span class="kw-2">*const </span>lfs_file_config,
     ) -&gt; cty::c_int;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
+<span class="kw">extern </span><span class="string">"C" </span>{
     <span class="kw">pub fn </span>lfs_file_close(lfs: <span class="kw-2">*mut </span>lfs_t, file: <span class="kw-2">*mut </span>lfs_file_t) -&gt; cty::c_int;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
+<span class="kw">extern </span><span class="string">"C" </span>{
     <span class="kw">pub fn </span>lfs_file_sync(lfs: <span class="kw-2">*mut </span>lfs_t, file: <span class="kw-2">*mut </span>lfs_file_t) -&gt; cty::c_int;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
+<span class="kw">extern </span><span class="string">"C" </span>{
     <span class="kw">pub fn </span>lfs_file_read(
         lfs: <span class="kw-2">*mut </span>lfs_t,
         file: <span class="kw-2">*mut </span>lfs_file_t,
@@ -3206,7 +3207,7 @@
         size: lfs_size_t,
     ) -&gt; lfs_ssize_t;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
+<span class="kw">extern </span><span class="string">"C" </span>{
     <span class="kw">pub fn </span>lfs_file_write(
         lfs: <span class="kw-2">*mut </span>lfs_t,
         file: <span class="kw-2">*mut </span>lfs_file_t,
@@ -3214,7 +3215,7 @@
         size: lfs_size_t,
     ) -&gt; lfs_ssize_t;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
+<span class="kw">extern </span><span class="string">"C" </span>{
     <span class="kw">pub fn </span>lfs_file_seek(
         lfs: <span class="kw-2">*mut </span>lfs_t,
         file: <span class="kw-2">*mut </span>lfs_file_t,
@@ -3222,54 +3223,54 @@
         whence: cty::c_int,
     ) -&gt; lfs_soff_t;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
+<span class="kw">extern </span><span class="string">"C" </span>{
     <span class="kw">pub fn </span>lfs_file_truncate(lfs: <span class="kw-2">*mut </span>lfs_t, file: <span class="kw-2">*mut </span>lfs_file_t, size: lfs_off_t)
         -&gt; cty::c_int;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
+<span class="kw">extern </span><span class="string">"C" </span>{
     <span class="kw">pub fn </span>lfs_file_tell(lfs: <span class="kw-2">*mut </span>lfs_t, file: <span class="kw-2">*mut </span>lfs_file_t) -&gt; lfs_soff_t;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
+<span class="kw">extern </span><span class="string">"C" </span>{
     <span class="kw">pub fn </span>lfs_file_rewind(lfs: <span class="kw-2">*mut </span>lfs_t, file: <span class="kw-2">*mut </span>lfs_file_t) -&gt; cty::c_int;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
+<span class="kw">extern </span><span class="string">"C" </span>{
     <span class="kw">pub fn </span>lfs_file_size(lfs: <span class="kw-2">*mut </span>lfs_t, file: <span class="kw-2">*mut </span>lfs_file_t) -&gt; lfs_soff_t;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
-    <span class="attr">#[doc = <span class="string">&quot; Directory operations ///&quot;</span>]
+<span class="kw">extern </span><span class="string">"C" </span>{
+    <span class="attr">#[doc = <span class="string">" Directory operations ///"</span>]
     </span><span class="kw">pub fn </span>lfs_mkdir(lfs: <span class="kw-2">*mut </span>lfs_t, path: <span class="kw-2">*const </span>cty::c_char) -&gt; cty::c_int;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
+<span class="kw">extern </span><span class="string">"C" </span>{
     <span class="kw">pub fn </span>lfs_dir_open(
         lfs: <span class="kw-2">*mut </span>lfs_t,
         dir: <span class="kw-2">*mut </span>lfs_dir_t,
         path: <span class="kw-2">*const </span>cty::c_char,
     ) -&gt; cty::c_int;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
+<span class="kw">extern </span><span class="string">"C" </span>{
     <span class="kw">pub fn </span>lfs_dir_close(lfs: <span class="kw-2">*mut </span>lfs_t, dir: <span class="kw-2">*mut </span>lfs_dir_t) -&gt; cty::c_int;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
+<span class="kw">extern </span><span class="string">"C" </span>{
     <span class="kw">pub fn </span>lfs_dir_read(lfs: <span class="kw-2">*mut </span>lfs_t, dir: <span class="kw-2">*mut </span>lfs_dir_t, info: <span class="kw-2">*mut </span>lfs_info) -&gt; cty::c_int;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
+<span class="kw">extern </span><span class="string">"C" </span>{
     <span class="kw">pub fn </span>lfs_dir_seek(lfs: <span class="kw-2">*mut </span>lfs_t, dir: <span class="kw-2">*mut </span>lfs_dir_t, off: lfs_off_t) -&gt; cty::c_int;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
+<span class="kw">extern </span><span class="string">"C" </span>{
     <span class="kw">pub fn </span>lfs_dir_tell(lfs: <span class="kw-2">*mut </span>lfs_t, dir: <span class="kw-2">*mut </span>lfs_dir_t) -&gt; lfs_soff_t;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
+<span class="kw">extern </span><span class="string">"C" </span>{
     <span class="kw">pub fn </span>lfs_dir_rewind(lfs: <span class="kw-2">*mut </span>lfs_t, dir: <span class="kw-2">*mut </span>lfs_dir_t) -&gt; cty::c_int;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
-    <span class="attr">#[doc = <span class="string">&quot; Filesystem-level filesystem operations&quot;</span>]
+<span class="kw">extern </span><span class="string">"C" </span>{
+    <span class="attr">#[doc = <span class="string">" Filesystem-level filesystem operations"</span>]
     </span><span class="kw">pub fn </span>lfs_fs_size(lfs: <span class="kw-2">*mut </span>lfs_t) -&gt; lfs_ssize_t;
 }
-<span class="kw">extern </span><span class="string">&quot;C&quot; </span>{
+<span class="kw">extern </span><span class="string">"C" </span>{
     <span class="kw">pub fn </span>lfs_fs_traverse(
         lfs: <span class="kw-2">*mut </span>lfs_t,
         cb: ::core::option::Option&lt;
-            <span class="kw">unsafe extern </span><span class="string">&quot;C&quot; </span><span class="kw">fn</span>(arg1: <span class="kw-2">*mut </span>cty::c_void, arg2: lfs_block_t) -&gt; cty::c_int,
+            <span class="kw">unsafe extern </span><span class="string">"C" </span><span class="kw">fn</span>(arg1: <span class="kw-2">*mut </span>cty::c_void, arg2: lfs_block_t) -&gt; cty::c_int,
         &gt;,
         data: <span class="kw-2">*mut </span>cty::c_void,
     ) -&gt; cty::c_int;
