@@ -7,9 +7,10 @@ use crate::types::*;
 const AES256_KEY_SIZE: usize = 32;
 
 #[cfg(feature = "aes256-cbc")]
-impl Encrypt for super::Aes256Cbc {
+impl MechanismImpl for super::Aes256Cbc {
     /// Encrypts the input *with zero IV*
     fn encrypt(
+        &self,
         keystore: &mut impl Keystore,
         request: &request::Encrypt,
     ) -> Result<reply::Encrypt, Error> {
@@ -63,11 +64,9 @@ impl Encrypt for super::Aes256Cbc {
             tag: ShortData::new(),
         })
     }
-}
 
-#[cfg(feature = "aes256-cbc")]
-impl WrapKey for super::Aes256Cbc {
     fn wrap_key(
+        &self,
         keystore: &mut impl Keystore,
         request: &request::WrapKey,
     ) -> Result<reply::WrapKey, Error> {
@@ -92,17 +91,15 @@ impl WrapKey for super::Aes256Cbc {
             associated_data: request.associated_data.clone(),
             nonce: request.nonce.clone(),
         };
-        let encryption_reply = <super::Aes256Cbc>::encrypt(keystore, &encryption_request)?;
+        let encryption_reply = self.encrypt(keystore, &encryption_request)?;
 
         let wrapped_key = encryption_reply.ciphertext;
 
         Ok(reply::WrapKey { wrapped_key })
     }
-}
 
-#[cfg(feature = "aes256-cbc")]
-impl Decrypt for super::Aes256Cbc {
     fn decrypt(
+        &self,
         keystore: &mut impl Keystore,
         request: &request::Decrypt,
     ) -> Result<reply::Decrypt, Error> {
@@ -157,11 +154,9 @@ impl Decrypt for super::Aes256Cbc {
             plaintext: Some(plaintext),
         })
     }
-}
 
-#[cfg(feature = "aes256-cbc")]
-impl UnsafeInjectKey for super::Aes256Cbc {
     fn unsafe_inject_key(
+        &self,
         keystore: &mut impl Keystore,
         request: &request::UnsafeInjectKey,
     ) -> Result<reply::UnsafeInjectKey, Error> {
@@ -172,7 +167,7 @@ impl UnsafeInjectKey for super::Aes256Cbc {
         let key_id = keystore.store_key(
             request.attributes.persistence,
             key::Secrecy::Secret,
-            key::Kind::Symmetric(request.raw_key.len()),
+            key::Kind::Symmetric(request.raw_key.len()).into(),
             &request.raw_key,
         )?;
 
@@ -181,10 +176,4 @@ impl UnsafeInjectKey for super::Aes256Cbc {
 }
 
 #[cfg(not(feature = "aes256-cbc"))]
-impl UnsafeInjectKey for super::Aes256Cbc {}
-#[cfg(not(feature = "aes256-cbc"))]
-impl Decrypt for super::Aes256Cbc {}
-#[cfg(not(feature = "aes256-cbc"))]
-impl Encrypt for super::Aes256Cbc {}
-#[cfg(not(feature = "aes256-cbc"))]
-impl WrapKey for super::Aes256Cbc {}
+impl MechanismImpl for super::Aes256Cbc {}

@@ -40,9 +40,10 @@ fn load_keypair(keystore: &mut impl Keystore, key_id: &KeyId) -> Result<salty::K
 }
 
 #[cfg(feature = "ed255")]
-impl DeriveKey for super::Ed255 {
+impl MechanismImpl for super::Ed255 {
     #[inline(never)]
     fn derive_key(
+        &self,
         keystore: &mut impl Keystore,
         request: &request::DeriveKey,
     ) -> Result<reply::DeriveKey, Error> {
@@ -52,18 +53,16 @@ impl DeriveKey for super::Ed255 {
         let public_id = keystore.store_key(
             request.attributes.persistence,
             key::Secrecy::Public,
-            key::Kind::Ed255,
+            key::Kind::Ed255.into(),
             keypair.public.as_bytes(),
         )?;
 
         Ok(reply::DeriveKey { key: public_id })
     }
-}
 
-#[cfg(feature = "ed255")]
-impl DeserializeKey for super::Ed255 {
     #[inline(never)]
     fn deserialize_key(
+        &self,
         keystore: &mut impl Keystore,
         request: &request::DeserializeKey,
     ) -> Result<reply::DeserializeKey, Error> {
@@ -86,18 +85,16 @@ impl DeserializeKey for super::Ed255 {
         let public_id = keystore.store_key(
             request.attributes.persistence,
             key::Secrecy::Public,
-            key::Kind::Ed255,
+            key::Kind::Ed255.into(),
             public_key.as_bytes(),
         )?;
 
         Ok(reply::DeserializeKey { key: public_id })
     }
-}
 
-#[cfg(feature = "ed255")]
-impl GenerateKey for super::Ed255 {
     #[inline(never)]
     fn generate_key(
+        &self,
         keystore: &mut impl Keystore,
         request: &request::GenerateKey,
     ) -> Result<reply::GenerateKey, Error> {
@@ -119,12 +116,10 @@ impl GenerateKey for super::Ed255 {
         // return handle
         Ok(reply::GenerateKey { key: key_id })
     }
-}
 
-#[cfg(feature = "ed255")]
-impl SerializeKey for super::Ed255 {
     #[inline(never)]
     fn serialize_key(
+        &self,
         keystore: &mut impl Keystore,
         request: &request::SerializeKey,
     ) -> Result<reply::SerializeKey, Error> {
@@ -157,12 +152,10 @@ impl SerializeKey for super::Ed255 {
 
         Ok(reply::SerializeKey { serialized_key })
     }
-}
 
-#[cfg(feature = "ed255")]
-impl Exists for super::Ed255 {
     #[inline(never)]
     fn exists(
+        &self,
         keystore: &mut impl Keystore,
         request: &request::Exists,
     ) -> Result<reply::Exists, Error> {
@@ -171,12 +164,13 @@ impl Exists for super::Ed255 {
         let exists = keystore.exists_key(key::Secrecy::Secret, Some(key::Kind::Ed255), &key_id);
         Ok(reply::Exists { exists })
     }
-}
 
-#[cfg(feature = "ed255")]
-impl Sign for super::Ed255 {
     #[inline(never)]
-    fn sign(keystore: &mut impl Keystore, request: &request::Sign) -> Result<reply::Sign, Error> {
+    fn sign(
+        &self,
+        keystore: &mut impl Keystore,
+        request: &request::Sign,
+    ) -> Result<reply::Sign, Error> {
         // Not so nice, expands to
         // `trussed::/home/nicolas/projects/solo-bee/components/trussed/src/mechanisms/ed255.rs:151
         // Ed255::Sign`, i.e. VEERY long
@@ -204,12 +198,10 @@ impl Sign for super::Ed255 {
             signature: our_signature,
         })
     }
-}
 
-#[cfg(feature = "ed255")]
-impl Verify for super::Ed255 {
     #[inline(never)]
     fn verify(
+        &self,
         keystore: &mut impl Keystore,
         request: &request::Verify,
     ) -> Result<reply::Verify, Error> {
@@ -235,10 +227,9 @@ impl Verify for super::Ed255 {
                 .is_ok(),
         })
     }
-}
 
-impl UnsafeInjectKey for super::Ed255 {
     fn unsafe_inject_key(
+        &self,
         keystore: &mut impl Keystore,
         request: &request::UnsafeInjectKey,
     ) -> Result<reply::UnsafeInjectKey, Error> {
@@ -266,16 +257,4 @@ impl UnsafeInjectKey for super::Ed255 {
 }
 
 #[cfg(not(feature = "ed255"))]
-impl Exists for super::Ed255 {}
-#[cfg(not(feature = "ed255"))]
-impl DeriveKey for super::Ed255 {}
-#[cfg(not(feature = "ed255"))]
-impl GenerateKey for super::Ed255 {}
-#[cfg(not(feature = "ed255"))]
-impl SerializeKey for super::Ed255 {}
-#[cfg(not(feature = "ed255"))]
-impl DeserializeKey for super::Ed255 {}
-#[cfg(not(feature = "ed255"))]
-impl Sign for super::Ed255 {}
-#[cfg(not(feature = "ed255"))]
-impl Verify for super::Ed255 {}
+impl MechanismImpl for super::Ed255 {}

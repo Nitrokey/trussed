@@ -4,9 +4,10 @@ use crate::service::*;
 use crate::types::*;
 
 #[cfg(feature = "hmac-sha256")]
-impl DeriveKey for super::HmacSha256 {
+impl MechanismImpl for super::HmacSha256 {
     #[inline(never)]
     fn derive_key(
+        &self,
         keystore: &mut impl Keystore,
         request: &request::DeriveKey,
     ) -> Result<reply::DeriveKey, Error> {
@@ -35,18 +36,19 @@ impl DeriveKey for super::HmacSha256 {
         let key_id = keystore.store_key(
             request.attributes.persistence,
             key::Secrecy::Secret,
-            key::Kind::Symmetric(32),
+            key::Kind::Symmetric(32).into(),
             &derived_key,
         )?;
 
         Ok(reply::DeriveKey { key: key_id })
     }
-}
 
-#[cfg(feature = "hmac-sha256")]
-impl Sign for super::HmacSha256 {
     #[inline(never)]
-    fn sign(keystore: &mut impl Keystore, request: &request::Sign) -> Result<reply::Sign, Error> {
+    fn sign(
+        &self,
+        keystore: &mut impl Keystore,
+        request: &request::Sign,
+    ) -> Result<reply::Sign, Error> {
         use hmac::{Hmac, Mac};
         use sha2::Sha256;
         type HmacSha256 = Hmac<Sha256>;
@@ -70,6 +72,4 @@ impl Sign for super::HmacSha256 {
 }
 
 #[cfg(not(feature = "hmac-sha256"))]
-impl DeriveKey for super::HmacSha256 {}
-#[cfg(not(feature = "hmac-sha256"))]
-impl Sign for super::HmacSha256 {}
+impl MechanismImpl for super::HmacSha256 {}

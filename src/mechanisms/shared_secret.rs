@@ -4,9 +4,10 @@ use crate::key;
 use crate::service::*;
 use crate::types::*;
 
-impl SerializeKey for super::SharedSecret {
+impl MechanismImpl for super::SharedSecret {
     #[inline(never)]
     fn serialize_key(
+        &self,
         keystore: &mut impl Keystore,
         request: &request::SerializeKey,
     ) -> Result<reply::SerializeKey, Error> {
@@ -27,17 +28,16 @@ impl SerializeKey for super::SharedSecret {
 
         Ok(reply::SerializeKey { serialized_key })
     }
-}
 
-impl UnsafeInjectKey for super::SharedSecret {
     fn unsafe_inject_key(
+        &self,
         keystore: &mut impl Keystore,
         request: &request::UnsafeInjectKey,
     ) -> Result<reply::UnsafeInjectKey, Error> {
         let key_id = keystore.store_key(
             request.attributes.persistence,
             key::Secrecy::Secret,
-            key::Kind::Shared(request.raw_key.len()),
+            key::Kind::Shared(request.raw_key.len()).into(),
             &request.raw_key,
         )?;
 

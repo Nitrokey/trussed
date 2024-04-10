@@ -41,9 +41,10 @@ fn load_secret_key(
 }
 
 #[cfg(feature = "x255")]
-impl Agree for super::X255 {
+impl MechanismImpl for super::X255 {
     // #[inline(never)]
     fn agree(
+        &self,
         keystore: &mut impl Keystore,
         request: &request::Agree,
     ) -> Result<reply::Agree, Error> {
@@ -75,12 +76,10 @@ impl Agree for super::X255 {
             shared_secret: key_id,
         })
     }
-}
 
-#[cfg(feature = "x255")]
-impl GenerateKey for super::X255 {
     // #[inline(never)]
     fn generate_key(
+        &self,
         keystore: &mut impl Keystore,
         request: &request::GenerateKey,
     ) -> Result<reply::GenerateKey, Error> {
@@ -99,12 +98,10 @@ impl GenerateKey for super::X255 {
         // return handle
         Ok(reply::GenerateKey { key: key_id })
     }
-}
 
-#[cfg(feature = "x255")]
-impl Exists for super::X255 {
     // #[inline(never)]
     fn exists(
+        &self,
         keystore: &mut impl Keystore,
         request: &request::Exists,
     ) -> Result<reply::Exists, Error> {
@@ -112,12 +109,10 @@ impl Exists for super::X255 {
         let exists = keystore.exists_key(key::Secrecy::Secret, Some(key::Kind::X255), &key_id);
         Ok(reply::Exists { exists })
     }
-}
 
-#[cfg(feature = "x255")]
-impl DeriveKey for super::X255 {
     // #[inline(never)]
     fn derive_key(
+        &self,
         keystore: &mut impl Keystore,
         request: &request::DeriveKey,
     ) -> Result<reply::DeriveKey, Error> {
@@ -130,18 +125,16 @@ impl DeriveKey for super::X255 {
         let public_id = keystore.store_key(
             request.attributes.persistence,
             key::Secrecy::Public,
-            key::Kind::X255,
+            key::Kind::X255.into(),
             &public_key_bytes,
         )?;
 
         Ok(reply::DeriveKey { key: public_id })
     }
-}
 
-#[cfg(feature = "x255")]
-impl SerializeKey for super::X255 {
     // #[inline(never)]
     fn serialize_key(
+        &self,
         keystore: &mut impl Keystore,
         request: &request::SerializeKey,
     ) -> Result<reply::SerializeKey, Error> {
@@ -163,12 +156,10 @@ impl SerializeKey for super::X255 {
 
         Ok(reply::SerializeKey { serialized_key })
     }
-}
 
-#[cfg(feature = "x255")]
-impl DeserializeKey for super::X255 {
     // #[inline(never)]
     fn deserialize_key(
+        &self,
         keystore: &mut impl Keystore,
         request: &request::DeserializeKey,
     ) -> Result<reply::DeserializeKey, Error> {
@@ -191,16 +182,15 @@ impl DeserializeKey for super::X255 {
         let public_id = keystore.store_key(
             request.attributes.persistence,
             key::Secrecy::Public,
-            key::Kind::X255,
+            key::Kind::X255.into(),
             &public_key.to_bytes(),
         )?;
 
         Ok(reply::DeserializeKey { key: public_id })
     }
-}
 
-impl UnsafeInjectKey for super::X255 {
     fn unsafe_inject_key(
+        &self,
         keystore: &mut impl Keystore,
         request: &request::UnsafeInjectKey,
     ) -> Result<reply::UnsafeInjectKey, Error> {
@@ -228,14 +218,4 @@ impl UnsafeInjectKey for super::X255 {
 }
 
 #[cfg(not(feature = "x255"))]
-impl Agree for super::X255 {}
-#[cfg(not(feature = "x255"))]
-impl GenerateKey for super::X255 {}
-#[cfg(not(feature = "x255"))]
-impl Exists for super::X255 {}
-#[cfg(not(feature = "x255"))]
-impl DeriveKey for super::X255 {}
-#[cfg(not(feature = "x255"))]
-impl SerializeKey for super::X255 {}
-#[cfg(not(feature = "x255"))]
-impl DeserializeKey for super::X255 {}
+impl MechanismImpl for super::X255 {}
