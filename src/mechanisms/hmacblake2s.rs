@@ -31,7 +31,7 @@ impl MechanismImpl for super::HmacBlake2s {
         let key = keystore.store_key(
             request.attributes.persistence,
             key::Secrecy::Secret,
-            key::Kind::Symmetric(32).into(),
+            key::Kind::Symmetric(32),
             &derived_key,
         )?;
 

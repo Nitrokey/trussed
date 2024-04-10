@@ -37,7 +37,7 @@ impl MechanismImpl for super::SharedSecret {
         let key_id = keystore.store_key(
             request.attributes.persistence,
             key::Secrecy::Secret,
-            key::Kind::Shared(request.raw_key.len()).into(),
+            key::Kind::Shared(request.raw_key.len()),
             &request.raw_key,
         )?;
 

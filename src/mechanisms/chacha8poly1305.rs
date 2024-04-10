@@ -53,7 +53,7 @@ impl MechanismImpl for super::Chacha8Poly1305 {
         let key_id = keystore.store_key(
             request.attributes.persistence,
             key::Secrecy::Secret,
-            KIND_NONCE.into(),
+            KIND_NONCE,
             &serialized,
         )?;
 
@@ -228,7 +228,7 @@ impl MechanismImpl for super::Chacha8Poly1305 {
             request.attributes.persistence,
             // using for signing keys... we need to know
             key::Secrecy::Secret,
-            kind.into(),
+            kind,
             &material,
         )?;
 

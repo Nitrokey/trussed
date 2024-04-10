@@ -31,7 +31,7 @@ impl MechanismImpl for super::HmacSha512 {
         let key = keystore.store_key(
             request.attributes.persistence,
             key::Secrecy::Secret,
-            key::Kind::Symmetric(64).into(),
+            key::Kind::Symmetric(64),
             &derived_key,
         )?;
 

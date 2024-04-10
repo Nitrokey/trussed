@@ -53,7 +53,7 @@ impl MechanismImpl for super::Ed255 {
         let public_id = keystore.store_key(
             request.attributes.persistence,
             key::Secrecy::Public,
-            key::Kind::Ed255.into(),
+            key::Kind::Ed255,
             keypair.public.as_bytes(),
         )?;
 
@@ -85,7 +85,7 @@ impl MechanismImpl for super::Ed255 {
         let public_id = keystore.store_key(
             request.attributes.persistence,
             key::Secrecy::Public,
-            key::Kind::Ed255.into(),
+            key::Kind::Ed255,
             public_key.as_bytes(),
         )?;
 

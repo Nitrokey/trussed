@@ -125,7 +125,7 @@ impl MechanismImpl for super::X255 {
         let public_id = keystore.store_key(
             request.attributes.persistence,
             key::Secrecy::Public,
-            key::Kind::X255.into(),
+            key::Kind::X255,
             &public_key_bytes,
         )?;
 
@@ -182,7 +182,7 @@ impl MechanismImpl for super::X255 {
         let public_id = keystore.store_key(
             request.attributes.persistence,
             key::Secrecy::Public,
-            key::Kind::X255.into(),
+            key::Kind::X255,
             &public_key.to_bytes(),
         )?;
 

@@ -17,7 +17,7 @@ impl MechanismImpl for super::Trng {
         let key_id = keystore.store_key(
             request.attributes.persistence,
             key::Secrecy::Secret,
-            key::Kind::Symmetric(32).into(),
+            key::Kind::Symmetric(32),
             &entropy,
         )?;
 

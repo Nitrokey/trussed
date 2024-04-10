@@ -167,7 +167,7 @@ impl MechanismImpl for super::Aes256Cbc {
         let key_id = keystore.store_key(
             request.attributes.persistence,
             key::Secrecy::Secret,
-            key::Kind::Symmetric(request.raw_key.len()).into(),
+            key::Kind::Symmetric(request.raw_key.len()),
             &request.raw_key,
         )?;
 

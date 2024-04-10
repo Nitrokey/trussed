@@ -92,7 +92,7 @@ impl MechanismImpl for super::P256 {
         let public_id = keystore.store_key(
             request.attributes.persistence,
             key::Secrecy::Public,
-            key::Kind::P256.into(),
+            key::Kind::P256,
             &public_key.to_compressed_sec1_bytes(),
         )?;
 
@@ -164,7 +164,7 @@ impl MechanismImpl for super::P256 {
         let public_id = keystore.store_key(
             request.attributes.persistence,
             key::Secrecy::Public,
-            key::Kind::P256.into(),
+            key::Kind::P256,
             &public_key.to_compressed_sec1_bytes(),
         )?;
 

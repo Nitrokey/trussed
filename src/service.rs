@@ -282,7 +282,7 @@ impl<P: Platform> ServiceResources<P> {
                 let key_id = keystore.store_key(
                     request.attributes.persistence,
                     key::Secrecy::Secret,
-                    key::Kind::Symmetric(size).into(),
+                    key::Kind::Symmetric(size),
                     &secret_key[..size],
                 )?;
                 Ok(Reply::GenerateSecretKey(reply::GenerateSecretKey {
@@ -300,7 +300,7 @@ impl<P: Platform> ServiceResources<P> {
                 let key_id = keystore(self, ctx)?.store_key(
                     request.location,
                     key::Secrecy::Secret,
-                    key::Kind::Shared(request.raw_key.len()).into(),
+                    key::Kind::Shared(request.raw_key.len()),
                     &request.raw_key,
                 )?;
 
