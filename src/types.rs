@@ -86,7 +86,7 @@ impl Id {
     }
 
     pub fn hex_path(&self) -> PathBuf {
-        PathBuf::from(self.hex().as_slice())
+        PathBuf::try_from(self.hex().as_slice()).unwrap()
     }
 
     /// skips leading zeros
@@ -332,7 +332,7 @@ impl From<PathBuf> for CoreContext {
 
 impl From<&str> for CoreContext {
     fn from(s: &str) -> Self {
-        Self::new(s.into())
+        Self::new(s.try_into().unwrap())
     }
 }
 

@@ -122,7 +122,7 @@ impl<P: Platform> ServiceResources<P> {
     }
 
     pub fn trussed_filestore(&mut self) -> ClientFilestore<P::S> {
-        ClientFilestore::new(PathBuf::from("trussed"), self.platform.store())
+        ClientFilestore::new(PathBuf::from(path!("trussed")), self.platform.store())
     }
 
     pub fn keystore(&mut self, client_id: PathBuf) -> Result<ClientKeystore<P::S>> {
@@ -858,7 +858,7 @@ impl<P: Platform> Service<P> {
         syscall: S,
         interrupt: Option<&'static InterruptFlag>,
     ) -> Result<ClientImplementation<S>, Error> {
-        ClientBuilder::new(client_id)
+        ClientBuilder::new(PathBuf::try_from(client_id).unwrap())
             .interrupt(interrupt)
             .prepare(self)
             .map(|p| p.build(syscall))
@@ -872,7 +872,7 @@ impl<P: Platform> Service<P> {
         client_id: &str,
         interrupt: Option<&'static InterruptFlag>,
     ) -> Result<ClientImplementation<&mut Self>, Error> {
-        ClientBuilder::new(client_id)
+        ClientBuilder::new(PathBuf::try_from(client_id).unwrap())
             .interrupt(interrupt)
             .prepare(self)
             .map(|p| p.build(self))
@@ -885,7 +885,7 @@ impl<P: Platform> Service<P> {
         client_id: &str,
         interrupt: Option<&'static InterruptFlag>,
     ) -> Result<ClientImplementation<Self>, Error> {
-        ClientBuilder::new(client_id)
+        ClientBuilder::new(PathBuf::try_from(client_id).unwrap())
             .interrupt(interrupt)
             .prepare(&mut self)
             .map(|p| p.build(self))

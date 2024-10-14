@@ -81,7 +81,7 @@ impl<S: Store> ClientFilestore<S> {
             // oh oh oh
             .unwrap();
         let dat_offset = "/dat/".len();
-        PathBuf::from(&bytes[end_of_namespace + 1 + offset + dat_offset..])
+        PathBuf::try_from(&bytes[end_of_namespace + 1 + offset + dat_offset..]).unwrap()
     }
 }
 
