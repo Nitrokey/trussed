@@ -268,14 +268,16 @@ impl<S: Store> ClientFilestore<S> {
                     // take first entry that meets requirements
                     .find(|(_, entry)| {
                         if let Some(user_attribute) = user_attribute.as_ref() {
+                            let mut buffer = UserAttribute::new();
+                            buffer.resize_to_capacity();
                             let mut path = dir.clone();
                             path.push(entry.file_name());
                             let attribute = fs
-                                .attribute(&path, crate::config::USER_ATTRIBUTE_NUMBER)
+                                .attribute(&path, crate::config::USER_ATTRIBUTE_NUMBER, &mut buffer)
                                 .unwrap();
 
                             if let Some(attribute) = attribute {
-                                user_attribute == attribute.data()
+                                user_attribute.len() == attribute.total_size() && user_attribute == attribute.data()
                             } else {
                                 false
                             }
@@ -335,13 +337,15 @@ impl<S: Store> ClientFilestore<S> {
                     // take first entry that meets requirements
                     .find(|(_, entry)| {
                         if let Some(user_attribute) = user_attribute.as_ref() {
+                            let mut buffer = UserAttribute::new();
+                            buffer.resize_to_capacity();
                             let mut path = real_dir.clone();
                             path.push(entry.file_name());
                             let attribute = fs
-                                .attribute(&path, crate::config::USER_ATTRIBUTE_NUMBER)
+                                .attribute(&path, crate::config::USER_ATTRIBUTE_NUMBER, &mut buffer)
                                 .unwrap();
                             if let Some(attribute) = attribute {
-                                user_attribute == attribute.data()
+                                user_attribute.len() == attribute.total_size() && user_attribute == attribute.data()
                             } else {
                                 false
                             }
