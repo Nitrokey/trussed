@@ -512,7 +512,6 @@ pub fn read<const N: usize>(
     store
         .fs(location)
         .read(path)
-        .map(From::from)
         .map_err(|_| Error::FilesystemReadFailure)
 }
 
