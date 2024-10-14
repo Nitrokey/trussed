@@ -204,7 +204,7 @@ impl<S: Store> ClientFilestore<S> {
                         // `read_dir_and_then` wants to see Results (although we naturally have an Option
                         // at this point)
                     })
-                    .ok_or(littlefs2::io::Error::Io)
+                    .ok_or(littlefs2::io::Error::IO)
             })
             .ok())
     }
@@ -241,7 +241,7 @@ impl<S: Store> ClientFilestore<S> {
 
                         (entry, read_dir_state)
                     })
-                    .ok_or(littlefs2::io::Error::Io)
+                    .ok_or(littlefs2::io::Error::IO)
             })
             .ok())
     }
@@ -295,7 +295,7 @@ impl<S: Store> ClientFilestore<S> {
                         // `read_dir_and_then` wants to see Results (although we naturally have an Option
                         // at this point)
                     })
-                    .ok_or(littlefs2::io::Error::Io)
+                    .ok_or(littlefs2::io::Error::IO)
             })
             .ok()
             .map(|(i, data)| {
@@ -355,7 +355,7 @@ impl<S: Store> ClientFilestore<S> {
                         (i, data)
                     })
                     // convert Option into Result, again because `read_dir_and_then` expects this
-                    .ok_or(littlefs2::io::Error::Io)
+                    .ok_or(littlefs2::io::Error::IO)
             })
             .ok()
             .map(|(i, data)| {
@@ -503,7 +503,7 @@ impl<S: Store> Filestore for ClientFilestore<S> {
                         }
                     })
                     .next()
-                    .ok_or(littlefs2::io::Error::Io)
+                    .ok_or(littlefs2::io::Error::IO)
             })
             .ok()
         }

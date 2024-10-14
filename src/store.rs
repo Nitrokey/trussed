@@ -568,7 +568,7 @@ pub fn metadata(
     debug_now!("checking existence of {}", &path);
     match store.fs(location).metadata(path) {
         Ok(metadata) => Ok(Some(metadata)),
-        Err(littlefs2::io::Error::NoSuchEntry) => Ok(None),
+        Err(littlefs2::io::Error::NO_SUCH_ENTRY) => Ok(None),
         Err(_) => Err(Error::FilesystemReadFailure),
     }
 }
