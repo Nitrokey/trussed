@@ -277,7 +277,8 @@ impl<S: Store> ClientFilestore<S> {
                                 .unwrap();
 
                             if let Some(attribute) = attribute {
-                                user_attribute.len() == attribute.total_size() && user_attribute == attribute.data()
+                                user_attribute.len() == attribute.total_size()
+                                    && user_attribute == attribute.data()
                             } else {
                                 false
                             }
@@ -345,7 +346,8 @@ impl<S: Store> ClientFilestore<S> {
                                 .attribute(&path, crate::config::USER_ATTRIBUTE_NUMBER, &mut buffer)
                                 .unwrap();
                             if let Some(attribute) = attribute {
-                                user_attribute.len() == attribute.total_size() && user_attribute == attribute.data()
+                                user_attribute.len() == attribute.total_size()
+                                    && user_attribute == attribute.data()
                             } else {
                                 false
                             }

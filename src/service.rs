@@ -182,7 +182,7 @@ impl<P: Platform> ServiceResources<P> {
             #[cfg(feature = "crypto-client-attest")]
             Request::Attest(request) => {
                 let mut attn_keystore: ClientKeystore<P::S> = ClientKeystore::new(
-                    PathBuf::from("attn"),
+                    PathBuf::from(path!("attn")),
                     self.rng().map_err(|_| Error::EntropyMalfunction)?,
                     full_store,
                 );
