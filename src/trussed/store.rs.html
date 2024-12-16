@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/store.rs`."><title>store.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-492a78a4a87dcc01.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="trussed" data-themes="" data-resource-suffix="" data-rustdoc-version="1.82.0 (f6e511eec 2024-10-15)" data-channel="1.82.0" data-search-js="search-a99f1315e7cc5121.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-921df33f47b8780c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-3b12f09e550e0385.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/store.rs`."><title>store.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-b0742ba02757f159.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="trussed" data-themes="" data-resource-suffix="" data-rustdoc-version="1.83.0 (90b35a623 2024-11-26)" data-channel="1.83.0" data-search-js="search-f0d225181b97f9a4.js" data-settings-js="settings-805db61a62df4bd2.js" ><script src="../../static.files/storage-1d39b6787ed640ff.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-f070b9041d14864c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-0111fcff984fae8f.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">trussed/</div>store.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers">
+<a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -635,7 +636,37 @@
 <a href="#635" id="635">635</a>
 <a href="#636" id="636">636</a>
 <a href="#637" id="637">637</a>
-</pre></div><pre class="rust"><code><span class="doccomment">//! `store` presents a combined interface to three littlefs2 filesystems:
+<a href="#638" id="638">638</a>
+<a href="#639" id="639">639</a>
+<a href="#640" id="640">640</a>
+<a href="#641" id="641">641</a>
+<a href="#642" id="642">642</a>
+<a href="#643" id="643">643</a>
+<a href="#644" id="644">644</a>
+<a href="#645" id="645">645</a>
+<a href="#646" id="646">646</a>
+<a href="#647" id="647">647</a>
+<a href="#648" id="648">648</a>
+<a href="#649" id="649">649</a>
+<a href="#650" id="650">650</a>
+<a href="#651" id="651">651</a>
+<a href="#652" id="652">652</a>
+<a href="#653" id="653">653</a>
+<a href="#654" id="654">654</a>
+<a href="#655" id="655">655</a>
+<a href="#656" id="656">656</a>
+<a href="#657" id="657">657</a>
+<a href="#658" id="658">658</a>
+<a href="#659" id="659">659</a>
+<a href="#660" id="660">660</a>
+<a href="#661" id="661">661</a>
+<a href="#662" id="662">662</a>
+<a href="#663" id="663">663</a>
+<a href="#664" id="664">664</a>
+<a href="#665" id="665">665</a>
+<a href="#666" id="666">666</a>
+<a href="#667" id="667">667</a>
+<a href="#668" id="668">668</a></pre></div><pre class="rust"><code><span class="doccomment">//! `store` presents a combined interface to three littlefs2 filesystems:
 //! internal flash, external flash, volatile/RAM.
 //!
 //! It covers two usecases:
@@ -709,7 +740,7 @@
 //! - Alternative: subdirectory &lt;==&gt; RP hash, everything else in flat files
 //! - In any case need to "list dirs excluding . and .." or similar
 
-</span><span class="kw">use </span>littlefs2::{driver::Storage, fs::Filesystem};
+</span><span class="kw">use </span>littlefs2::{driver::Storage, fs::Filesystem, path};
 
 <span class="kw">use </span><span class="kw">crate</span>::error::Error;
 <span class="kw">use </span><span class="kw">crate</span>::types::{Bytes, Location};
@@ -841,6 +872,7 @@
                 <span class="kw-2">&amp;</span><span class="lifetime">'static </span><span class="kw-2">mut </span>littlefs2::fs::Allocation&lt;<span class="macro-nonterminal">$Vfs</span>&gt;,
                 <span class="kw-2">&amp;</span><span class="lifetime">'static </span><span class="kw-2">mut </span><span class="macro-nonterminal">$Vfs</span>,
             ) {
+                <span class="kw">use </span>core::ptr::addr_of_mut;
                 <span class="comment">// static mut INTERNAL_STORAGE: $Ifs = i_ctor();//&lt;$Ifs&gt;::new();
 
                 </span><span class="kw">static </span><span class="kw-2">mut </span>INTERNAL_STORAGE: <span class="prelude-ty">Option</span>&lt;<span class="macro-nonterminal">$Ifs</span>&gt; = <span class="prelude-val">None</span>;
@@ -873,12 +905,12 @@
                 }
 
                 (
-                    <span class="kw">unsafe </span>{ INTERNAL_FS_ALLOC.as_mut().unwrap() },
-                    <span class="kw">unsafe </span>{ INTERNAL_STORAGE.as_mut().unwrap() },
-                    <span class="kw">unsafe </span>{ EXTERNAL_FS_ALLOC.as_mut().unwrap() },
-                    <span class="kw">unsafe </span>{ EXTERNAL_STORAGE.as_mut().unwrap() },
-                    <span class="kw">unsafe </span>{ VOLATILE_FS_ALLOC.as_mut().unwrap() },
-                    <span class="kw">unsafe </span>{ VOLATILE_STORAGE.as_mut().unwrap() },
+                    <span class="kw">unsafe </span>{ (<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(INTERNAL_FS_ALLOC)).as_mut().unwrap() },
+                    <span class="kw">unsafe </span>{ (<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(INTERNAL_STORAGE)).as_mut().unwrap() },
+                    <span class="kw">unsafe </span>{ (<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(EXTERNAL_FS_ALLOC)).as_mut().unwrap() },
+                    <span class="kw">unsafe </span>{ (<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(EXTERNAL_STORAGE)).as_mut().unwrap() },
+                    <span class="kw">unsafe </span>{ (<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(VOLATILE_FS_ALLOC)).as_mut().unwrap() },
+                    <span class="kw">unsafe </span>{ (<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(VOLATILE_STORAGE)).as_mut().unwrap() },
                 )
             }
 
@@ -955,23 +987,26 @@
 
             <span class="kw">fn </span>ifs_ptr() -&gt; <span class="kw-2">*mut </span><span class="macro-nonterminal">$crate::store::Fs</span>&lt;<span class="macro-nonterminal">$Ifs</span>&gt; {
                 <span class="kw">use </span>core::mem::MaybeUninit;
+                <span class="kw">use </span>core::ptr::addr_of_mut;
                 <span class="kw">use </span><span class="macro-nonterminal">$crate::store::Fs</span>;
                 <span class="kw">static </span><span class="kw-2">mut </span>IFS: MaybeUninit&lt;Fs&lt;<span class="macro-nonterminal">$Ifs</span>&gt;&gt; = MaybeUninit::uninit();
-                <span class="kw">unsafe </span>{ IFS.as_mut_ptr() }
+                <span class="kw">unsafe </span>{ (<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(IFS)).as_mut_ptr() }
             }
 
             <span class="kw">fn </span>efs_ptr() -&gt; <span class="kw-2">*mut </span><span class="macro-nonterminal">$crate::store::Fs</span>&lt;<span class="macro-nonterminal">$Efs</span>&gt; {
                 <span class="kw">use </span>core::mem::MaybeUninit;
+                <span class="kw">use </span>core::ptr::addr_of_mut;
                 <span class="kw">use </span><span class="macro-nonterminal">$crate::store::Fs</span>;
                 <span class="kw">static </span><span class="kw-2">mut </span>EFS: MaybeUninit&lt;Fs&lt;<span class="macro-nonterminal">$Efs</span>&gt;&gt; = MaybeUninit::uninit();
-                <span class="kw">unsafe </span>{ EFS.as_mut_ptr() }
+                <span class="kw">unsafe </span>{ (<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(EFS)).as_mut_ptr() }
             }
 
             <span class="kw">fn </span>vfs_ptr() -&gt; <span class="kw-2">*mut </span><span class="macro-nonterminal">$crate::store::Fs</span>&lt;<span class="macro-nonterminal">$Vfs</span>&gt; {
                 <span class="kw">use </span>core::mem::MaybeUninit;
+                <span class="kw">use </span>core::ptr::addr_of_mut;
                 <span class="kw">use </span><span class="macro-nonterminal">$crate::store::Fs</span>;
                 <span class="kw">static </span><span class="kw-2">mut </span>VFS: MaybeUninit&lt;Fs&lt;<span class="macro-nonterminal">$Vfs</span>&gt;&gt; = MaybeUninit::uninit();
-                <span class="kw">unsafe </span>{ VFS.as_mut_ptr() }
+                <span class="kw">unsafe </span>{ (<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(VFS)).as_mut_ptr() }
             }
 
             <span class="comment">// Ignore lint for compatibility
@@ -998,6 +1033,7 @@
                 </span>format: bool,
             ) -&gt; littlefs2::io::Result&lt;()&gt; {
                 <span class="kw">use </span>core::mem::MaybeUninit;
+                <span class="kw">use </span>core::ptr::{addr_of, addr_of_mut};
                 <span class="kw">use </span>littlefs2::fs::{Allocation, Filesystem};
 
                 <span class="kw">static </span><span class="kw-2">mut </span>IFS_ALLOC: MaybeUninit&lt;<span class="kw-2">&amp;</span><span class="lifetime">'static </span><span class="kw-2">mut </span>Allocation&lt;<span class="macro-nonterminal">$Ifs</span>&gt;&gt; =
@@ -1027,31 +1063,31 @@
                         Filesystem::format(ifs_storage).expect(<span class="string">"can format"</span>);
                     }
 
-                    IFS_ALLOC.as_mut_ptr().write(ifs_alloc);
-                    IFS_STORAGE.as_mut_ptr().write(ifs_storage);
+                    (<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(IFS_ALLOC)).as_mut_ptr().write(ifs_alloc);
+                    (<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(IFS_STORAGE)).as_mut_ptr().write(ifs_storage);
                     IFS = <span class="prelude-val">Some</span>(Filesystem::mount(
-                        <span class="kw-2">&amp;mut *</span>IFS_ALLOC.as_mut_ptr(),
-                        <span class="kw-2">&amp;mut *</span>IFS_STORAGE.as_mut_ptr(),
+                        <span class="kw-2">&amp;mut *</span>(<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(IFS_ALLOC)).as_mut_ptr(),
+                        <span class="kw-2">&amp;mut *</span>(<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(IFS_STORAGE)).as_mut_ptr(),
                     )<span class="question-mark">?</span>);
-                    <span class="kw">let </span>ifs = <span class="macro-nonterminal">$crate::store::Fs::new</span>(IFS.as_ref().unwrap());
+                    <span class="kw">let </span>ifs = <span class="macro-nonterminal">$crate::store::Fs::new</span>((<span class="kw-2">*</span><span class="macro">addr_of!</span>(IFS)).as_ref().unwrap());
                     <span class="self">Self</span>::ifs_ptr().write(ifs);
 
-                    EFS_ALLOC.as_mut_ptr().write(efs_alloc);
-                    EFS_STORAGE.as_mut_ptr().write(efs_storage);
+                    (<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(EFS_ALLOC)).as_mut_ptr().write(efs_alloc);
+                    (<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(EFS_STORAGE)).as_mut_ptr().write(efs_storage);
                     EFS = <span class="prelude-val">Some</span>(Filesystem::mount(
-                        <span class="kw-2">&amp;mut *</span>EFS_ALLOC.as_mut_ptr(),
-                        <span class="kw-2">&amp;mut *</span>EFS_STORAGE.as_mut_ptr(),
+                        <span class="kw-2">&amp;mut *</span>(<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(EFS_ALLOC)).as_mut_ptr(),
+                        <span class="kw-2">&amp;mut *</span>(<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(EFS_STORAGE)).as_mut_ptr(),
                     )<span class="question-mark">?</span>);
-                    <span class="kw">let </span>efs = <span class="macro-nonterminal">$crate::store::Fs::new</span>(EFS.as_ref().unwrap());
+                    <span class="kw">let </span>efs = <span class="macro-nonterminal">$crate::store::Fs::new</span>((<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(EFS)).as_ref().unwrap());
                     <span class="self">Self</span>::efs_ptr().write(efs);
 
-                    VFS_ALLOC.as_mut_ptr().write(vfs_alloc);
-                    VFS_STORAGE.as_mut_ptr().write(vfs_storage);
+                    (<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(VFS_ALLOC)).as_mut_ptr().write(vfs_alloc);
+                    (<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(VFS_STORAGE)).as_mut_ptr().write(vfs_storage);
                     VFS = <span class="prelude-val">Some</span>(Filesystem::mount(
-                        <span class="kw-2">&amp;mut *</span>VFS_ALLOC.as_mut_ptr(),
-                        <span class="kw-2">&amp;mut *</span>VFS_STORAGE.as_mut_ptr(),
+                        <span class="kw-2">&amp;mut *</span>(<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(VFS_ALLOC)).as_mut_ptr(),
+                        <span class="kw-2">&amp;mut *</span>(<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(VFS_STORAGE)).as_mut_ptr(),
                     )<span class="question-mark">?</span>);
-                    <span class="kw">let </span>vfs = <span class="macro-nonterminal">$crate::store::Fs::new</span>(VFS.as_ref().unwrap());
+                    <span class="kw">let </span>vfs = <span class="macro-nonterminal">$crate::store::Fs::new</span>((<span class="kw-2">*</span><span class="macro">addr_of!</span>(VFS)).as_ref().unwrap());
                     <span class="self">Self</span>::vfs_ptr().write(vfs);
 
                     <span class="prelude-val">Ok</span>(())
@@ -1066,7 +1102,8 @@
             ) -&gt; <span class="self">Self </span>{
                 <span class="comment">// This unfortunately repeates the code of `allocate`.
                 // It seems Rust's borrowing rules go against this.
-                </span><span class="kw">use </span>littlefs2::fs::{Allocation, Filesystem};
+                </span><span class="kw">use </span>core::ptr::addr_of_mut;
+                <span class="kw">use </span>littlefs2::fs::{Allocation, Filesystem};
 
                 <span class="kw">static </span><span class="kw-2">mut </span>INTERNAL_STORAGE: <span class="prelude-ty">Option</span>&lt;<span class="macro-nonterminal">$Ifs</span>&gt; = <span class="prelude-val">None</span>;
                 <span class="kw">unsafe </span>{
@@ -1100,24 +1137,24 @@
                 <span class="kw">let </span>store = <span class="self">Self</span>::claim().unwrap();
                 <span class="kw">if </span>store
                     .mount(
-                        <span class="kw">unsafe </span>{ INTERNAL_FS_ALLOC.as_mut().unwrap() },
-                        <span class="kw">unsafe </span>{ INTERNAL_STORAGE.as_mut().unwrap() },
-                        <span class="kw">unsafe </span>{ EXTERNAL_FS_ALLOC.as_mut().unwrap() },
-                        <span class="kw">unsafe </span>{ EXTERNAL_STORAGE.as_mut().unwrap() },
-                        <span class="kw">unsafe </span>{ VOLATILE_FS_ALLOC.as_mut().unwrap() },
-                        <span class="kw">unsafe </span>{ VOLATILE_STORAGE.as_mut().unwrap() },
+                        <span class="kw">unsafe </span>{ (<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(INTERNAL_FS_ALLOC)).as_mut().unwrap() },
+                        <span class="kw">unsafe </span>{ (<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(INTERNAL_STORAGE)).as_mut().unwrap() },
+                        <span class="kw">unsafe </span>{ (<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(EXTERNAL_FS_ALLOC)).as_mut().unwrap() },
+                        <span class="kw">unsafe </span>{ (<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(EXTERNAL_STORAGE)).as_mut().unwrap() },
+                        <span class="kw">unsafe </span>{ (<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(VOLATILE_FS_ALLOC)).as_mut().unwrap() },
+                        <span class="kw">unsafe </span>{ (<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(VOLATILE_STORAGE)).as_mut().unwrap() },
                         <span class="bool-val">false</span>,
                     )
                     .is_err()
                 {
                     store
                         .mount(
-                            <span class="kw">unsafe </span>{ INTERNAL_FS_ALLOC.as_mut().unwrap() },
-                            <span class="kw">unsafe </span>{ INTERNAL_STORAGE.as_mut().unwrap() },
-                            <span class="kw">unsafe </span>{ EXTERNAL_FS_ALLOC.as_mut().unwrap() },
-                            <span class="kw">unsafe </span>{ EXTERNAL_STORAGE.as_mut().unwrap() },
-                            <span class="kw">unsafe </span>{ VOLATILE_FS_ALLOC.as_mut().unwrap() },
-                            <span class="kw">unsafe </span>{ VOLATILE_STORAGE.as_mut().unwrap() },
+                            <span class="kw">unsafe </span>{ (<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(INTERNAL_FS_ALLOC)).as_mut().unwrap() },
+                            <span class="kw">unsafe </span>{ (<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(INTERNAL_STORAGE)).as_mut().unwrap() },
+                            <span class="kw">unsafe </span>{ (<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(EXTERNAL_FS_ALLOC)).as_mut().unwrap() },
+                            <span class="kw">unsafe </span>{ (<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(EXTERNAL_STORAGE)).as_mut().unwrap() },
+                            <span class="kw">unsafe </span>{ (<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(VOLATILE_FS_ALLOC)).as_mut().unwrap() },
+                            <span class="kw">unsafe </span>{ (<span class="kw-2">*</span><span class="macro">addr_of_mut!</span>(VOLATILE_STORAGE)).as_mut().unwrap() },
                             <span class="bool-val">true</span>,
                         )
                         .unwrap();
@@ -1185,8 +1222,33 @@
 <span class="attr">#[inline(never)]
 </span><span class="kw">pub fn </span>delete(store: <span class="kw">impl </span>Store, location: Location, path: <span class="kw-2">&amp;</span>Path) -&gt; bool {
     <span class="macro">debug_now!</span>(<span class="string">"deleting {}"</span>, <span class="kw-2">&amp;</span>path);
-    store.fs(location).remove(path).is_ok()
-}
+    <span class="kw">let </span>fs = store.fs(location);
+    <span class="kw">if </span>fs.remove(path).is_err() {
+        <span class="kw">return </span><span class="bool-val">false</span>;
+    }
+
+    <span class="comment">// Only delete ancestors for volatile FS
+    </span><span class="kw">if </span>location != Location::Volatile {
+        <span class="kw">return </span><span class="bool-val">true</span>;
+    }
+    <span class="comment">// first ancestor is the file itself
+    </span><span class="kw">for </span>parent <span class="kw">in </span>path.ancestors().skip(<span class="number">1</span>) {
+        <span class="kw">if </span><span class="kw-2">&amp;*</span>parent == <span class="macro">path!</span>(<span class="string">"/"</span>) {
+            <span class="kw">break</span>;
+        }
+        <span class="kw">let </span><span class="prelude-val">Ok</span>(meta) = fs.metadata(<span class="kw-2">&amp;</span>parent) <span class="kw">else </span>{
+            <span class="kw">return </span><span class="bool-val">false</span>;
+        };
+        <span class="kw">if </span>meta.is_dir() &amp;&amp; meta.is_empty() {
+            <span class="kw">if </span>fs.remove_dir(<span class="kw-2">&amp;</span>parent).is_err() {
+                <span class="kw">return </span><span class="bool-val">false</span>;
+            }
+        } <span class="kw">else </span>{
+            <span class="kw">break</span>;
+        }
+    }
+    <span class="bool-val">true
+</span>}
 
 <span class="attr">#[inline(never)]
 </span><span class="kw">pub fn </span>exists(store: <span class="kw">impl </span>Store, location: Location, path: <span class="kw-2">&amp;</span>Path) -&gt; bool {
