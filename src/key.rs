@@ -75,7 +75,6 @@ pub enum Kind {
     BrainpoolP384R1,
     BrainpoolP512R1,
     X255,
-
     // Post-quantum cryptography algorithms
     #[cfg(feature = "backend-dilithium2")]
     Dilithium2,
@@ -83,6 +82,7 @@ pub enum Kind {
     Dilithium3,
     #[cfg(feature = "backend-dilithium5")]
     Dilithium5,
+    Secp256k1,
 }
 
 bitflags::bitflags! {
@@ -228,12 +228,13 @@ impl Kind {
             Kind::BrainpoolP256R1 => 12,
             Kind::BrainpoolP384R1 => 13,
             Kind::BrainpoolP512R1 => 14,
+            Kind::Secp256k1 => 15,
             #[cfg(feature = "backend-dilithium2")]
-            Kind::Dilithium2 => 15,
+            Kind::Dilithium2 => 16,
             #[cfg(feature = "backend-dilithium3")]
-            Kind::Dilithium3 => 16,
+            Kind::Dilithium3 => 17,
             #[cfg(feature = "backend-dilithium5")]
-            Kind::Dilithium5 => 17,
+            Kind::Dilithium5 => 18,
         }
     }
 
@@ -253,12 +254,13 @@ impl Kind {
             12 => Kind::BrainpoolP256R1,
             13 => Kind::BrainpoolP384R1,
             14 => Kind::BrainpoolP512R1,
+            15 => Kind::Secp256k1,
             #[cfg(feature = "backend-dilithium2")]
-            15 => Kind::Dilithium2,
+            16 => Kind::Dilithium2,
             #[cfg(feature = "backend-dilithium3")]
-            16 => Kind::Dilithium3,
+            17 => Kind::Dilithium3,
             #[cfg(feature = "backend-dilithium5")]
-            17 => Kind::Dilithium5,
+            18 => Kind::Dilithium5,
             _ => return Err(Error::InvalidSerializedKey),
         })
     }

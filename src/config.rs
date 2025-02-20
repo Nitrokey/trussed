@@ -1,7 +1,15 @@
 // TODO: this needs to be overridable.
 // Should we use the "config crate that can have a replacement patched in" idea?
 
+pub use trussed_core::config::{
+    MAX_KEY_MATERIAL_LENGTH, MAX_MEDIUM_DATA_LENGTH, MAX_MESSAGE_LENGTH, MAX_SHORT_DATA_LENGTH,
+    MAX_SIGNATURE_LENGTH, MAX_USER_ATTRIBUTE_LENGTH, SERDE_EXTENSION_REPLY_LENGTH,
+    SERDE_EXTENSION_REQUEST_LENGTH,
+};
+
+pub const MAX_SHORT_DATA_LENGTH: usize = 128;
 pub const MAX_MEDIUM_DATA_LENGTH: usize = 256;
+
 cfg_if::cfg_if! {
     if #[cfg(test)] {
         pub const MAX_SERVICE_CLIENTS: usize = 6;
@@ -33,7 +41,6 @@ cfg_if::cfg_if! {
         pub const MAX_SERVICE_CLIENTS: usize = 0;
     }
 }
-pub const MAX_SHORT_DATA_LENGTH: usize = 128;
 
 // For the PQC algorithms, public and private key are generated at the same time and stored together as
 // the private key. Then in the derive call, it just pulls the public key from the private key store
@@ -78,14 +85,4 @@ pub const MAX_SERIALIZED_KEY_LENGTH: usize = MAX_KEY_MATERIAL_LENGTH + 4;
 // 30 bytes are added by CBOR serialization of a FullCredential
 pub const MAX_MESSAGE_LENGTH: usize = MAX_FIDO_WRAPPED_KEY_LENGTH + 30 + 2031 + 32 + 37; // TODO: update this to be different 
 
-pub const MAX_USER_ATTRIBUTE_LENGTH: usize = 256;
-
 pub const USER_ATTRIBUTE_NUMBER: u8 = 37;
-
-// request size is chosen to not exceed the largest standard syscall, Decrypt, so that the Request
-// enum does not grow from this variant
-pub const SERDE_EXTENSION_REQUEST_LENGTH: usize =
-    2 * MAX_MESSAGE_LENGTH + 2 * MAX_SHORT_DATA_LENGTH;
-// reply size is chosen to not exceed the largest standard syscall, Encrypt, so that the Reply enum
-// does not grow from this variant
-pub const SERDE_EXTENSION_REPLY_LENGTH: usize = MAX_MESSAGE_LENGTH + 2 * MAX_SHORT_DATA_LENGTH;

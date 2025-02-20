@@ -1,6 +1,3 @@
-use core::marker::PhantomData;
-use core::ops::Deref;
-
 pub use generic_array::GenericArray;
 
 pub use heapless::{String, Vec};
@@ -10,10 +7,12 @@ pub use crate::Bytes;
 pub use littlefs2::{driver::Storage as LfsStorage, fs::Filesystem};
 pub use littlefs2_core::{DirEntry, Metadata, Path, PathBuf, Result as LfsResult};
 
-use rand_core::{CryptoRng, RngCore};
-use serde::{Deserialize, Serialize};
+pub use trussed_core::types::{
+    reboot, CertId, CounterId, Id, KeyId, KeySerialization, Location, Mechanism, MediumData,
+    Message, ObjectId, SerializedKey, ShortData, Signature, SignatureSerialization, SpecialId,
+    StorageAttributes, UserAttribute,
+};
 
-use crate::config::*;
 use crate::interrupt::InterruptFlag;
 use crate::store::filestore::{ReadDirFilesState, ReadDirState};
 
@@ -23,147 +22,6 @@ pub use crate::platform::Platform;
 /// An empty struct not storing any data.
 #[derive(Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct NoData;
-
-/// The ID of a Trussed object.
-///
-/// Apart from the 256 "special" IDs, generated as a random 128-bit number,
-/// hence globally unique without coordination or counters.
-///
-/// Specific object types have more specific IDs, e.g., currently: [`CertId`], [`CounterId`], [`KeyId`].
-///
-/// When serialized to the file system, the `hex` method is used, which
-/// generates a big-endian hex representation with leading zero bytes trimmed.
-///
-/// Open question: Should `PublicKey` and `SecretKey` be distinguished?
-#[derive(Copy, Clone, PartialEq, PartialOrd)]
-pub struct Id(pub(crate) u128);
-impl Eq for Id {}
-
-impl core::fmt::Debug for Id {
-    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-        write!(f, "Id({})", &self.hex_clean())
-    }
-}
-
-pub type SpecialId = u8;
-
-pub trait ObjectId: Deref<Target = Id> {}
-
-impl Id {
-    /// Generate an ID, using a cryptographically secure random number generator.
-    pub(crate) fn new(rng: &mut (impl CryptoRng + RngCore)) -> Self {
-        let mut id = [0u8; 16];
-        rng.fill_bytes(&mut id);
-        Self(u128::from_be_bytes(id))
-    }
-
-    /// Is a non-random, constructible u8 ID.
-    pub fn is_special(&self) -> bool {
-        self.0 < 256
-    }
-
-    /// skips leading zeros
-    pub fn hex(&self) -> Bytes<32> {
-        const HEX_CHARS: &[u8] = b"0123456789abcdef";
-        let mut buffer = Bytes::new();
-        let array = self.0.to_be_bytes();
-
-        for i in 0..array.len() {
-            if array[i] == 0 && i != (array.len() - 1) {
-                // This actually skips all zeroes, not only leading ones
-                // This is kept for backward compatibility with already serialized KeyIds
-                continue;
-            }
-
-            buffer.push(HEX_CHARS[(array[i] >> 4) as usize]).unwrap();
-            buffer.push(HEX_CHARS[(array[i] & 0xf) as usize]).unwrap();
-        }
-        buffer
-    }
-
-    pub fn hex_path(&self) -> PathBuf {
-        PathBuf::try_from(self.hex().as_slice()).unwrap()
-    }
-
-    /// skips leading zeros
-    pub fn hex_clean(&self) -> String<32> {
-        const HEX_CHARS: &[u8] = b"0123456789abcdef";
-        let mut buffer = String::new();
-        let array = self.0.to_be_bytes();
-
-        // skip leading zeros
-        for v in array.into_iter().skip_while(|v| *v == 0) {
-            buffer.push(HEX_CHARS[(v >> 4) as usize] as char).unwrap();
-            buffer.push(HEX_CHARS[(v & 0xf) as usize] as char).unwrap();
-        }
-
-        buffer
-    }
-}
-
-macro_rules! impl_id {
-    ($Name:ident) => {
-        #[derive(
-            Copy, Clone, Debug, serde::Deserialize, PartialEq, PartialOrd, serde::Serialize,
-        )]
-        #[serde(transparent)]
-        pub struct $Name(pub(crate) Id);
-        impl Eq for $Name {}
-
-        impl ObjectId for $Name {}
-
-        /// TODO: Is this a good idea (motivation: save implementions...)
-        impl Deref for $Name {
-            type Target = Id;
-            fn deref(&self) -> &Self::Target {
-                &self.0
-            }
-        }
-
-        impl $Name {
-            pub fn new(rng: &mut (impl CryptoRng + RngCore)) -> Self {
-                Self(Id::new(rng))
-            }
-
-            pub const fn from_special(special_id: u8) -> Self {
-                Self(Id(special_id as _))
-            }
-        }
-
-        impl From<SpecialId> for $Name {
-            fn from(id: u8) -> Self {
-                Self(Id(id as _))
-            }
-        }
-    };
-}
-
-impl_id!(CertId);
-impl_id!(CounterId);
-impl_id!(KeyId);
-
-impl KeyId {
-    /// Create a KeyId from a given value instead of at random.
-    ///
-    /// This can be useful for backends which can use it to encode additional information inside of the KeyId itself (128 bits is a lot)
-    ///
-    /// This is already possible to acheive through the serde implementation, so this doesn't really add any unavailable functionality.
-    #[doc(hidden)]
-    pub fn from_value(value: u128) -> Self {
-        Self(Id(value))
-    }
-
-    #[doc(hidden)]
-    pub fn value(&self) -> u128 {
-        self.0 .0
-    }
-}
-
-// TODO: decide whether this is good idea.
-// It would allow using the same underlying u128 ID for the public key of the private
-// key in a keypair. However, DeleteKey and others would need to be adjusted.
-// impl_id!(PublicKeyId);
-// impl_id!(SecretKeyId);
 
 pub mod ui {
     use serde::{Deserialize, Serialize};
@@ -181,30 +39,10 @@ pub mod ui {
     }
 }
 
-pub mod reboot {
-    use serde::{Deserialize, Serialize};
-
-    #[derive(Copy, Clone, Eq, PartialEq, Debug, Serialize, Deserialize)]
-    pub enum To {
-        Application,
-        ApplicationUpdate,
-    }
-}
-
 pub mod consent {
+    pub use trussed_core::types::consent::{Error, Level, Result};
+
     use serde::{Deserialize, Serialize};
-
-    #[derive(Copy, Clone, Eq, PartialEq, Debug, Serialize, Deserialize)]
-    pub enum Level {
-        /// There is no user present
-        None,
-
-        /// Normal user presence check, currently implemented as "touch any of three buttons"
-        Normal,
-
-        /// Strong user intent check, currently implemented as "two-or-three finger squeeze"
-        Strong,
-    }
 
     #[derive(Copy, Clone, Eq, PartialEq, Debug, Serialize, Deserialize)]
     pub enum Urgency {
@@ -213,16 +51,6 @@ pub mod consent {
         /// If other user consent requests are pending, fail this request.
         FailIfOthers,
     }
-
-    #[derive(Copy, Clone, Eq, PartialEq, Debug, Serialize, Deserialize)]
-    pub enum Error {
-        FailedToInterrupt,
-        Interrupted,
-        TimedOut,
-        TimeoutNotImplemented,
-    }
-
-    pub type Result = core::result::Result<(), Error>;
 }
 
 /// The context for a syscall (per client).
